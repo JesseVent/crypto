@@ -1,0 +1,24 @@
+Package: crypto
+Type: Package
+Title: Cryptocurrency Market Data
+Version: 0.1.0
+Authors@R: person("Jesse", "Vent", email = "jesse@solutiondesign.io", role = c("aut", "cre"))
+Description: Retrieves all the open, high, low, close values for all cryptocurrencies. This retrieves data from CoinMarketCap's historical tables.
+Depends: R (>= 3.4.3), foreach, rvest, xml2
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: magrittr,
+  jsonlite,
+  plyr,
+  dplyr,
+  doSNOW,
+  doParallel,
+  lubridate,
+  curl,
+  utils,
+  base,
+  parallel,
+  purrr,
+  stats
+RoxygenNote: 6.0.1
