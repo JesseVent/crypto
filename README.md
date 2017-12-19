@@ -6,55 +6,39 @@ Retrieves all the open, high, low, close values for all cryptocurrencies. This r
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the crypto R package installed and ready to go.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
-
+Below are the high level dependencies for the package
 ```
 R (>= 3.4.3), foreach, rvest, xml2
 ```
-
 ### Installing
-
 For now installation is through devtools::install_github("jessevent/crypto") until the cran package is accepted.
-
-### Installing crypto via Github
-
+#### Installing crypto via Github
 ```
 library(devtools)
 install_github("jessevent/crypto")
 ```
-
-### Installing crypto via CRAN
-
+#### Installing crypto via CRAN
 - Waiting for approval to be added as CRAN package
-
 ```
 install.packages("crypto")
 ```
-
-## Usage
+## Package Usage
 
 ### Load Crypto Package
-
 ```
 library(crypto)
 ```
-
 ### Retrieve All Cryptocurrencies Market History
-
 This is the main function of this package and once ran will go and scrape all the historical tables of all the different cryptocurrencies listed on CoinMarketCap and turn it into a data frame.
-
 ```
 will_i_get_rich <- getCoins()
 ```
-
 ### Output
-
 I've had to go over the code with a fine tooth comb to get it compatible with CRAN so there have been significant enhancements to how some of the field conversions have been undertaken and the data being cleaned. This should eliminate a few issues around number formatting or unexpected handling of scientific notations.
-
 ```
 Observations: 656,772
 Variables: 10
@@ -69,29 +53,26 @@ $ market  <dbl> 1500520000, 1491160000, 1597780000, 1542820000, 1292190000, 1180
 $ name    <chr> "Bitcoin", "Bitcoin", "Bitcoin", "Bitcoin", "Bitcoin", "Bitcoin", "Bitcoin", "Bitcoin"...
 $ ranknow <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
 ```
-
 ## Built With :heart: R
 
 - [Kaggle](https://www.kaggle.com/jessevent/all-crypto-currencies) - Get this dataset on kaggle!
 - [CoinSpot](https://coinspot.com.au?affiliate=9V5G4) - Invest $AUD into Crypto today!
 - [CoinMarketCap](https://coinmarketcap.com/) - Providing amazing data @CoinMarketCap
 
-## Authors
+### Authors
 
-- **Jesse Vent** - _Initial work_ - [jessevent](https://github.com/jessevent)
+- **Jesse Vent** - Package Author - [jessevent](https://github.com/jessevent)
 
-## License
+### License
 
 This project is licensed under the MIT License - see the <LICENSE.md> file for details
 
-## Acknowledgments
+### Acknowledgments
 
 - Thanks to the team at <https://coinmarketcap.com> for the great work they do and to the team at CoinTelegraph where the images were sourced.
-
 - Please star this if you find it useful, and remember the crypto currency market is volatile by nature, please be responsible if trading.
-
 - If by chance you do manage to make your fortune through some game-changing model, I'd appreciate your consideration in the below :)
-
-- BTC: 1LPjH7KyH5aD65pTBhByXFCFXZNTUVdeRY
-
-- ETH: 0x375923Bf82F0b728d23A5704261a6e16341fd860
+```
+BTC: 1LPjH7KyH5aD65pTBhByXFCFXZNTUVdeRY
+ETH: 0x375923Bf82F0b728d23A5704261a6e16341fd860
+```
