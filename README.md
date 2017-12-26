@@ -73,6 +73,7 @@ This project is licensed under the MIT License - see the <LICENSE.md> file for d
 - Please star this if you find it useful, and remember the crypto currency market is volatile by nature, please be responsible if trading.
 - If by chance you do manage to make your fortune through some game-changing model, I'd appreciate your consideration in the below :)
 ```
-BTC: 1LPjH7KyH5aD65pTBhByXFCFXZNTUVdeRY
-ETH: 0x375923Bf82F0b728d23A5704261a6e16341fd860
+ERC-20: 0x375923Bf82F0b728d23A5704261a6e16341fd860
+XRP: rK59semLsuJZEWftxBFhWuNE6uhznjz2bK
+LTC: LWpiZMd2cEyqCdrZrs9TjsouTLWbFFxwCj
 ```
