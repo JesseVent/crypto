@@ -4,10 +4,12 @@
 \alias{scraper}
 \title{Scraping Historical Tables from CMC}
 \usage{
-scraper(attributes)
+scraper(attributes, slug)
 }
 \arguments{
 \item{attributes}{Singular url input from \code{listCoins()}}
+
+\item{slug}{coin from \code{listCoins()}#}
 }
 \value{
 Returns data.frame of scraped results.
@@ -26,4 +28,9 @@ Returns data.frame of scraped results.
 Retrieves historical tables from CoinMarketCap for the input token.
 This function is a dependency of \code{getCoins()}
 and is used as part of the loop to retrieve all cryptocurrencies.
+}
+\examples{
+\dontrun{
+scraper(attributes)
+}
 }

@@ -29,6 +29,6 @@ turn it into a dataset.
 }
 \examples{
 \dontrun{
-getCoins()
+markets <- getCoins()
 }
 }

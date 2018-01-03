@@ -5,7 +5,7 @@
 #' and is used as part of the loop to retrieve all cryptocurrencies.
 #'
 #' @param attributes Singular url input from \code{listCoins()}
-#
+#' @param slug coin from \code{listCoins()}#
 #' @return Returns data.frame of scraped results.
 #'  \tabular{lccclcccl}{
 #'   Date \tab  \tab  \tab  \tab chr \tab  \tab  \tab  \tab "Dec 17, 2017"\cr
@@ -22,9 +22,15 @@
 #' @importFrom rvest "html_nodes"
 #' @importFrom xml2 "read_html"
 #' @export
-scraper <- function(attributes) {
+#' @examples
+#' \dontrun{
+#' scraper(attributes)
+#' }
+scraper <- function(attributes, slug) {
   . <- "."
-  cpage <- xml2::read_html(attributes, handle = curl::new_handle("useragent" = "Mozilla/5.0"))
+  history_url <- as.character(attributes)
+  coin_slug <- as.character(slug)
+  cpage <- xml2::read_html(history_url, handle = curl::new_handle("useragent" = "Mozilla/5.0"))
   cnames <- cpage %>% rvest::html_nodes(css = ".col-sm-4 .text-large") %>% rvest::html_text(trim = TRUE) %>% replace(!nzchar(.), NA)
   cnodes <- cpage %>% rvest::html_nodes(css = "table") %>% .[1] %>% rvest::html_table(fill = TRUE) %>%
     replace(!nzchar(.), NA)
@@ -32,5 +38,6 @@ scraper <- function(attributes) {
   scraper <- Reduce(rbind, cnodes)
   scraper$symbol <- gsub("\\(||\\n|\\)", "", toupper(cnames))
   scraper$symbol <- as.character(strsplit(scraper$symbol, " ")[[1]][1])
+  scraper$slug <- as.character(coin_slug)
   return(scraper)
 }

@@ -14,6 +14,10 @@
 #'   rank \tab  \tab  \tab  \tab dbl \tab  \tab  \tab  \tab 104\cr
 #' }
 #' @export
+#' @examples
+#' \dontrun{
+#' coin_list <- listCoins()
+#' }
 listCoins <- function() {
   today <- gsub("-", "", lubridate::today())
   json <-
@@ -37,7 +41,8 @@ listCoins <- function() {
   baseurl <- c(cmcurl)
   coins$symbol <- as.character(toupper(coins$symbol))
   coins$name <- as.character(coins$name)
-  coins$slug <- as.character(baseurl)
+  coins$slug <- as.character(coins$slug)
+  coins$url <- as.character(baseurl)
   coins$rank <- as.numeric(coins$rank)
   return(coins)
 }

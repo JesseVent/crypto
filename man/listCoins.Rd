@@ -22,3 +22,8 @@ This is called automatically as part of \code{getCoins()}.
 It retrieves name, slug, symbol and rank of cryptocurrencies from
 CoinMarketCap and creates URLS for \code{scraper()} to use.
 }
+\examples{
+\dontrun{
+coin_list <- listCoins()
+}
+}

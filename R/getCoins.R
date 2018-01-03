@@ -27,7 +27,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' getCoins()
+#' markets <- getCoins()
 #' }
 #' @export
 getCoins <-
@@ -38,12 +38,12 @@ getCoins <-
     coins <- listCoins()
     coinnames <-
       dplyr::data_frame(
-        symbol = as.character(coins$symbol),
         name = as.character(coins$name),
-        rank = coins$rank
+        rank = coins$rank,
+        slug = coins$slug
       )
-    length <- as.numeric(length(coins$slug))
-    zrange <- 1:as.numeric(length(coins$slug))
+    length <- as.numeric(length(coins$url))
+    zrange <- 1:as.numeric(length(coins$url))
     cpucore <-
       as.numeric(parallel::detectCores(all.tests = FALSE, logical = TRUE))
     ptm <- proc.time()
@@ -53,27 +53,29 @@ getCoins <-
     progress <- function(n)
       setTxtProgressBar(pb, n)
     opts <- list(progress = progress)
-    attributes <- coins$slug
+    attributes <- coins$url
+    slug <- coins$slug
     message('   If this helps you become rich please consider donating',
             appendLF = TRUE)
-    message("ETH:  0x375923Bf82F0b728d23A5704261a6e16341fd860",
+    message("ERC-20: 0x375923Bf82F0b728d23A5704261a6e16341fd860",
             appendLF = TRUE)
-    message("BTC:  1LPjH7KyH5aD65pTBhByXFCFXZNTUVdeRY", appendLF = TRUE)
+    message("XRP: rK59semLsuJZEWftxBFhWuNE6uhznjz2bK", appendLF = TRUE)
+    message("LTC: LWpiZMd2cEyqCdrZrs9TjsouTLWbFFxwCj", appendLF = TRUE)
     results <-
       foreach::foreach(i = zrange,
                        .options.snow = opts,
-                       .combine = rbind) %dopar% scraper(attributes[i])
+                       .combine = rbind) %dopar% scraper(attributes[i], slug[i])
     close(pb)
     parallel::stopCluster(cluster)
     print(proc.time() - ptm)
-    results <- merge(results, coinnames)
+    results <- merge(results, coinnames, by = "slug")
     marketdata <- results
-    namecheck <- ncol(marketdata)
+    namecheck <- as.numeric(ncol(marketdata))
     ifelse(
       namecheck > 2,
       colnames(marketdata) <-
         c(
-          "symbol",
+          "slug",
           "date",
           "open",
           "high",
@@ -81,15 +83,29 @@ getCoins <-
           "close",
           "volume",
           "market",
+          "symbol",
           "name",
           "ranknow"
         ),
       NULL
     )
+    marketdata <- marketdata[c(
+      "slug",
+      "symbol",
+      "name",
+      "date",
+      "ranknow",
+      "open",
+      "high",
+      "low",
+      "close",
+      "volume",
+      "market"
+    )]
     marketdata$date <-
       suppressWarnings(lubridate::mdy(unlist(marketdata$date)))
-    cols <- c(3:8)
-    ccols <- c(5:8)
+    cols <- c(5:11)
+    ccols <- c(7:11)
     marketdata[, cols] <-
       apply(marketdata[, cols], 2, function(x)
         gsub(",", "", x))
@@ -100,6 +116,11 @@ getCoins <-
       suppressWarnings(apply(marketdata[, cols], 2, function(x)
         as.numeric(x)))
     marketdata <- na.omit(marketdata)
+    marketdata$close_ratio <-
+      (marketdata$close - marketdata$low) / (marketdata$high - marketdata$low)
+    marketdata$close_ratio <- round(marketdata$close_ratio, 4)
+    marketdata$spread <- (marketdata$high - marketdata$low)
+    marketdata$spread <- round(marketdata$spread, 2)
     results <-
       marketdata[order(marketdata$ranknow, marketdata$date, decreasing = FALSE),]
     return(results)
