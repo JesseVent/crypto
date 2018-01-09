@@ -1,10 +1,17 @@
 Package: crypto
 Type: Package
 Title: Cryptocurrency Market Data
+Description: Retrieves all the daily open, high, low and close values for all crypto currencies. This retrieves the historical market data by web scraping tables provided by 'Cryptocurrency Market Capitalizations' <https://coinmarketcap.com>.
 Version: 0.1.0
-Authors@R: person("Jesse", "Vent", email = "jesse@solutiondesign.io", role = c("aut", "cre"))
-Description: Retrieves all the open, high, low, close values for all cryptocurrencies. This retrieves data from historical tables hosted by 'CoinMarketCap' <https:coinmarketcap.com>.
-Depends: R (>= 3.4.3), foreach, rvest, xml2
+Date: 2018-01-10
+Authors@R: c(person("Jesse", "Vent",
+                    role = c("aut", "cre"), 
+                    email = "jesse@solutiondesign.io")
+             )
+Maintainer: Jesse Vent <jesse@solutiondesign.io>
+URL: https://github.com/JesseVent/crypto, https://www.kaggle.com/jessevent/all-crypto-currencies
+BugReports: https://github.com/JesseVent/crypto/issues
+Depends: R (>= 3.4.0), foreach, rvest, xml2
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -13,7 +20,6 @@ Imports: magrittr,
   plyr,
   dplyr,
   doParallel,
-  doSNOW,
   lubridate,
   curl,
   utils,
@@ -21,4 +27,5 @@ Imports: magrittr,
   parallel,
   purrr,
   stats
+Suggests: doSNOW
 RoxygenNote: 6.0.1

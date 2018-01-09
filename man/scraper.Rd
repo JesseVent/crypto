@@ -2,35 +2,41 @@
 % Please edit documentation in R/scraper.R
 \name{scraper}
 \alias{scraper}
-\title{Scraping Historical Tables from CMC}
+\title{Historical table scraper}
 \usage{
 scraper(attributes, slug)
 }
 \arguments{
-\item{attributes}{Singular url input from \code{listCoins()}}
+\item{attributes}{URL generated from \code{listCoins()}}
 
-\item{slug}{coin from \code{listCoins()}#}
+\item{slug}{Unique indentifier required for merging}
 }
 \value{
-Returns data.frame of scraped results.
- \tabular{lccclcccl}{
-  Date \tab  \tab  \tab  \tab chr \tab  \tab  \tab  \tab "Dec 17, 2017"\cr
-  Open \tab  \tab  \tab  \tab dbl \tab  \tab  \tab  \tab 0.000088\cr
-  High \tab  \tab  \tab  \tab dbl \tab  \tab  \tab  \tab 0.000137\cr
-  Low \tab  \tab  \tab  \tab dbl \tab  \tab  \tab  \tab 0.000083\cr
-  Close \tab  \tab  \tab  \tab dbl \tab  \tab  \tab  \tab 0.000125\cr
-  Volume \tab  \tab  \tab  \tab chr \tab  \tab  \tab  \tab 557,972\cr
-  Market \tab  \tab  \tab  \tab chr \tab  \tab  \tab  \tab 66,221,100\cr
-  symbol \tab  \tab  \tab  \tab chr \tab  \tab  \tab  \tab "KIN"\cr
-}
+Raw OHLC market data in a dataframe:
+  \item{slug}{Coin url slug}
+  \item{symbol}{Coin symbol}
+  \item{name}{Coin name}
+  \item{date}{Market date}
+  \item{open}{Market open}
+  \item{high}{Market high}
+  \item{low}{Market low}
+  \item{close}{Market close}
+  \item{volume}{Volume 24 hours}
+  \item{market}{USD Market cap}
+
+This function is not to be called individually by a user but is to be
+consumed as part of the getCoins.
 }
 \description{
-Retrieves historical tables from CoinMarketCap for the input token.
-This function is a dependency of \code{getCoins()}
-and is used as part of the loop to retrieve all cryptocurrencies.
+This web scrapes the historic price tables from CoinMarketCap
+and provides back a dataframe for the coin provided as an input.
+This function is a dependency of getCoins and is used
+as part of a loop to retrieve all crypto currencies.
 }
 \examples{
 \dontrun{
+# Only to be executed by getCoins
 scraper(attributes)
 }
+
 }

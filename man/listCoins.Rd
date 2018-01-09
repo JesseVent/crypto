@@ -2,28 +2,41 @@
 % Please edit documentation in R/listCoins.R
 \name{listCoins}
 \alias{listCoins}
-\title{Retrieve Cryptocurrencies}
+\title{Retrieves name, symbol, slug and rank for all tokens}
 \usage{
-listCoins()
+listCoins(coin = NULL)
+}
+\arguments{
+\item{coin}{Name, symbol or slug of crypto currency}
+
+\item{...}{No arguments, return all coins}
 }
 \value{
-Returns data frame of coin listings for getting
- coin names, rank and slugs for use in \code{getCoins()}
- and populating the urls for use in \code{scraper()}.
- \tabular{lccclcccl}{
-  symbol \tab  \tab  \tab  \tab chr \tab  \tab  \tab  \tab "KIN"\cr
-  name \tab  \tab  \tab  \tab chr \tab  \tab  \tab  \tab "Kin"\cr
-  slug \tab  \tab  \tab  \tab chr \tab  \tab  \tab  \tab "kin"\cr
-  rank \tab  \tab  \tab  \tab dbl \tab  \tab  \tab  \tab 104\cr
-}
+Crypto currency historic OHLC market data in a dataframe:
+  \item{symbol}{Coin symbol (not-unique)}
+  \item{name}{Coin name}
+  \item{slug}{Coin URL slug (unique)}
+  \item{rank}{Current rank by market cap}
+  \item{url}{Historical market tables urls for scraping}
+
+Required dependency that is used in function call \code{getCoins()}.
 }
 \description{
-This is called automatically as part of \code{getCoins()}.
-It retrieves name, slug, symbol and rank of cryptocurrencies from
+List all of the crypto currencies that have existed on Coinmarketcap
+and use this to populate the URL base for scraping historical market
+data. It retrieves name, slug, symbol and rank of cryptocurrencies from
 CoinMarketCap and creates URLS for \code{scraper()} to use.
 }
 \examples{
+# return specific coin
+
+coin <- "kin"
+coins <- listCoins(coin)
+
 \dontrun{
+
+# return all coins
 coin_list <- listCoins()
 }
+
 }

@@ -1,0 +1,87 @@
+---
+title: Cryptocurrency Daily Market Price Dashboard
+output:
+  flexdashboard::flex_dashboard:
+    vertical_layout: scroll
+    orientation: rows
+---
+<style>
+
+body {
+  padding-top:0px
+}
+
+.navbar{
+  visibility: hidden
+}
+
+</style>
+```{r setup, include=FALSE}
+install.packages("treemap")
+library(flexdashboard)
+library(ggplot2)
+library(readr)
+library(highcharter)
+library(dplyr)
+library(lubridate)
+library(treemap)
+library(viridisLite)
+
+check <- exists("market_data")
+ifelse(check, market_data <- read_csv('../input/crypto-markets.csv'), market_data <- kin_history)
+coincount <- as.numeric(length(unique(market_data$symbol)))
+rowcount <- as.numeric(nrow(market_data))
+datecount <- as.numeric(length(unique(market_data$date)))
+kin <- filter(market_data, market_data$symbol == "KIN")
+kin <- tail(kin, n=30)
+kin$date <- as.character(kin$date)
+yesterday <- unique(market_data$date)
+yesterday <- tail(yesterday, n=1)
+top_volume <- filter(market_data, market_data$date == as.character(yesterday))[1:15,] %>% dplyr::select(name,volume)
+tm <- treemap(top_volume, index = "name",
+              vSize = "volume", vColor = "volume",
+              type = "value", palette = magma(15))
+
+```
+# Cryptocurrency Daily Market Price Dashboard
+
+Row 1 {data-height=110}
+-----------------------------------------------------------------------
+### Rows of data
+
+```{r}
+valueBox(rowcount, icon = "fa-database", color="rgb(100,100,100)")
+```
+
+### Crypto Tokens
+
+```{r}
+valueBox(coincount, icon = "fa-rocket", color="rgb(57,222,157)")
+```
+
+### Days Of Content
+
+```{r}
+valueBox(datecount, icon = "fa-hourglass-half",color="rgb(100,100,100)")
+```
+
+
+Row 2 {data-height=400}
+-----------------------------------------------------------------------
+### Kin Token 30-Day Market History
+```{r}
+
+
+highchart(type = "stock") %>%
+hc_add_series(kin, type="ohlc")
+```
+
+
+
+Row 3 {data-height=400}
+-----------------------------------------------------------------------
+### Top 15 Cryptocurrencies Today By Volume
+```{r}
+
+hctreemap(tm)
+```

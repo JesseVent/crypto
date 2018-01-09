@@ -1,43 +1,59 @@
-#' Scraping Historical Tables from CMC
+#' Historical table scraper
 #'
-#' Retrieves historical tables from CoinMarketCap for the input token.
-#' This function is a dependency of \code{getCoins()}
-#' and is used as part of the loop to retrieve all cryptocurrencies.
+#' This web scrapes the historic price tables from CoinMarketCap
+#' and provides back a dataframe for the coin provided as an input.
+#' This function is a dependency of getCoins and is used
+#' as part of a loop to retrieve all crypto currencies.
 #'
-#' @param attributes Singular url input from \code{listCoins()}
-#' @param slug coin from \code{listCoins()}#
-#' @return Returns data.frame of scraped results.
-#'  \tabular{lccclcccl}{
-#'   Date \tab  \tab  \tab  \tab chr \tab  \tab  \tab  \tab "Dec 17, 2017"\cr
-#'   Open \tab  \tab  \tab  \tab dbl \tab  \tab  \tab  \tab 0.000088\cr
-#'   High \tab  \tab  \tab  \tab dbl \tab  \tab  \tab  \tab 0.000137\cr
-#'   Low \tab  \tab  \tab  \tab dbl \tab  \tab  \tab  \tab 0.000083\cr
-#'   Close \tab  \tab  \tab  \tab dbl \tab  \tab  \tab  \tab 0.000125\cr
-#'   Volume \tab  \tab  \tab  \tab chr \tab  \tab  \tab  \tab 557,972\cr
-#'   Market \tab  \tab  \tab  \tab chr \tab  \tab  \tab  \tab 66,221,100\cr
-#'   symbol \tab  \tab  \tab  \tab chr \tab  \tab  \tab  \tab "KIN"\cr
-#' }
+#' @param attributes URL generated from \code{listCoins()}
+#' @param slug Unique indentifier required for merging
+#'
+#' @return Raw OHLC market data in a dataframe:
+#'   \item{slug}{Coin url slug}
+#'   \item{symbol}{Coin symbol}
+#'   \item{name}{Coin name}
+#'   \item{date}{Market date}
+#'   \item{open}{Market open}
+#'   \item{high}{Market high}
+#'   \item{low}{Market low}
+#'   \item{close}{Market close}
+#'   \item{volume}{Volume 24 hours}
+#'   \item{market}{USD Market cap}
+#'
+#' This function is not to be called individually by a user but is to be
+#' consumed as part of the getCoins.
 #'
 #' @importFrom magrittr "%>%"
 #' @importFrom rvest "html_nodes"
 #' @importFrom xml2 "read_html"
-#' @export
+#'
 #' @examples
 #' \dontrun{
+#' # Only to be executed by getCoins
 #' scraper(attributes)
 #' }
+#'
+#' @name scraper
+#'
+#' @export
+#'
 scraper <- function(attributes, slug) {
   . <- "."
   history_url <- as.character(attributes)
   coin_slug <- as.character(slug)
-  cpage <- xml2::read_html(history_url, handle = curl::new_handle("useragent" = "Mozilla/5.0"))
-  cnames <- cpage %>% rvest::html_nodes(css = ".col-sm-4 .text-large") %>% rvest::html_text(trim = TRUE) %>% replace(!nzchar(.), NA)
-  cnodes <- cpage %>% rvest::html_nodes(css = "table") %>% .[1] %>% rvest::html_table(fill = TRUE) %>%
+  cpage <-
+    xml2::read_html(history_url,
+                    handle = curl::new_handle("useragent" = "Mozilla/5.0"))
+  cnames <-
+    cpage %>% rvest::html_nodes(css = ".col-sm-4 .text-large") %>% rvest::html_text(trim = TRUE) %>% replace(!nzchar(.), NA)
+  cnodes <-
+    cpage %>% rvest::html_nodes(css = "table") %>% .[1] %>% rvest::html_table(fill = TRUE) %>%
     replace(!nzchar(.), NA)
   scraper <- data.frame(cnodes = cnodes)
   scraper <- Reduce(rbind, cnodes)
   scraper$symbol <- gsub("\\(||\\n|\\)", "", toupper(cnames))
-  scraper$symbol <- as.character(strsplit(scraper$symbol, " ")[[1]][1])
+  scraper$symbol <-
+    as.character(strsplit(scraper$symbol, " ")[[1]][1])
   scraper$slug <- as.character(coin_slug)
   return(scraper)
 }
