@@ -4,38 +4,32 @@
 
 Retrieves all the open, high, low, close values for all cryptocurrencies. This retrieves data from CoinMarketCap's historical tables.
 
-## Getting Started
-
-These instructions will get you a copy of the crypto R package installed and ready to go.
-
 ### Prerequisites
 
 Below are the high level dependencies for the package
 
 ```
-R (>= 3.4.3), foreach, rvest, xml2
+R (>= 3.4.0), foreach, rvest, xml2, doSNOW
 ```
 
 ### Installing
 
-For now installation is through devtools::install_github("jessevent/crypto") until the cran package is accepted.
+The *crypto* R-package is now available on the CRAN repository!
 
-#### Installing crypto via Github
+#### Installing from CRAN
+
+  ```
+  install.packages("crypto")
+  ```
+
+#### Installing from Github
 
 ```
 library(devtools)
 install_github("jessevent/crypto")
 ```
 
-#### Installing crypto via CRAN
-
-- Waiting for approval to be added as CRAN package
-
-  ```
-  install.packages("crypto")
-  ```
-
-  ## Package Usage
+## Package Usage
 
 ### Load Crypto Package
 
@@ -48,12 +42,19 @@ library(crypto)
 This is the main function of this package and once ran will go and scrape all the historical tables of all the different cryptocurrencies listed on CoinMarketCap and turn it into a data frame.
 
 ```
+# Retrieve crypto market history for all coins
 will_i_get_rich <- getCoins()
+
+# Retrieve crypto market history for specific coin
+will_i_get_rich_from <- getCoins("kin")
+
+# Get list of coins and rank
+rich_list <- listCoins()
 ```
 
 ### Output
 
-I've had to go over the code with a fine tooth comb to get it compatible with CRAN so there have been significant enhancements to how some of the field conversions have been undertaken and the data being cleaned. This should eliminate a few issues around number formatting or unexpected handling of scientific notations.
+Running the `getCoins()` function will provide the following as a data frame.
 
 ```
     Observations: 649,051
@@ -78,6 +79,7 @@ I've had to go over the code with a fine tooth comb to get it compatible with CR
 - [Kaggle](https://www.kaggle.com/jessevent/all-crypto-currencies) - Get this dataset on kaggle!
 - [CoinSpot](https://coinspot.com.au?affiliate=9V5G4) - Invest $AUD into Crypto today!
 - [CoinMarketCap](https://coinmarketcap.com/) - Providing amazing data @CoinMarketCap
+- [CRAN] (https://cran.r-project.org/web/packages/crypto/index.html) - The CRAN repository for crypto
 
 ### Authors
 
