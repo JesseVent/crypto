@@ -79,7 +79,7 @@ Running the `getCoins()` function will provide the following as a data frame.
 - [Kaggle](https://www.kaggle.com/jessevent/all-crypto-currencies) - Get this dataset on kaggle!
 - [CoinSpot](https://coinspot.com.au?affiliate=9V5G4) - Invest $AUD into Crypto today!
 - [CoinMarketCap](https://coinmarketcap.com/) - Providing amazing data @CoinMarketCap
-- [CRAN] (https://cran.r-project.org/web/packages/crypto/index.html) - The CRAN repository for crypto
+- [CRAN](https://cran.r-project.org/web/packages/crypto/index.html) - The CRAN repository for crypto
 
 ### Authors
 
