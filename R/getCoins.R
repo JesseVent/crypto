@@ -68,7 +68,7 @@ getCoins <-
     i <- "i"
     options(scipen = 999)
     coins <- listCoins(coin, start_date, end_date)
-    if (!is.null(cpu_cores)) {
+    if (!is.null(limit)) {
       coins <- coins[1:limit,]
     }
     coinnames <-

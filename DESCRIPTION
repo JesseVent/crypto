@@ -17,15 +17,11 @@ Encoding: UTF-8
 LazyData: true
 Imports: magrittr,
   jsonlite,
-  plyr,
   dplyr,
-  doParallel,
   lubridate,
   curl,
   utils,
-  base,
   parallel,
-  purrr,
   stats
 Suggests: doSNOW
 RoxygenNote: 6.0.1
