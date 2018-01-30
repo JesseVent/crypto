@@ -4,10 +4,19 @@
 \alias{getCoins}
 \title{Get historic crypto currency market data}
 \usage{
-getCoins(coin = NULL)
+getCoins(coin = NULL, limit = NULL, cpu_cores = NULL, start_date = NULL,
+  end_date = NULL)
 }
 \arguments{
-\item{coin}{Name, symbol or slug of crypto currency}
+\item{coin}{string Name, symbol or slug of crypto currency, default is all tokens}
+
+\item{limit}{integer Return the top n records, default is all tokens}
+
+\item{cpu_cores}{integer Uses n cores for processing, default uses all cores}
+
+\item{start_date}{string Start date to retrieve data from, format 'yyyymmdd'}
+
+\item{end_date}{string End date to retrieve data from, format 'yyyymmdd'}
 
 \item{...}{No arguments, return all coins}
 }
@@ -51,6 +60,9 @@ kin_coins <- listCoins(coin)
 # retrieving market history for ALL crypto currencies
 
 all_coins <- getCoins()
-}
 
+# retrieving this years market history for ALL crypto currencies
+
+all_coins <- getCoins(start_date = '20180101')
+}
 }

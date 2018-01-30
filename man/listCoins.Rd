@@ -4,10 +4,14 @@
 \alias{listCoins}
 \title{Retrieves name, symbol, slug and rank for all tokens}
 \usage{
-listCoins(coin = NULL)
+listCoins(coin = NULL, start_date = NULL, end_date = NULL)
 }
 \arguments{
 \item{coin}{Name, symbol or slug of crypto currency}
+
+\item{start_date}{Start date to retrieve data from, format yyyymmdd}
+
+\item{end_date}{Start date to retrieve data from, format yyyymmdd}
 
 \item{...}{No arguments, return all coins}
 }

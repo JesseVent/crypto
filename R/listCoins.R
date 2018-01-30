@@ -7,6 +7,8 @@
 #'
 #' @param coin Name, symbol or slug of crypto currency
 #' @param ... No arguments, return all coins
+#' @param start_date Start date to retrieve data from, format yyyymmdd
+#' @param end_date Start date to retrieve data from, format yyyymmdd
 #'
 #' @return Crypto currency historic OHLC market data in a dataframe:
 #'   \item{symbol}{Coin symbol (not-unique)}
@@ -33,8 +35,7 @@
 #'
 #' @export
 #'
-listCoins <- function(coin = NULL) {
-  today <- gsub("-", "", lubridate::today())
+listCoins <- function(coin = NULL, start_date = NULL, end_date = NULL) {
   json <-
     "https://files.coinmarketcap.com/generated/search/quick_search.json"
   coins <- jsonlite::read_json(json, simplifyVector = TRUE)
@@ -58,12 +59,20 @@ listCoins <- function(coin = NULL) {
       rank = coins$rank
     )
   length <- as.numeric(length(coins$slug))
+  if (is.null(start_date)) {
+  start_date <- "20130428"
+  }
+  if (is.null(end_date)) {
+  end_date <- gsub("-", "", lubridate::today())
+  }
   cmcurl <-
     paste0(
       "https://coinmarketcap.com/currencies/",
       coins$slug,
-      "/historical-data/?start=20130428&end=",
-      today
+      "/historical-data/?start=",
+       start_date,
+       "&end=",
+       end_date
     )
   baseurl <- c(cmcurl)
   coins$symbol <- as.character(toupper(coins$symbol))

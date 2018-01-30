@@ -6,8 +6,12 @@
 #' analysis on the crypto financial markets or to attempt
 #' to predict future market movments or trends.
 #'
-#' @param coin Name, symbol or slug of crypto currency
+#' @param coin string Name, symbol or slug of crypto currency, default is all tokens
+#' @param limit integer Return the top n records, default is all tokens
+#' @param cpu_cores integer Uses n cores for processing, default uses all cores
 #' @param ... No arguments, return all coins
+#' @param start_date string Start date to retrieve data from, format 'yyyymmdd'
+#' @param end_date string End date to retrieve data from, format 'yyyymmdd'
 #'
 #' @return Crypto currency historic OHLC market data in a dataframe:
 #'   \item{slug}{Coin url slug}
@@ -49,18 +53,24 @@
 #' # retrieving market history for ALL crypto currencies
 #'
 #' all_coins <- getCoins()
-#' }
 #'
+#' # retrieving this years market history for ALL crypto currencies
+#'
+#' all_coins <- getCoins(start_date = '20180101')
+#' }
 #' @name getCoins
 #'
 #' @export
 #'
 getCoins <-
-  function(coin = NULL) {
+  function(coin = NULL, limit = NULL, cpu_cores = NULL, start_date = NULL, end_date = NULL) {
     cat("Retrieves coin market history from coinmarketcap. ")
     i <- "i"
     options(scipen = 999)
-    coins <- listCoins(coin)
+    coins <- listCoins(coin, start_date, end_date)
+    if (!is.null(cpu_cores)) {
+      coins <- coins[1:limit,]
+    }
     coinnames <-
       dplyr::data_frame(
         name = as.character(coins$name),
@@ -69,10 +79,11 @@ getCoins <-
       )
     length <- as.numeric(length(coins$url))
     zrange <- 1:as.numeric(length(coins$url))
-    cpucore <-
-      as.numeric(parallel::detectCores(all.tests = FALSE, logical = TRUE))
+    if (is.null(cpu_cores)) {
+    cpu_cores <- as.numeric(parallel::detectCores(all.tests = FALSE, logical = TRUE))
+    }
     ptm <- proc.time()
-    cluster <- parallel::makeCluster(cpucore, type = "SOCK")
+    cluster <- parallel::makeCluster(cpu_cores, type = "SOCK")
     doSNOW::registerDoSNOW(cluster)
     pb <- txtProgressBar(max = length, style = 3)
     progress <- function(n)
