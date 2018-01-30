@@ -22,6 +22,6 @@ Imports: magrittr,
   curl,
   utils,
   parallel,
-  stats
-Suggests: doSNOW
+  stats,
+  doSNOW
 RoxygenNote: 6.0.1
