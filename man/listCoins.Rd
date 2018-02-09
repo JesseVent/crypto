@@ -21,7 +21,8 @@ Crypto currency historic OHLC market data in a dataframe:
   \item{name}{Coin name}
   \item{slug}{Coin URL slug (unique)}
   \item{rank}{Current rank by market cap}
-  \item{url}{Historical market tables urls for scraping}
+  \item{exchange_url}{Exchange market tables urls for scraping}
+  \item{history_url}{Historical market tables urls for scraping}
 
 Required dependency that is used in function call \code{getCoins()}.
 }

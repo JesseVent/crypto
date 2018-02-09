@@ -15,7 +15,8 @@
 #'   \item{name}{Coin name}
 #'   \item{slug}{Coin URL slug (unique)}
 #'   \item{rank}{Current rank by market cap}
-#'   \item{url}{Historical market tables urls for scraping}
+#'   \item{exchange_url}{Exchange market tables urls for scraping}
+#'   \item{history_url}{Historical market tables urls for scraping}
 #'
 #' Required dependency that is used in function call \code{getCoins()}.
 #'
@@ -65,7 +66,13 @@ listCoins <- function(coin = NULL, start_date = NULL, end_date = NULL) {
   if (is.null(end_date)) {
   end_date <- gsub("-", "", lubridate::today())
   }
-  cmcurl <-
+  exchangeurl <-
+    paste0(
+      "https://coinmarketcap.com/currencies/",
+      coins$slug,
+      "/#markets"
+    )
+  historyurl <-
     paste0(
       "https://coinmarketcap.com/currencies/",
       coins$slug,
@@ -74,11 +81,13 @@ listCoins <- function(coin = NULL, start_date = NULL, end_date = NULL) {
        "&end=",
        end_date
     )
-  baseurl <- c(cmcurl)
+  exchange_url <- c(exchangeurl)
+  history_url <- c(historyurl)
   coins$symbol <- as.character(toupper(coins$symbol))
   coins$name <- as.character(coins$name)
   coins$slug <- as.character(coins$slug)
-  coins$url <- as.character(baseurl)
+  coins$exchange_url <- as.character(exchange_url)
+  coins$history_url <- as.character(history_url)
   coins$rank <- as.numeric(coins$rank)
   return(coins)
 }

@@ -1,10 +1,10 @@
-#' Get historic crypto currency market data
+#' Get current crypto market exchanges
 #'
-#' Scrape the crypto currency historic market tables from
+#' Scrape the crypto currency exchange tables from
 #' Coinmarketcap <https://coinmarketcap.com> and display
 #' the results in a date frame. This can be used to conduct
-#' analysis on the crypto financial markets or to attempt
-#' to predict future market movments or trends.
+#' analysis on the exchanges or to attempt
+#' to predict arbiture.
 #'
 #' @param coin string Name, symbol or slug of crypto currency, default is all tokens
 #' @param limit integer Return the top n records, default is all tokens
@@ -17,19 +17,18 @@
 #'   \item{slug}{Coin url slug}
 #'   \item{symbol}{Coin symbol}
 #'   \item{name}{Coin name}
-#'   \item{date}{Market date}
-#'   \item{ranknow}{Current Rank}
-#'   \item{open}{Market open}
-#'   \item{high}{Market high}
-#'   \item{low}{Market low}
-#'   \item{close}{Market close}
-#'   \item{volume}{Volume 24 hours}
-#'   \item{market}{USD Market cap}
-#'   \item{close_ratio}{Close rate, min-maxed with the high and low values that day}
-#'   \item{spread}{Volatility premium, high minus low for that day}
-#'
+#'   \item{trading_pair}{Coin trading pair}
+#'   \item{exchange_name}{Name of exchange}
+#'   \item{last_updated}{Exchange refresh}
+#'   \item{exchange_volume}{Exchange $USD volume}
+#'   \item{exchange_price}{Exchange $USD price}
+#'   \item{exchange_share}{Percent exchange traded}
+#'   \item{coin_rank}{Rank of current coin}
+#'   \item{exchange_rank}{Exchange ranking for coin}
+
 #' This is the main function of the crypto package. If you want to retrieve
-#' ALL coins then do not pass a argument to getCoins(), or pass the coin name.
+#' ALL coins and their exchanges, then do not pass a argument to getExchanges(),
+#' or pass the coin name.
 #'
 #' Please note that the doSNOW package is required to load the progress bar on
 #' both linux and macOS systems as the doParallel package does not support it.
@@ -43,26 +42,23 @@
 #' @import stats
 #'
 #' @examples
-#' # retrieving market history for specific crypto currency
+#' # Retrieving exchange data for specific crypto currency
 #'
 #' coin <- "kin"
-#' kin_coins <- listCoins(coin)
+#' kin_exchanges <- getExchanges(coin)
 #'
 #' \dontrun{
 #'
 #' # retrieving market history for ALL crypto currencies
 #'
-#' all_coins <- getCoins()
+#' all_exchanges <- getExchanges()
 #'
-#' # retrieving this years market history for ALL crypto currencies
-#'
-#' all_coins <- getCoins(start_date = '20180101')
 #' }
-#' @name getCoins
+#' @name getExchanges
 #'
 #' @export
 #'
-getCoins <-
+getExchanges <-
   function(coin = NULL, limit = NULL, cpu_cores = NULL, start_date = NULL, end_date = NULL) {
     cat("Retrieves coin market history from coinmarketcap. ")
     i <- "i"
@@ -78,8 +74,8 @@ getCoins <-
         rank = coins$rank,
         slug = coins$slug
       )
-    length <- as.numeric(length(coins$history_url))
-    zrange <- 1:as.numeric(length(coins$history_url))
+    length <- as.numeric(length(coins$exchange_url))
+    zrange <- 1:as.numeric(length(coins$exchange_url))
     if (is.null(cpu_cores)) {
     cpu_cores <- as.numeric(parallel::detectCores(all.tests = FALSE, logical = TRUE))
     }
@@ -90,7 +86,7 @@ getCoins <-
     progress <- function(n)
       setTxtProgressBar(pb, n)
     opts <- list(progress = progress)
-    attributes <- coins$history_url
+    attributes <- coins$exchange_url
     slug <- coins$slug
     message('   If this helps you become rich please consider donating',
             appendLF = TRUE)
@@ -106,59 +102,55 @@ getCoins <-
     parallel::stopCluster(cluster)
     print(proc.time() - ptm)
     results <- merge(results, coinnames, by = "slug")
-    marketdata <- results
-    namecheck <- as.numeric(ncol(marketdata))
+    exchangedata <- results
+    namecheck <- as.numeric(ncol(exchangedata))
     ifelse(
       namecheck > 2,
-      colnames(marketdata) <-
+      colnames(exchangedata) <-
         c(
           "slug",
-          "date",
-          "open",
-          "high",
-          "low",
-          "close",
-          "volume",
-          "market",
+          "exchange_rank",
+          "exchange_name",
+          "trading_pair",
+          "exchange_volume",
+          "exchange_price",
+          "exchange_share",
+          "last_updated",
           "symbol",
           "name",
-          "ranknow"
+          "coin_rank"
         ),
       NULL
     )
-    marketdata <- marketdata[c(
+    exchangedata <- exchangedata[c(
       "slug",
       "symbol",
       "name",
-      "date",
-      "ranknow",
-      "open",
-      "high",
-      "low",
-      "close",
-      "volume",
-      "market"
+      "trading_pair",
+      "exchange_name",
+      "last_updated",
+      "exchange_volume",
+      "exchange_price",
+      "exchange_share",
+      "coin_rank",
+      "exchange_rank"
     )]
-    marketdata$date <-
-      suppressWarnings(lubridate::mdy(unlist(marketdata$date)))
-    cols <- c(5:11)
-    ccols <- c(7:11)
-    marketdata[, cols] <-
-      apply(marketdata[, cols], 2, function(x)
-        gsub(",", "", x))
-    marketdata[, ccols] <-
-      apply(marketdata[, ccols], 2, function(x)
+
+    cols <- c(7:11)
+    exchangedata[, cols] <-
+      apply(exchangedata[, cols], 2, function(x)
+        gsub(",|%|\\$", "", x))
+    exchangedata[, cols] <-
+      apply(exchangedata[, cols], 2, function(x)
         gsub("-", "0", x))
-    marketdata[, cols] <-
-      suppressWarnings(apply(marketdata[, cols], 2, function(x)
+    exchangedata[, cols] <-
+      apply(exchangedata[, cols], 2, function(x)
+        replace(x,is.na(x),0))
+    exchangedata[, cols] <-
+      suppressWarnings(apply(exchangedata[, cols], 2, function(x)
         as.numeric(x)))
-    marketdata <- na.omit(marketdata)
-    marketdata$close_ratio <-
-      (marketdata$close - marketdata$low) / (marketdata$high - marketdata$low)
-    marketdata$close_ratio <- round(marketdata$close_ratio, 4)
-    marketdata$spread <- (marketdata$high - marketdata$low)
-    marketdata$spread <- round(marketdata$spread, 2)
+    exchangedata <- na.omit(exchangedata)
     results <-
-      marketdata[order(marketdata$ranknow, marketdata$date, decreasing = FALSE), ]
+      exchangedata[order(exchangedata$coin_rank, exchangedata$exchange_rank, decreasing = FALSE), ]
     return(results)
   }
