@@ -44,16 +44,11 @@ scraper <- function(attributes, slug) {
   cpage <-
     xml2::read_html(history_url,
                     handle = curl::new_handle("useragent" = "Mozilla/5.0"))
-  cnames <-
-    cpage %>% rvest::html_nodes(css = ".col-sm-4 .text-large") %>% rvest::html_text(trim = TRUE) %>% replace(!nzchar(.), NA)
   cnodes <-
     cpage %>% rvest::html_nodes(css = "table") %>% .[1] %>% rvest::html_table(fill = TRUE) %>%
     replace(!nzchar(.), NA)
   scraper <- data.frame(cnodes = cnodes)
   scraper <- Reduce(rbind, cnodes)
-  scraper$symbol <- gsub("\\(||\\n|\\)", "", toupper(cnames))
-  scraper$symbol <-
-    as.character(strsplit(scraper$symbol, " ")[[1]][1])
   scraper$slug <- as.character(coin_slug)
   return(scraper)
 }
