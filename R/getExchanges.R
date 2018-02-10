@@ -26,9 +26,9 @@
 #'   \item{coin_rank}{Rank of current coin}
 #'   \item{exchange_rank}{Exchange ranking for coin}
 
-#' This is the main function of the crypto package. If you want to retrieve
-#' ALL coins and their exchanges, then do not pass a argument to getExchanges(),
-#' or pass the coin name.
+#' If you want to retrieve ALL coins and their exchanges,
+#' then do not pass a argument to getExchanges(),
+#'
 #'
 #' Please note that the doSNOW package is required to load the progress bar on
 #' both linux and macOS systems as the doParallel package does not support it.

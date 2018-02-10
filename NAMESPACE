@@ -2,10 +2,12 @@
 
 export(getCoins)
 export(getExchanges)
+export(getPrices)
 export(listCoins)
 export(scraper)
 import(stats)
 importFrom(foreach,"%dopar%")
+importFrom(jsonlite,read_json)
 importFrom(magrittr,"%>%")
 importFrom(rvest,"html_nodes")
 importFrom(utils,"globalVariables")
