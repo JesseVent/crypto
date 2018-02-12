@@ -1,5 +1,7 @@
 # Cryptocurrency Market Data
-![Cran](http://cranlogs.r-pkg.org/badges/grand-total/crypto) ![Cran](http://cranlogs.r-pkg.org/badges/crypto) ![Cran](http://cranlogs.r-pkg.org/badges/last-week/crypto) ![Cran](http://cranlogs.r-pkg.org/badges/last-day/crypto) [![Rdoc](http://www.rdocumentation.org/badges/version/crypto)](http://www.rdocumentation.org/packages/crypto) 
+
+![Cran](http://cranlogs.r-pkg.org/badges/grand-total/crypto) ![Cran](http://cranlogs.r-pkg.org/badges/crypto) ![Cran](http://cranlogs.r-pkg.org/badges/last-week/crypto) ![Cran](http://cranlogs.r-pkg.org/badges/last-day/crypto) [![Rdoc](http://www.rdocumentation.org/badges/version/crypto)](http://www.rdocumentation.org/packages/crypto)
+
 ## Historical Cryptocurrency Prices For ALL Tokens!
 
 Retrieves all the open, high, low, close values for all cryptocurrencies. This retrieves data from CoinMarketCap's historical tables.
@@ -14,13 +16,13 @@ R (>= 3.4.0), foreach, rvest, xml2, doSNOW
 
 ### Installing
 
-The *crypto* R-package is now available on the CRAN repository!
+The _crypto_ R-package is now available on the CRAN repository!
 
 #### Installing from CRAN
 
-  ```
+```
   install.packages("crypto")
-  ```
+```
 
 #### Installing from Github
 
@@ -79,7 +81,7 @@ Running the `getCoins()` function will provide the following as a data frame.
 - [Kaggle](https://www.kaggle.com/jessevent/all-crypto-currencies) - Get this dataset on kaggle!
 - [CoinSpot](https://coinspot.com.au?affiliate=9V5G4) - Invest $AUD into Crypto today!
 - [CoinMarketCap](https://coinmarketcap.com/) - Providing amazing data @CoinMarketCap
-- [CRAN](https://cran.r-project.org/web/packages/crypto/index.html) - The CRAN repository for crypto
+- [CRAN](https://CRAN.R-project.org/package=crypto) - The CRAN repository for crypto
 
 ### Authors
 
@@ -87,7 +89,7 @@ Running the `getCoins()` function will provide the following as a data frame.
 
 ### License
 
-This project is licensed under the MIT License - see the 
+This project is licensed under the MIT License - see the
 
 <license.md> file for details</license.md>
 

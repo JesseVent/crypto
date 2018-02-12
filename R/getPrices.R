@@ -24,4 +24,5 @@ cols   <- c(4:14)
 prices[, cols]   <- apply(prices[, cols], 2, function(x) replace(x, is.na(x), 0))
 prices[, cols]   <- suppressWarnings(apply(prices[, cols], 2, function(x) as.numeric(x)))
 prices[, 15]     <- as.POSIXct(as.numeric(prices[, 15]), origin = "1970-01-01")
+return(prices)
 }

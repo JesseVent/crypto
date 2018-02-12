@@ -48,12 +48,11 @@ analysis on the exchanges or to attempt
 to predict arbiture.
 }
 \examples{
+\dontrun{
 # Retrieving exchange data for specific crypto currency
 
 coin <- "kin"
 kin_exchanges <- getExchanges(coin)
-
-\dontrun{
 
 # retrieving market history for ALL crypto currencies
 
