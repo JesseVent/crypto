@@ -27,9 +27,9 @@ Crypto currency historic OHLC market data in a dataframe:
 Required dependency that is used in function call \code{getCoins()}.
 }
 \description{
-List all of the crypto currencies that have existed on Coinmarketcap
+List all of the crypto currencies that have existed on CoinMarketCap
 and use this to populate the URL base for scraping historical market
-data. It retrieves name, slug, symbol and rank of cryptocurrencies from
+data. It retrieves name, slug, symbol and rank of crypto currencies from
 CoinMarketCap and creates URLS for \code{scraper()} to use.
 }
 \examples{

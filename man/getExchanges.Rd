@@ -42,10 +42,10 @@ both linux and macOS systems as the doParallel package does not support it.
 }
 \description{
 Scrape the crypto currency exchange tables from
-Coinmarketcap <https://coinmarketcap.com> and display
+CoinMarketCap <https://coinmarketcap.com> and display
 the results in a date frame. This can be used to conduct
 analysis on the exchanges or to attempt
-to predict arbiture.
+to predict exchange arbiture.
 }
 \examples{
 \dontrun{

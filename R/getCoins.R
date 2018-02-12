@@ -1,10 +1,10 @@
 #' Get historic crypto currency market data
 #'
 #' Scrape the crypto currency historic market tables from
-#' Coinmarketcap <https://coinmarketcap.com> and display
+#' CoinMarketCap <https://coinmarketcap.com> and display
 #' the results in a date frame. This can be used to conduct
 #' analysis on the crypto financial markets or to attempt
-#' to predict future market movments or trends.
+#' to predict future market movements or trends.
 #'
 #' @param coin string Name, symbol or slug of crypto currency, default is all tokens
 #' @param limit integer Return the top n records, default is all tokens
@@ -64,7 +64,7 @@
 #'
 getCoins <-
   function(coin = NULL, limit = NULL, cpu_cores = NULL, start_date = NULL, end_date = NULL) {
-    cat("Retrieves coin market history from coinmarketcap. ")
+    cat("Retrieves coin market history from CoinMarketCap. ")
     i <- "i"
     options(scipen = 999)
     coins <- listCoins(coin, start_date, end_date)

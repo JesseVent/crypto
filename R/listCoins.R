@@ -1,8 +1,8 @@
 #' Retrieves name, symbol, slug and rank for all tokens
 #'
-#' List all of the crypto currencies that have existed on Coinmarketcap
+#' List all of the crypto currencies that have existed on CoinMarketCap
 #' and use this to populate the URL base for scraping historical market
-#' data. It retrieves name, slug, symbol and rank of cryptocurrencies from
+#' data. It retrieves name, slug, symbol and rank of crypto currencies from
 #' CoinMarketCap and creates URLS for \code{scraper()} to use.
 #'
 #' @param coin Name, symbol or slug of crypto currency

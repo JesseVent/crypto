@@ -6,7 +6,7 @@
 #' as part of a loop to retrieve all crypto currencies.
 #'
 #' @param attributes URL generated from \code{listCoins()}
-#' @param slug Unique indentifier required for merging
+#' @param slug Unique identifier required for merging
 #'
 #' @return Raw OHLC market data in a dataframe:
 #'   \item{slug}{Coin url slug}

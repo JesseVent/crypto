@@ -9,7 +9,7 @@ scraper(attributes, slug)
 \arguments{
 \item{attributes}{URL generated from \code{listCoins()}}
 
-\item{slug}{Unique indentifier required for merging}
+\item{slug}{Unique identifier required for merging}
 }
 \value{
 Raw OHLC market data in a dataframe:

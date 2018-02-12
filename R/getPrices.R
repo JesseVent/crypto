@@ -1,4 +1,4 @@
-#' @title Get current cryptocurrency prices
+#' @title Get current crypto currency prices
 #' @description This will retrieve the current market prices from CoinMarketCap. Data gets refreshed every 5 minutes.
 #' @param coin Token name, default is all, Default: NULL
 #' @param limit Return top n coins, default is all, Default: 0

@@ -2,7 +2,7 @@
 % Please edit documentation in R/getPrices.R
 \name{getPrices}
 \alias{getPrices}
-\title{Get current cryptocurrency prices}
+\title{Get current crypto currency prices}
 \usage{
 getPrices(coin = NULL, limit = 0, currency = NULL)
 }
