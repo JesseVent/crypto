@@ -52,6 +52,10 @@ will_i_get_rich_from <- getCoins("kin")
 
 # Get list of coins and rank
 rich_list <- listCoins()
+
+# Retrieve crypto market history for all coins and write results to file
+will_i_get_rich <- getCoins()
+write.csv(will_i_get_rich, file = "C:/coin_data.csv")
 ```
 
 ### Output
