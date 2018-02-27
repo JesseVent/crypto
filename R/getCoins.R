@@ -39,6 +39,7 @@
 #' @importFrom utils "txtProgressBar"
 #' @importFrom utils "setTxtProgressBar"
 #' @importFrom utils "globalVariables"
+#' @importFrom tidyr "replace_na"
 #'
 #' @import stats
 #'
@@ -156,6 +157,7 @@ getCoins <-
     marketdata$close_ratio <-
       (marketdata$close - marketdata$low) / (marketdata$high - marketdata$low)
     marketdata$close_ratio <- round(marketdata$close_ratio, 4)
+    marketdata$close_ratio <- marketdata$close_ratio %>% tidyr::replace_na(0) %>% as.numeric()
     marketdata$spread <- (marketdata$high - marketdata$low)
     marketdata$spread <- round(marketdata$spread, 2)
     results <-

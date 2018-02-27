@@ -1,10 +1,9 @@
 # Latest CRAN submission comments
 
-## crypto 0.1.3 - Minor resubmission
+## crypto 0.1.4 - Minor resubmission
 
-Apologies for resubmission, but I identified a defect in one of my functions that was returning the wrong result when packaged. Change summary is below:
-
-- Fixing defect in getPrices function by adding return(prices)
+- Fixed rounding issue in getCoins by introducing replace_na from tidyr package
+- Addition of tidyr package to DESCRIPTION
 
 ### Tested on Mac OSX R 3.4.3 & WinBuild
 
@@ -20,6 +19,11 @@ Status: 1 NOTE
 **Notes regard usage of doSNOW, no alternative please see previous comments below for note resolution.**
 
 # Previous CRAN submission comments
+## crypto 0.1.3 
+
+Apologies for resubmission, but I identified a defect in one of my functions that was returning the wrong result when packaged. Change summary is below:
+
+- Fixing defect in getPrices function by adding return(prices)
 
 ## crypto 0.1.2
 
