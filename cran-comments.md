@@ -2,8 +2,9 @@
 
 ## crypto 0.1.4 - Minor resubmission
 
-- Fixed rounding issue in getCoins by introducing replace_na from tidyr package
+- Fixed rounding issue in getCoins & getPrices by introducing replace_na from tidyr package
 - Addition of tidyr package to DESCRIPTION
+- Fixed issue in getPrices to do with currency conversion
 
 ### Tested on Mac OSX R 3.4.3 & WinBuild
 
