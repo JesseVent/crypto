@@ -150,6 +150,8 @@ getCoins <-
     marketdata[, ccols] <-
       apply(marketdata[, ccols], 2, function(x)
         gsub("-", "0", x))
+    marketdata$volume <- marketdata$volume  %>% tidyr::replace_na(0) %>% as.numeric()
+    marketdata$market <-marketdata$market  %>% tidyr::replace_na(0) %>% as.numeric()
     marketdata[, cols] <-
       suppressWarnings(apply(marketdata[, cols], 2, function(x)
         as.numeric(x)))
