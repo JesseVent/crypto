@@ -99,14 +99,17 @@ getCoins <-
             appendLF = TRUE)
     message("XRP: rK59semLsuJZEWftxBFhWuNE6uhznjz2bK", appendLF = TRUE)
     message("LTC: LWpiZMd2cEyqCdrZrs9TjsouTLWbFFxwCj", appendLF = TRUE)
-    results <-
-      foreach::foreach(i = zrange,
-                       .options.snow = opts,
-                       .combine = rbind) %dopar% scraper(attributes[i], slug[i])
+    results_data <- foreach::foreach(
+      i = zrange,
+      .errorhandling = c('remove'),
+      .options.snow = opts,
+      .combine = rbind,
+      .verbose = FALSE
+    ) %dopar% scraper(attributes[i], slug[i])
     close(pb)
     parallel::stopCluster(cluster)
     print(proc.time() - ptm)
-    results <- merge(results, coinnames, by = "slug")
+    results <- merge(results_data, coinnames, by = "slug")
     marketdata <- results
     namecheck <- as.numeric(ncol(marketdata))
     ifelse(
