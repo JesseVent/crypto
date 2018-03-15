@@ -38,7 +38,7 @@
 #'
 listCoins <- function(coin = NULL, start_date = NULL, end_date = NULL) {
   json <-
-    "https://files.coinmarketcap.com/generated/search/quick_search.json"
+    "https://s2.coinmarketcap.com/generated/search/quick_search.json"
   coins <- jsonlite::read_json(json, simplifyVector = TRUE)
   name <- coins$name
   slug <- coins$slug

@@ -1,10 +1,9 @@
 # Latest CRAN submission comments
 
-## crypto 0.1.4 - Minor resubmission
+## crypto 0.1.5 - Minor resubmission
 
-- Fixed rounding issue in getCoins & getPrices by introducing replace_na from tidyr package
-- Addition of tidyr package to DESCRIPTION
-- Fixed issue in getPrices to do with currency conversion
+- Changed listCoins url to the new service
+- added error handling to foreach call
 
 ### Tested on Mac OSX R 3.4.3 & WinBuild
 
@@ -20,6 +19,12 @@ Status: 1 NOTE
 **Notes regard usage of doSNOW, no alternative please see previous comments below for note resolution.**
 
 # Previous CRAN submission comments
+## crypto 0.1.4 - Minor resubmission
+
+- Fixed rounding issue in getCoins & getPrices by introducing replace_na from tidyr package
+- Addition of tidyr package to DESCRIPTION
+- Fixed issue in getPrices to do with currency conversion
+
 ## crypto 0.1.3 
 
 Apologies for resubmission, but I identified a defect in one of my functions that was returning the wrong result when packaged. Change summary is below:

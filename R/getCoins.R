@@ -104,13 +104,13 @@ getCoins <-
       .errorhandling = c('remove'),
       .options.snow = opts,
       .combine = rbind,
-      .verbose = FALSE
+      .verbose = TRUE
     ) %dopar% scraper(attributes[i], slug[i])
     close(pb)
     parallel::stopCluster(cluster)
     print(proc.time() - ptm)
     results <- merge(results_data, coinnames, by = "slug")
-    marketdata <- results
+    marketdata <- results %>% as.data.frame()
     namecheck <- as.numeric(ncol(marketdata))
     ifelse(
       namecheck > 2,
