@@ -110,7 +110,7 @@ getCoins <-
     parallel::stopCluster(cluster)
     print(proc.time() - ptm)
     results <- merge(results_data, coinnames, by = "slug")
-    marketdata <- results
+    marketdata <- results %>% as.data.frame()
     namecheck <- as.numeric(ncol(marketdata))
     ifelse(
       namecheck > 2,

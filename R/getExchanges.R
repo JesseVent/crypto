@@ -95,8 +95,10 @@ getExchanges <-
     message("LTC: LWpiZMd2cEyqCdrZrs9TjsouTLWbFFxwCj", appendLF = TRUE)
     results <-
       foreach::foreach(i = zrange,
+                       .errorhandling = c('remove'),
                        .options.snow = opts,
-                       .combine = rbind) %dopar% scraper(attributes[i], slug[i])
+                       .combine = rbind,
+                       .verbose = FALSE) %dopar% scraper(attributes[i], slug[i])
     close(pb)
     parallel::stopCluster(cluster)
     print(proc.time() - ptm)
