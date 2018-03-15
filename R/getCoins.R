@@ -104,7 +104,7 @@ getCoins <-
       .errorhandling = c('remove'),
       .options.snow = opts,
       .combine = rbind,
-      .verbose = FALSE
+      .verbose = TRUE
     ) %dopar% scraper(attributes[i], slug[i])
     close(pb)
     parallel::stopCluster(cluster)
