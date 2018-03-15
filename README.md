@@ -14,6 +14,14 @@ Below are the high level dependencies for the package
 R (>= 3.4.0), foreach, rvest, xml2, doSNOW
 ```
 
+#### Ubuntu 16.04 LTS
+
+The following packages are required for the dependencies to install correctly
+
+```bash
+sudo apt install libxml2-dev libcurl4-openssl-dev libssl-dev
+```
+
 ### Installing
 
 The _crypto_ R-package is now available on the CRAN repository!
