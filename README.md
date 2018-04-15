@@ -1,4 +1,3 @@
-# Cryptocurrency Market Data
 ![alt text](https://github.com/JesseVent/Crypto-Market-Scraper/blob/dd67704fea43f4e77e07435924e5fe4ede4b73ab/dataset-cover.png?raw=true "Cryptocurrency Market Data Banner")
 ![Cran](http://cranlogs.r-pkg.org/badges/grand-total/crypto) ![Cran](http://cranlogs.r-pkg.org/badges/crypto) ![Cran](http://cranlogs.r-pkg.org/badges/last-week/crypto) ![Cran](http://cranlogs.r-pkg.org/badges/last-day/crypto) [![Rdoc](http://www.rdocumentation.org/badges/version/crypto)](http://www.rdocumentation.org/packages/crypto)
 
