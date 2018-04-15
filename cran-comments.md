@@ -1,9 +1,14 @@
 # Latest CRAN submission comments
 
-## crypto 0.1.5 - Minor resubmission
+## crypto 0.1.6 - Minor resubmission
 
-- Changed listCoins url to the new service
-- added error handling to foreach call
+- Added crypto2xts function to getCoins() into xts object
+- crypto2xts can be summarised by time periods
+- Addition of 'xts' package to DESCRIPTION
+- Addition of NEWS file
+- In DESCRIPTION changed contact email address to align with public email on GitHub
+
+**Please let me know if email address change is not allowed, just trying to protect my own privacy a bit more as I have been getting a large amount of unsolicited contact through different channels and trying to consolidate public contact details.**
 
 ### Tested on Mac OSX R 3.4.3 & WinBuild
 
@@ -19,6 +24,11 @@ Status: 1 NOTE
 **Notes regard usage of doSNOW, no alternative please see previous comments below for note resolution.**
 
 # Previous CRAN submission comments
+## crypto 0.1.5 - Minor resubmission
+
+- Changed listCoins url to the new service
+- added error handling to foreach call
+
 ## crypto 0.1.4 - Minor resubmission
 
 - Fixed rounding issue in getCoins & getPrices by introducing replace_na from tidyr package

@@ -2,3 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+crypto.Rproj
+/inst/
+.Rbuildignore
+cran-comments.md

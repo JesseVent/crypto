@@ -4,101 +4,83 @@
 
 ## Historical Cryptocurrency Prices For ALL Tokens!
 
-Retrieves all the open, high, low, close values for all cryptocurrencies. This retrieves data from CoinMarketCap's historical tables.
+Retrieves all the open, high, low, close values for all cryptocurrencies. This retrieves data from CoinMarketCap's historical prices, exchange details and current prices API.
+
+- Retrieves historical crypto currency data `getCoins()`
+- Retrieves current crypto currency prices `getPrices()`
+- Retrieves list of all crypto currencies `listCoins()`
+- Retrieves all crypto exchanges and their listings `getExchanges()`
+- Converts/summarises historical data into xts objects `crypto2xts`
 
 ### Prerequisites
 
-Below are the high level dependencies for the package
+Below are the high level dependencies for the package to install correctly.
 
 ```
 R (>= 3.4.0), foreach, rvest, xml2, doSNOW
-```
 
-#### Ubuntu 16.04 LTS
-
-The following packages are required for the dependencies to install correctly
-
-```bash
+# Ubuntu 
 sudo apt install libxml2-dev libcurl4-openssl-dev libssl-dev
 ```
 
 ### Installing
 
-The _crypto_ R-package is now available on the CRAN repository!
+The _crypto_ R-package is installable through CRAN or through github.
 
-#### Installing from CRAN
+```R
+# Installing via CRAN
+install.packages("crypto", dependencies = TRUE)
 
-```
-  install.packages("crypto")
-```
-
-#### Installing from Github
-
-```
-library(devtools)
-install_github("jessevent/crypto")
+# Installing via Github
+devtools::install_github("jessevent/crypto")
 ```
 
 ## Package Usage
 
-### Load Crypto Package
+These are the main functions that are added so far and a brief summary of what they do. Additional parameters are viewable in the documentation for each function.
 
-```
+> Please give this package a star if you find it helpful
+
+```R
 library(crypto)
-```
 
-### Retrieve All Cryptocurrencies Market History
-
-This is the main function of this package and once ran will go and scrape all the historical tables of all the different cryptocurrencies listed on CoinMarketCap and turn it into a data frame.
-
-```
-# Retrieve crypto market history for all coins
-will_i_get_rich <- getCoins()
+# Retrieve crypto market history for all-to-n coins
+?getCoins
+will_i_get_rich <- getCoins(limit=50)
 
 # Retrieve crypto market history for specific coin
+?getCoins
 will_i_get_rich_from <- getCoins("kin")
 
 # Get list of coins and rank
+?listCoins
 rich_list <- listCoins()
+
+# Retrieve current crypto market details
+?getPrices
+am_i_rich_now <- getPrices()
+
+# Retrieve exchange details for all coins or specific coin
+?getExchanges
+where_do_i_get_rich <- getExchanges()
+
+# Convert and/or summarise market history into xts object
+?crypto2xts
+when_will_i_get_rich <- crypto2xts(will_i_get_rich, "week")
 ```
 
-### Output
-
-Running the `getCoins()` function will provide the following as a data frame.
-
-```
-    Observations: 649,051
-    Variables: 13
-    $ slug        <chr> "bitcoin", "bitcoin", "bitcoin", "bitcoin"...
-    $ symbol      <chr> "BTC", "BTC", "BTC", "BTC", "BTC", "BTC", ...
-    $ name        <chr> "Bitcoin", "Bitcoin", "Bitcoin", "Bitcoin"...
-    $ date        <date> 2013-04-28, 2013-04-29, 2013-04-30, 2013-...
-    $ ranknow     <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ...
-    $ open        <dbl> 135.30, 134.44, 144.00, 139.00, 116.38, 10...
-    $ high        <dbl> 135.98, 147.49, 146.93, 139.89, 125.60, 10...
-    $ low         <dbl> 132.10, 134.00, 134.05, 107.72, 92.28, 79...
-    $ close       <dbl> 134.21, 144.54, 139.00, 116.99, 105.21, 97...
-    $ volume      <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...
-    $ market      <dbl> 1500520000, 1491160000, 1597780000, 154282...
-    $ close_ratio <dbl> 0.5438, 0.7813, 0.3843, 0.2882, 0.3881, 0...
-    $ spread      <dbl> 3.88, 13.49, 12.88, 32.17, 33.32, 29.03, 2...
-```
-
-## Built With :heart: R
+## Built With :heart_eyes_cat: R
 
 - [Kaggle](https://www.kaggle.com/jessevent/all-crypto-currencies) - Get this dataset on kaggle!
 - [CoinSpot](https://coinspot.com.au?affiliate=9V5G4) - Invest $AUD into Crypto today!
 - [CoinMarketCap](https://coinmarketcap.com/) - Providing amazing data @CoinMarketCap
 - [CRAN](https://CRAN.R-project.org/package=crypto) - The CRAN repository for crypto
 
-### Authors
+### Author/License
 
 - **Jesse Vent** - Package Author - [jessevent](https://github.com/jessevent)
 
-### License
-
 This project is licensed under the MIT License - see the
-
 <license.md> file for details</license.md>
 
 ### Acknowledgments
