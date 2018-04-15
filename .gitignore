@@ -6,3 +6,4 @@ crypto.Rproj
 /inst/
 .Rbuildignore
 cran-comments.md
+.gitconfig

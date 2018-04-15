@@ -6,7 +6,7 @@
 - crypto2xts can be summarised by time periods
 - Addition of 'xts' package to DESCRIPTION
 - Addition of NEWS file
-- In DESCRIPTION changed contact email address to align with public email on GitHub
+- In DESCRIPTION changed contact email address to align with Github
 
 **Please let me know if email address change is not allowed, just trying to protect my own privacy a bit more as I have been getting a large amount of unsolicited contact through different channels and trying to consolidate public contact details.**
 

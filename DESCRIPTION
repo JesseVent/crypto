@@ -6,9 +6,9 @@ Version: 0.1.6
 Date: 2018-04-05
 Authors@R: c(person("Jesse", "Vent",
                     role = c("aut", "cre"), 
-                    email = "16379819+JesseVent@users.noreply.github.com")
+                    email = "cryptopackage@icloud.com")
              )
-Maintainer: Jesse Vent <16379819+JesseVent@users.noreply.github.com>
+Maintainer: Jesse Vent <cryptopackage@icloud.com>
 URL: https://github.com/JesseVent/crypto, https://CRAN.R-project.org/package=crypto
 BugReports: https://github.com/JesseVent/crypto/issues
 Depends: R (>= 3.4.0), foreach, rvest, xml2
