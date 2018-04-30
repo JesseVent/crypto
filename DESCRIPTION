@@ -3,7 +3,7 @@ Type: Package
 Title: Cryptocurrency Market Data
 Description: Retrieves crypto currency current and historical information as well as information on the exchanges they are listed on. For current and historical it will retrieve the daily open, high, low and close values for all crypto currencies. This retrieves the historical market data by web scraping tables provided by 'Cryptocurrency Market Capitalizations' <https://coinmarketcap.com>.
 Version: 0.1.6
-Date: 2018-04-05
+Date: 2018-05-01
 Authors@R: c(person("Jesse", "Vent",
                     role = c("aut", "cre"), 
                     email = "cryptopackage@icloud.com")
@@ -11,7 +11,7 @@ Authors@R: c(person("Jesse", "Vent",
 Maintainer: Jesse Vent <cryptopackage@icloud.com>
 URL: https://github.com/JesseVent/crypto, https://CRAN.R-project.org/package=crypto
 BugReports: https://github.com/JesseVent/crypto/issues
-Depends: R (>= 3.4.0), foreach, rvest, xml2
+Depends: R (>= 3.5.0), foreach, rvest, xml2
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
