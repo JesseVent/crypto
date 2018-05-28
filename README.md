@@ -45,27 +45,43 @@ library(crypto)
 
 # Retrieve crypto market history for all-to-n coins
 ?getCoins
-will_i_get_rich <- getCoins(limit=50)
+will_i_get_rich <- crypto_history(limit=50)
 
 # Retrieve crypto market history for specific coin
 ?getCoins
-will_i_get_rich_from <- getCoins("kin")
+will_i_get_rich_from <- crypto_history("kin")
 
 # Get list of coins and rank
 ?listCoins
-rich_list <- listCoins()
+rich_list <- crypto_list()
 
 # Retrieve current crypto market details
 ?getPrices
-am_i_rich_now <- getPrices()
+am_i_rich_now <- crypto_prices()
 
 # Retrieve exchange details for all coins or specific coin
 ?getExchanges
-where_do_i_get_rich <- getExchanges()
+where_do_i_get_rich <- crypto_exchanges()
 
 # Convert and/or summarise market history into xts object
 ?crypto2xts
-when_will_i_get_rich <- crypto2xts(will_i_get_rich, "week")
+when_will_i_get_rich <- crypto_xts(will_i_get_rich, "week")
+
+# Get timeseries market data for token for displaying in charts
+?daily_market
+show_me_getting_rich <- daily_market('bitcoin')
+
+# Get timeseries global market data for all coins or alt coins for displaying in charts
+?global_market
+show_me_everyone_getting_rich <- global_market()
+```
+
+## Package Issues
+> Please run the below before raising an issue, then include the output from sessionInfo()
+```R
+crypto::repair_dependencies()
+
+print(sessionInfo())
 ```
 
 ## Built With :heart_eyes_cat: R
