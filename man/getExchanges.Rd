@@ -2,9 +2,13 @@
 % Please edit documentation in R/getExchanges.R
 \name{getExchanges}
 \alias{getExchanges}
+\alias{crypto_exchanges}
 \title{Get current crypto market exchanges}
 \usage{
 getExchanges(coin = NULL, limit = NULL, cpu_cores = NULL,
+  start_date = NULL, end_date = NULL)
+
+crypto_exchanges(coin = NULL, limit = NULL, cpu_cores = NULL,
   start_date = NULL, end_date = NULL)
 }
 \arguments{

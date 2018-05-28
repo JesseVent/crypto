@@ -2,9 +2,12 @@
 % Please edit documentation in R/crypto2xts.R
 \name{crypto2xts}
 \alias{crypto2xts}
+\alias{crypto_xts}
 \title{crypto2xts}
 \usage{
 crypto2xts(df, frequency = NULL)
+
+crypto_xts(df, frequency = NULL)
 }
 \arguments{
 \item{df}{data.frame from \code{getCoins()}}

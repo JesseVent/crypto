@@ -43,9 +43,13 @@ scraper <- function(attributes, slug) {
   coin_slug <- as.character(slug)
   cpage <-
     xml2::read_html(history_url,
-                    handle = curl::new_handle("useragent" = "Mozilla/5.0"))
+      handle = curl::new_handle("useragent" = "Mozilla/5.0")
+    )
   cnodes <-
-    cpage %>% rvest::html_nodes(css = "table") %>% .[1] %>% rvest::html_table(fill = TRUE) %>%
+    cpage %>%
+    rvest::html_nodes(css = "table") %>%
+    .[1] %>%
+    rvest::html_table(fill = TRUE) %>%
     replace(!nzchar(.), NA)
   scraper <- data.frame(cnodes = cnodes)
   scraper <- Reduce(rbind, cnodes)

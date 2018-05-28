@@ -65,12 +65,18 @@
 #'
 getCoins <-
   function(coin = NULL, limit = NULL, cpu_cores = NULL, start_date = NULL, end_date = NULL) {
+    if (as.character(match.call()[[1]]) == "getCoins") {
+      warning("DEPRECATED: Please use crypto_history() instead of getCoins().", call. = TRUE, immediate. = TRUE)
+    }
     cat("Retrieves coin market history from CoinMarketCap. ")
     i <- "i"
     options(scipen = 999)
-    coins <- listCoins(coin, start_date, end_date)
+    sys_locale <- Sys.getlocale(category = "LC_TIME")
+    replace_encoding(sys_locale)
+
+    coins <- crypto_list(coin, start_date, end_date)
     if (!is.null(limit)) {
-      coins <- coins[1:limit,]
+      coins <- coins[1:limit, ]
     }
     coinnames <-
       dplyr::data_frame(
@@ -82,7 +88,7 @@ getCoins <-
     length <- as.numeric(length(coins$history_url))
     zrange <- 1:as.numeric(length(coins$history_url))
     if (is.null(cpu_cores)) {
-    cpu_cores <- as.numeric(parallel::detectCores(all.tests = FALSE, logical = TRUE))
+      cpu_cores <- as.numeric(parallel::detectCores(all.tests = FALSE, logical = TRUE))
     }
     ptm <- proc.time()
     cluster <- parallel::makeCluster(cpu_cores, type = "SOCK")
@@ -93,19 +99,21 @@ getCoins <-
     opts <- list(progress = progress)
     attributes <- coins$history_url
     slug <- coins$slug
-    message('   If this helps you become rich please consider donating',
-            appendLF = TRUE)
+    message("   If this helps you become rich please consider donating",
+      appendLF = TRUE
+    )
     message("ERC-20: 0x375923Bf82F0b728d23A5704261a6e16341fd860",
-            appendLF = TRUE)
+      appendLF = TRUE
+    )
     message("XRP: rK59semLsuJZEWftxBFhWuNE6uhznjz2bK", appendLF = TRUE)
     message("LTC: LWpiZMd2cEyqCdrZrs9TjsouTLWbFFxwCj", appendLF = TRUE)
     results_data <- foreach::foreach(
       i = zrange,
-      .errorhandling = c('remove'),
+      .errorhandling = c("remove"),
       .options.snow = opts,
       .combine = rbind,
-      .verbose = FALSE
-    ) %dopar% scraper(attributes[i], slug[i])
+      .verbose = TRUE
+    ) %dopar% crypto::scraper(attributes[i], slug[i])
     close(pb)
     parallel::stopCluster(cluster)
     print(proc.time() - ptm)
@@ -153,8 +161,8 @@ getCoins <-
     marketdata[, ccols] <-
       apply(marketdata[, ccols], 2, function(x)
         gsub("-", "0", x))
-    marketdata$volume <- marketdata$volume  %>% tidyr::replace_na(0) %>% as.numeric()
-    marketdata$market <-marketdata$market  %>% tidyr::replace_na(0) %>% as.numeric()
+    marketdata$volume <- marketdata$volume %>% tidyr::replace_na(0) %>% as.numeric()
+    marketdata$market <- marketdata$market %>% tidyr::replace_na(0) %>% as.numeric()
     marketdata[, cols] <-
       suppressWarnings(apply(marketdata[, cols], 2, function(x)
         as.numeric(x)))
@@ -165,7 +173,11 @@ getCoins <-
     marketdata$close_ratio <- marketdata$close_ratio %>% tidyr::replace_na(0) %>% as.numeric()
     marketdata$spread <- (marketdata$high - marketdata$low)
     marketdata$spread <- round(marketdata$spread, 2)
-    results <-
-      marketdata[order(marketdata$ranknow, marketdata$date, decreasing = FALSE), ]
+    results <- marketdata[order(marketdata$ranknow, marketdata$date, decreasing = FALSE), ]
+    reset_encoding(sys_locale)
     return(results)
   }
+
+#' @export
+#' @rdname getCoins
+crypto_history <- getCoins

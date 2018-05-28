@@ -2,10 +2,14 @@
 % Please edit documentation in R/getCoins.R
 \name{getCoins}
 \alias{getCoins}
+\alias{crypto_history}
 \title{Get historic crypto currency market data}
 \usage{
 getCoins(coin = NULL, limit = NULL, cpu_cores = NULL, start_date = NULL,
   end_date = NULL)
+
+crypto_history(coin = NULL, limit = NULL, cpu_cores = NULL,
+  start_date = NULL, end_date = NULL)
 }
 \arguments{
 \item{coin}{string Name, symbol or slug of crypto currency, default is all tokens}

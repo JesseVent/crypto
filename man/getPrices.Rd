@@ -2,9 +2,12 @@
 % Please edit documentation in R/getPrices.R
 \name{getPrices}
 \alias{getPrices}
+\alias{crypto_prices}
 \title{Get current crypto currency prices}
 \usage{
 getPrices(coin = NULL, limit = 0, currency = NULL)
+
+crypto_prices(coin = NULL, limit = 0, currency = NULL)
 }
 \arguments{
 \item{coin}{Token name, default is all, Default: NULL}

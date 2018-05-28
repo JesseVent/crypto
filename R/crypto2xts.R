@@ -34,27 +34,38 @@
 #' @return xts
 #' @export
 crypto2xts <- function(df, frequency = NULL) {
-  slug        <- ""
-  symbol      <- ""
-  name        <- ""
-  ranknow     <- ""
-  high        <- ""
-  low         <- ""
-  market      <- ""
-  volume      <- ""
-  freq        <- frequency
-  df$date     <- lubridate::round_date(df$date, freq)
-  data        <-
-    df %>% dplyr::group_by(date, slug, symbol, name, ranknow) %>% dplyr::summarise(
-      open   = dplyr::first(open),
-      high   = max(high),
-      low    = min(low),
-      close  = dplyr::last(close),
+  if (as.character(match.call()[[1]]) == "crypto2xts") {
+    warning("DEPRECATED: Please use crypto_xts() instead of crypto2xts().", call. = TRUE, immediate. = TRUE)
+  }
+  slug <- ""
+  symbol <- ""
+  name <- ""
+  ranknow <- ""
+  high <- ""
+  low <- ""
+  market <- ""
+  volume <- ""
+  freq <- frequency
+  df$date <- lubridate::round_date(df$date, freq)
+  data <-
+    df %>%
+    dplyr::group_by(date, slug, symbol, name, ranknow) %>%
+    dplyr::summarise(
+      open = dplyr::first(open),
+      high = max(high),
+      low = min(low),
+      close = dplyr::last(close),
       volume = sum(volume),
-      market = dplyr::last(market))
+      market = dplyr::last(market)
+    )
   data$volume <- round(data$volume, digits = 0)
   data$market <- round(data$market, digits = 0)
-  data        <- as.data.frame(data)
+  data <- as.data.frame(data)
   results <- xts::xts(data[, 2:ncol(data)], as.POSIXct(data[, 1], format = "%d.%m.%Y %H:%M:%S"))
   return(results)
 }
+
+
+#' @export
+#' @rdname crypto2xts
+crypto_xts <- crypto2xts

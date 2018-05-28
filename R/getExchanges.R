@@ -43,7 +43,7 @@
 #'
 #' @examples
 #' \dontrun{
-#'# Retrieving exchange data for specific crypto currency
+#' # Retrieving exchange data for specific crypto currency
 #'
 #' coin <- "kin"
 #' kin_exchanges <- getExchanges(coin)
@@ -59,12 +59,15 @@
 #'
 getExchanges <-
   function(coin = NULL, limit = NULL, cpu_cores = NULL, start_date = NULL, end_date = NULL) {
+    if (as.character(match.call()[[1]]) == "getExchanges") {
+      warning("DEPRECATED: Please use crypto_exchanges() instead of getExchanges().", call. = TRUE, immediate. = TRUE)
+    }
     cat("Retrieving crypto exchange information from CoinMarketCap. ")
     i <- "i"
     options(scipen = 999)
-    coins <- listCoins(coin, start_date, end_date)
+    coins <- crypto_list(coin, start_date, end_date)
     if (!is.null(limit)) {
-      coins <- coins[1:limit,]
+      coins <- coins[1:limit, ]
     }
     coinnames <-
       dplyr::data_frame(
@@ -76,7 +79,7 @@ getExchanges <-
     length <- as.numeric(length(coins$exchange_url))
     zrange <- 1:as.numeric(length(coins$exchange_url))
     if (is.null(cpu_cores)) {
-    cpu_cores <- as.numeric(parallel::detectCores(all.tests = FALSE, logical = TRUE))
+      cpu_cores <- as.numeric(parallel::detectCores(all.tests = FALSE, logical = TRUE))
     }
     ptm <- proc.time()
     cluster <- parallel::makeCluster(cpu_cores, type = "SOCK")
@@ -87,18 +90,22 @@ getExchanges <-
     opts <- list(progress = progress)
     attributes <- coins$exchange_url
     slug <- coins$slug
-    message('   If this helps you become rich please consider donating',
-            appendLF = TRUE)
+    message("   If this helps you become rich please consider donating",
+      appendLF = TRUE
+    )
     message("ERC-20: 0x375923Bf82F0b728d23A5704261a6e16341fd860",
-            appendLF = TRUE)
+      appendLF = TRUE
+    )
     message("XRP: rK59semLsuJZEWftxBFhWuNE6uhznjz2bK", appendLF = TRUE)
     message("LTC: LWpiZMd2cEyqCdrZrs9TjsouTLWbFFxwCj", appendLF = TRUE)
     results <-
-      foreach::foreach(i = zrange,
-                       .errorhandling = c('remove'),
-                       .options.snow = opts,
-                       .combine = rbind,
-                       .verbose = FALSE) %dopar% scraper(attributes[i], slug[i])
+      foreach::foreach(
+        i = zrange,
+        .errorhandling = c("remove"),
+        .options.snow = opts,
+        .combine = rbind,
+        .verbose = FALSE
+      ) %dopar% scraper(attributes[i], slug[i])
     close(pb)
     parallel::stopCluster(cluster)
     print(proc.time() - ptm)
@@ -146,7 +153,7 @@ getExchanges <-
         gsub("-", "0", x))
     exchangedata[, cols] <-
       apply(exchangedata[, cols], 2, function(x)
-        replace(x,is.na(x),0))
+        replace(x, is.na(x), 0))
     exchangedata[, cols] <-
       suppressWarnings(apply(exchangedata[, cols], 2, function(x)
         as.numeric(x)))
@@ -155,3 +162,7 @@ getExchanges <-
       exchangedata[order(exchangedata$coin_rank, exchangedata$exchange_rank, decreasing = FALSE), ]
     return(results)
   }
+
+#' @export
+#' @rdname getExchanges
+crypto_exchanges <- getExchanges

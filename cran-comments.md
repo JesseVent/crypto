@@ -1,5 +1,22 @@
 # Latest CRAN submission comments
 
+## crypto 1.0.0 - Major Submission
+- Added two new usable functions `global_market()` and `daily_market()` which retrieve timeseries data for charts and visualisations
+- Added two new functions `replace_encoding()` and `reset_encoding()` to handle locale encoding issues which will change encoding to UTF-8, then at end of function call will reset back to users original locale setting. **Github Issue: Data inconsistency #19**
+- Added messaging to notify user of locale changes
+- Added deprecation messages to `getCoins(), listCoins(), getPrices(), getExchanges() and crypto2xts()` functions to warn about the function names changing to `crypto_history(), crypto_list(), crypto_prices(), crypto_exchanges() and crypto_xts()` respectively.
+- Added helper function `repair_dependencies()` to prompt user to reinstall dependant packages based on feedback from github issues **Github Issue: Error when running getCoins #20**
+
+**Notes regard usage of doSNOW, no alternative please see previous comments below for note resolution.**
+
+# Previous CRAN submission comments
+
+## crypto 0.1.7 - CRAN resubmission fix
+- Update to new maintainer email address at cryptopackage@icloud.com
+- Confirmation/approval provided via email trail with Uwe linked to 0.1.6 submission
+- Update to LICENSE file to align with CRAN template as per note
+- Added winbuilder check results to cran-comments
+
 ## crypto 0.1.6 - Minor resubmission
 
 - Added crypto2xts function to getCoins() into xts object
@@ -10,20 +27,18 @@
 
 **Please let me know if email address change is not allowed, just trying to protect my own privacy a bit more as I have been getting a large amount of unsolicited contact through different channels and trying to consolidate public contact details.**
 
-### Tested on Mac OSX R 3.4.3 & WinBuild
+### Tested on Mac OSX R 3.5.0 & WinBuild
 
 ```
+Your package crypto_0.1.6.tar.gz has been built (if working) and checked for Windows.
 Please check the log files and (if working) the binary package at:
-https://win-builder.r-project.org/eKqB2fCcg57r
+https://win-builder.r-project.org/grYhYUjUETas
 The files will be removed after roughly 72 hours.
-Installation time in seconds: 4
-Check time in seconds: 78
+Installation time in seconds: 8
+Check time in seconds: 127
 Status: 1 NOTE
+R Under development (unstable) (2018-04-28 r74669)
 ```
-
-**Notes regard usage of doSNOW, no alternative please see previous comments below for note resolution.**
-
-# Previous CRAN submission comments
 ## crypto 0.1.5 - Minor resubmission
 
 - Changed listCoins url to the new service

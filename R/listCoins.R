@@ -36,7 +36,10 @@
 #'
 #' @export
 #'
-listCoins <- function(coin = NULL, start_date = NULL, end_date = NULL) {
+listCoins <- crypto_list <- function(coin = NULL, start_date = NULL, end_date = NULL) {
+  if (as.character(match.call()[[1]]) == "listCoins") {
+    warning("DEPRECATED: Please use crypto_list() instead of listCoins().", call. = TRUE, immediate. = TRUE)
+  }
   json <-
     "https://s2.coinmarketcap.com/generated/search/quick_search.json"
   coins <- jsonlite::read_json(json, simplifyVector = TRUE)
@@ -46,12 +49,15 @@ listCoins <- function(coin = NULL, start_date = NULL, end_date = NULL) {
   c1 <- subset(coins, name == coin)
   c2 <- subset(coins, symbol == coin)
   c3 <- subset(coins, slug == coin)
-  if (nrow(c1) > 0)
+  if (nrow(c1) > 0) {
     coins <- c1
-  if (nrow(c2) > 0)
+  }
+  if (nrow(c2) > 0) {
     coins <- c2
-  if (nrow(c3) > 0)
+  }
+  if (nrow(c3) > 0) {
     coins <- c3
+  }
   coins <-
     data.frame(
       symbol = coins$symbol,
@@ -61,10 +67,10 @@ listCoins <- function(coin = NULL, start_date = NULL, end_date = NULL) {
     )
   length <- as.numeric(length(coins$slug))
   if (is.null(start_date)) {
-  start_date <- "20130428"
+    start_date <- "20130428"
   }
   if (is.null(end_date)) {
-  end_date <- gsub("-", "", lubridate::today())
+    end_date <- gsub("-", "", lubridate::today())
   }
   exchangeurl <-
     paste0(
@@ -77,9 +83,9 @@ listCoins <- function(coin = NULL, start_date = NULL, end_date = NULL) {
       "https://coinmarketcap.com/currencies/",
       coins$slug,
       "/historical-data/?start=",
-       start_date,
-       "&end=",
-       end_date
+      start_date,
+      "&end=",
+      end_date
     )
   exchange_url <- c(exchangeurl)
   history_url <- c(historyurl)
@@ -91,3 +97,8 @@ listCoins <- function(coin = NULL, start_date = NULL, end_date = NULL) {
   coins$rank <- as.numeric(coins$rank)
   return(coins)
 }
+
+
+#' @export
+#' @rdname listCoins
+crypto_list <- listCoins

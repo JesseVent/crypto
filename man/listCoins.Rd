@@ -2,9 +2,12 @@
 % Please edit documentation in R/listCoins.R
 \name{listCoins}
 \alias{listCoins}
+\alias{crypto_list}
 \title{Retrieves name, symbol, slug and rank for all tokens}
 \usage{
 listCoins(coin = NULL, start_date = NULL, end_date = NULL)
+
+crypto_list(coin = NULL, start_date = NULL, end_date = NULL)
 }
 \arguments{
 \item{coin}{Name, symbol or slug of crypto currency}

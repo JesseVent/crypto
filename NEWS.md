@@ -1,6 +1,25 @@
 # Latest updates, fixes and news for the Crypto package
 ![Cran](http://cranlogs.r-pkg.org/badges/grand-total/crypto) ![Cran](http://cranlogs.r-pkg.org/badges/crypto) ![Cran](http://cranlogs.r-pkg.org/badges/last-week/crypto) ![Cran](http://cranlogs.r-pkg.org/badges/last-day/crypto) [![Rdoc](http://www.rdocumentation.org/badges/version/crypto)](http://www.rdocumentation.org/packages/crypto)
 
+### crypto major release 1.0.0
+#### NEW FUNCTIONS
+- **daily_market()** Retrieve timeseries market data for specific token perfect for visualisation.
+- **global_market()** Retrieve timeseries global market data for all coins or alt-coins perfect for visualisation.
+- **repair_dependencies()** Repair all dependant packagess and install any missing ones.
+- **replace_encoding()** Converts locale encoding to use UTF-8 for better localisation and international support.
+- **reset_encoding()** Resets locale encoding back to system default.
+
+#### RENAMED/DEPRECATED FUNCTIONS
+The following functions have been renamed and will be deprecated in future versions. Functionality remains the same.
+
+```R
+getCoins()      -----> crypto_history()
+listCoins()     -----> crypto_list()
+getExchanges()  -----> crypto_exchanges()
+getPrices()     -----> crypto_prices()
+crypto2xts      -----> crypto_xts()
+```
+
 ### crypto release 0.1.6
 
 ---
