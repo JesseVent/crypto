@@ -18,7 +18,7 @@
 #'
 #' @examples
 #' coin       <- "kin"
-#' btc_charts <- daily_market(coin)
+#' kin_charts <- daily_market(coin)
 #' @export
 daily_market <- function(coin = NULL) {
   if (is.null(coin)) {
@@ -42,7 +42,11 @@ daily_market <- function(coin = NULL) {
 
   slug             <- coins$slug %>% as.character()
   url              <- paste0("https://graphs2.coinmarketcap.com/currencies/", slug)
-  df               <- jsonlite::fromJSON(url, flatten = TRUE) %>% as.data.frame()
+  df               <- jsonlite::fromJSON(url, flatten = TRUE)
+  if(length(df) >= 5L){
+    df$price_platform <- NULL
+  }
+  df <- as.data.frame(df)
   df[, c(3, 5, 7)] <- NULL
   names(df)    <-
     c("timestamp",

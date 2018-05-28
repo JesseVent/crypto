@@ -1,4 +1,18 @@
 # Latest CRAN submission comments
+## crypto 1.0.1 - CRAN resubmission
+- Added list length check into daily_market function to handle different length columns
+**Notes regard usage of doSNOW, no alternative please see previous comments below for note resolution.**
+
+```
+Your package crypto_1.0.0.tar.gz has been built (if working) and checked for Windows.
+Please check the log files and (if working) the binary package at:
+https://win-builder.r-project.org/nJgAFzn14Xf3
+The files will be removed after roughly 72 hours.
+Installation time in seconds: 13
+Check time in seconds: 161
+Status: 1 NOTE
+R Under development (unstable) (2018-05-27 r74786)
+```
 
 ## crypto 1.0.0 - Major Submission
 - Added two new usable functions `global_market()` and `daily_market()` which retrieve timeseries data for charts and visualisations

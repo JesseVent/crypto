@@ -27,5 +27,5 @@ Most tokens are refreshed every 6 hours.. results may vary.
 }
 \examples{
 coin       <- "kin"
-btc_charts <- daily_market(coin)
+kin_charts <- daily_market(coin)
 }
