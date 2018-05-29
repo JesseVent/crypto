@@ -14,9 +14,10 @@
 #' @importFrom magrittr %>%
 #' @import tidyr
 getPrices <- function(coin = NULL, limit = 0, currency = NULL) {
-  if (as.character(match.call()[[1]]) == "getPrices") {
-    warning("DEPRECATED: Please use crypto_prices() instead of getPrices().", call. = TRUE, immediate. = TRUE)
-  }
+  ifelse(as.character(match.call()[[1]]) == "getPrices",
+    warning("DEPRECATED: Please use crypto_prices() instead of getPrices().", call. = TRUE, immediate. = TRUE),
+    print(" ")
+    )
   options(scipen = 999)
   url <- "https://api.coinmarketcap.com/v1/ticker/"
   if (is.null(coin)) {

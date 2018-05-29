@@ -26,6 +26,8 @@ of specified coin - perfect for charting or timeseries analysis.
 Most tokens are refreshed every 6 hours.. results may vary.
 }
 \examples{
+\dontrun{
 coin       <- "kin"
 kin_charts <- daily_market(coin)
+}
 }

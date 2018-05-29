@@ -1,4 +1,10 @@
 # Latest CRAN submission comments
+
+## crypto 1.0.2 - Minor resubmission
+My sincere apologies for the resubmission, wasting your time was not my intention
+- Option .verbose changed from TRUE to FALSE in crypto_history() function.
+- Changed if(match.call) function to ifelse to resolve warning message when calling function
+
 ## crypto 1.0.1 - CRAN resubmission
 - Added list length check into daily_market function to handle different length columns
 **Notes regard usage of doSNOW, no alternative please see previous comments below for note resolution.**

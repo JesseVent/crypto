@@ -37,9 +37,10 @@
 #' @export
 #'
 listCoins <- crypto_list <- function(coin = NULL, start_date = NULL, end_date = NULL) {
-  if (as.character(match.call()[[1]]) == "listCoins") {
-    warning("DEPRECATED: Please use crypto_list() instead of listCoins().", call. = TRUE, immediate. = TRUE)
-  }
+  ifelse(as.character(match.call()[[1]]) == "listCoins",
+    warning("DEPRECATED: Please use crypto_list() instead of listCoins().", call. = TRUE, immediate. = TRUE),
+    print(" ")
+  )
   json <-
     "https://s2.coinmarketcap.com/generated/search/quick_search.json"
   coins <- jsonlite::read_json(json, simplifyVector = TRUE)

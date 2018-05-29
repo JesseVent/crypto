@@ -17,11 +17,11 @@ replace_encoding <- function(sys_locale) {
   if (!endsWith(sys_locale, "UTF-8")) {
     msg <-
       paste(
-        "Warning: Changing locale encoding from",
+        "Temporarily changing locale encoding from",
         sys_locale,
-        " to UTF-8. Post completion locale will be reset to", sys_locale
+        "to UTF-8. Will reset back to", sys_locale
       )
-    message(msg, appendLF = TRUE)
+    warning(msg, call. = TRUE, immediate. = TRUE)
     sys_os <- .Platform$OS.type
     ifelse(
       sys_os == "unix",

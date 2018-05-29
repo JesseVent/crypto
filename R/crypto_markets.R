@@ -17,8 +17,10 @@
 #'   \item{slug}{Coin URL slug (unique)}
 #'
 #' @examples
+#' \dontrun{
 #' coin       <- "kin"
 #' kin_charts <- daily_market(coin)
+#' }
 #' @export
 daily_market <- function(coin = NULL) {
   if (is.null(coin)) {

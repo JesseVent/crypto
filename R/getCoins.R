@@ -65,9 +65,10 @@
 #'
 getCoins <-
   function(coin = NULL, limit = NULL, cpu_cores = NULL, start_date = NULL, end_date = NULL) {
-    if (as.character(match.call()[[1]]) == "getCoins") {
-      warning("DEPRECATED: Please use crypto_history() instead of getCoins().", call. = TRUE, immediate. = TRUE)
-    }
+    ifelse(as.character(sys.call()[[1]]) == "getCoins",
+      warning("DEPRECATED: Please use crypto_history() instead of getCoins().", call. = TRUE, immediate. = TRUE),
+      print(" ")
+      )
     cat("Retrieves coin market history from CoinMarketCap. ")
     i <- "i"
     options(scipen = 999)
@@ -112,7 +113,7 @@ getCoins <-
       .errorhandling = c("remove"),
       .options.snow = opts,
       .combine = rbind,
-      .verbose = TRUE
+      .verbose = FALSE
     ) %dopar% crypto::scraper(attributes[i], slug[i])
     close(pb)
     parallel::stopCluster(cluster)
