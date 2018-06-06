@@ -15,21 +15,24 @@
 replace_encoding <- function(sys_locale) {
   new_locale <- "en_US.UTF-8"
   if (!endsWith(sys_locale, "UTF-8")) {
-    msg <-
-      paste(
-        "Temporarily changing locale encoding from",
-        sys_locale,
-        "to UTF-8. Will reset back to", sys_locale
+    if (!endsWith(sys_locale, "1252")) {
+      msg <-
+        paste(
+          "Temporarily changing locale encoding from",
+          sys_locale,
+          "to UTF-8. Will reset back to",
+          sys_locale
+        )
+      warning(msg, call. = TRUE, immediate. = TRUE)
+      sys_os <- .Platform$OS.type
+      ifelse(
+        sys_os == "unix",
+        new_locale <-
+          Sys.setlocale(category = "LC_ALL", locale = "en_US.UTF-8"),
+        new_locale <-
+          Sys.setlocale(category = "LC_ALL", locale = "English_United States.1252")
       )
-    warning(msg, call. = TRUE, immediate. = TRUE)
-    sys_os <- .Platform$OS.type
-    ifelse(
-      sys_os == "unix",
-      new_locale <-
-        Sys.setlocale(category = "LC_ALL", locale = "en_US.UTF-8"),
-      new_locale <-
-        Sys.setlocale(category = "LC_ALL", locale = "English_United States.1252")
-    )
+    }
   }
   return(new_locale)
 }
