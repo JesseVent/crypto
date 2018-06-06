@@ -16,6 +16,7 @@
 #'   \item{volume}{Volume traded in USD}
 #'   \item{slug}{Coin URL slug (unique)}
 #'
+#' @importFrom tibble tibble
 #' @examples
 #' \dontrun{
 #' coin       <- "kin"
@@ -26,25 +27,24 @@ daily_market <- function(coin = NULL) {
   if (is.null(coin)) {
     coin <- "bitcoin"
   }
-  json             <- "https://s2.coinmarketcap.com/generated/search/quick_search.json"
-  coins            <- jsonlite::read_json(json, simplifyVector = TRUE)
-  name             <- coins$name
-  slug             <- coins$slug
-  symbol           <- coins$symbol
-  c1               <- subset(coins, name   == coin)
-  c2               <- subset(coins, symbol == coin)
-  c3               <- subset(coins, slug   == coin)
-
-  if (nrow(c1) > 0)
-    coins <- c1
-  if (nrow(c2) > 0)
-    coins <- c2
-  if (nrow(c3) > 0)
-    coins <- c3
-
-  slug             <- coins$slug %>% as.character()
-  url              <- paste0("https://graphs2.coinmarketcap.com/currencies/", slug)
-  df               <- jsonlite::fromJSON(url, flatten = TRUE)
+  json   <- "https://s2.coinmarketcap.com/generated/search/quick_search.json"
+  coins  <- jsonlite::read_json(json, simplifyVector = TRUE)
+  if (!is.null(coin)) {
+  name   <- coins$name
+  slug   <- coins$slug
+  symbol <- coins$symbol
+  c1     <- subset(coins, toupper(name) %in% toupper(coin))
+  c2     <- subset(coins, symbol %in% toupper(coin))
+  c3     <- subset(coins, slug %in% tolower(coin))
+  coins  <- tibble::tibble()
+  if (nrow(c1) > 0) { coins     <- rbind(coins, c1) }
+  if (nrow(c2) > 0) { coins     <- rbind(coins, c2) }
+  if (nrow(c3) > 0) { coins     <- rbind(coins, c3) }
+  if (nrow(coins) > 1L) { coins <- unique(coins) }
+  }
+  slug   <- coins$slug %>% as.character()
+  url    <- paste0("https://graphs2.coinmarketcap.com/currencies/", slug)
+  df     <- jsonlite::fromJSON(url, flatten = TRUE)
   if(length(df) >= 5L){
     df$price_platform <- NULL
   }

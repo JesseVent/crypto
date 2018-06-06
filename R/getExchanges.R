@@ -60,8 +60,8 @@
 getExchanges <-
   function(coin = NULL, limit = NULL, cpu_cores = NULL, start_date = NULL, end_date = NULL) {
     ifelse(as.character(match.call()[[1]]) == "getExchanges",
-      warning("DEPRECATED: Please use crypto_exchanges() instead of getExchanges().", call. = TRUE, immediate. = TRUE),
-      print(" ")
+      warning("DEPRECATED: Please use crypto_exchanges() instead of getExchanges().", call. = FALSE, immediate. = TRUE),
+      shh <- ""
     )
     cat("Retrieving crypto exchange information from CoinMarketCap. ")
     i <- "i"

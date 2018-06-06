@@ -6,6 +6,12 @@
 - turning off verbose mode from `crypto_history()` function
 - added additional check in `encoding.R` to not change locale for existing windows UTF-8 encoding
 
+#### ENHANCEMENTS
+- functions will now accept a character vector of coin names
+- enhanced coin name handling
+- cleaned up warning messages of deprecation
+- added stop function for coins without data
+- removed printing of empty string
 ### crypto major release 1.0.0
 #### NEW FUNCTIONS
 - **daily_market()** Retrieve timeseries market data for specific token perfect for visualisation.

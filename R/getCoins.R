@@ -66,8 +66,8 @@
 getCoins <-
   function(coin = NULL, limit = NULL, cpu_cores = NULL, start_date = NULL, end_date = NULL) {
     ifelse(as.character(sys.call()[[1]]) == "getCoins",
-      warning("DEPRECATED: Please use crypto_history() instead of getCoins().", call. = TRUE, immediate. = TRUE),
-      print(" ")
+      warning("DEPRECATED: Please use crypto_history() instead of getCoins().", call. = FALSE, immediate. = TRUE),
+      shh <- ""
       )
     cat("Retrieves coin market history from CoinMarketCap. ")
     i <- "i"
@@ -118,6 +118,9 @@ getCoins <-
     close(pb)
     parallel::stopCluster(cluster)
     print(proc.time() - ptm)
+    if(length(results_data) == 0L) {
+      stop("No data currently exists for this cryptocurrency that can be scraped.", call. = FALSE)
+      }
     results <- merge(results_data, coinnames, by = "slug")
     marketdata <- results %>% as.data.frame()
     namecheck <- as.numeric(ncol(marketdata))

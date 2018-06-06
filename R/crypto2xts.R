@@ -35,8 +35,8 @@
 #' @export
 crypto2xts <- function(df, frequency = NULL) {
   ifelse(as.character(match.call()[[1]]) == "crypto2xts",
-    warning("DEPRECATED: Please use crypto_xts() instead of crypto2xts().", call. = TRUE, immediate. = TRUE),
-    print(" ")
+    warning("DEPRECATED: Please use crypto_xts() instead of crypto2xts().", call. = FALSE, immediate. = TRUE),
+    shh <- ""
   )
   slug <- ""
   symbol <- ""
