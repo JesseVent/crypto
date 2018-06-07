@@ -6,6 +6,8 @@
 #' analysis on the crypto financial markets or to attempt
 #' to predict future market movements or trends.
 #'
+#' @note  If experiencing issues, explicitly set \code{cpu_cores=1} to turn off parallel processing.
+#'
 #' @param coin string Name, symbol or slug of crypto currency, default is all tokens
 #' @param limit integer Return the top n records, default is all tokens
 #' @param cpu_cores integer Uses n cores for processing, default uses all cores
@@ -36,6 +38,7 @@
 #'
 #' @importFrom magrittr "%>%"
 #' @importFrom foreach "%dopar%"
+#' @importFrom foreach "%do%"
 #' @importFrom utils "txtProgressBar"
 #' @importFrom utils "setTxtProgressBar"
 #' @importFrom utils "globalVariables"
@@ -92,8 +95,11 @@ getCoins <-
       cpu_cores <- as.numeric(parallel::detectCores(all.tests = FALSE, logical = TRUE))
     }
     ptm <- proc.time()
-    cluster <- parallel::makeCluster(cpu_cores, type = "SOCK")
-    doSNOW::registerDoSNOW(cluster)
+    if (cpu_cores != 1) {
+      cluster <- parallel::makeCluster(cpu_cores, type = "SOCK")
+      doSNOW::registerDoSNOW(cluster)
+    }
+
     pb <- txtProgressBar(max = length, style = 3)
     progress <- function(n)
       setTxtProgressBar(pb, n)
@@ -108,6 +114,7 @@ getCoins <-
     )
     message("XRP: rK59semLsuJZEWftxBFhWuNE6uhznjz2bK", appendLF = TRUE)
     message("LTC: LWpiZMd2cEyqCdrZrs9TjsouTLWbFFxwCj", appendLF = TRUE)
+    if (cpu_cores != 1) {
     results_data <- foreach::foreach(
       i = zrange,
       .errorhandling = c("remove"),
@@ -117,6 +124,19 @@ getCoins <-
     ) %dopar% crypto::scraper(attributes[i], slug[i])
     close(pb)
     parallel::stopCluster(cluster)
+    }
+    if (cpu_cores == 1) {
+      cat("Not parallel processing, so this will take a while.. please be patient.", fill = TRUE)
+      results_data <- foreach::foreach(
+        i = zrange,
+        .errorhandling = c("remove"),
+        .options.snow = opts,
+        .combine = rbind,
+        .verbose = FALSE
+      ) %do% crypto::scraper(attributes[i], slug[i])
+      close(pb)
+    }
+
     print(proc.time() - ptm)
     if(length(results_data) == 0L) {
       stop("No data currently exists for this cryptocurrency that can be scraped.", call. = FALSE)

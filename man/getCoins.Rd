@@ -53,6 +53,9 @@ the results in a date frame. This can be used to conduct
 analysis on the crypto financial markets or to attempt
 to predict future market movements or trends.
 }
+\note{
+If experiencing issues, explicitly set \code{cpu_cores=1} to turn off parallel processing.
+}
 \examples{
 # retrieving market history for specific crypto currency
 
