@@ -23,7 +23,7 @@
 #' This function is not to be called individually by a user but is to be
 #' consumed as part of the getCoins.
 #'
-#' @importFrom magrittr "%>%"
+#' @importFrom dplyr "%>%"
 #' @importFrom rvest "html_nodes"
 #' @importFrom xml2 "read_html"
 #'

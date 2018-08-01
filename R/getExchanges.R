@@ -124,6 +124,8 @@ getExchanges <-
           "exchange_volume",
           "exchange_price",
           "exchange_share",
+          "category",
+          "fee_type",
           "last_updated",
           "symbol",
           "name",
@@ -137,6 +139,8 @@ getExchanges <-
       "name",
       "trading_pair",
       "exchange_name",
+      "category",
+      "fee_type",
       "last_updated",
       "exchange_volume",
       "exchange_price",
@@ -145,7 +149,7 @@ getExchanges <-
       "exchange_rank"
     )]
 
-    cols <- c(7:11)
+    cols <- c(9:13)
     exchangedata[, cols] <-
       apply(exchangedata[, cols], 2, function(x)
         gsub(",|%|\\$", "", x))
