@@ -1,5 +1,13 @@
 # Latest CRAN submission comments
 
+### crypto minor release 1.0.3
+- turning off verbose mode from `crypto_history()` function
+- added additional check in `encoding.R` to not change locale for existing windows UTF-8 encoding
+- updating crypto_exchanges to include new columns to resolve GitHub issue
+- other minor bug fixes
+
+**Notes regard usage of doSNOW, no alternative please see previous comments below for note resolution.**
+
 ## crypto 1.0.2 - Minor resubmission
 My sincere apologies for the resubmission, wasting your time was not my intention
 - Option .verbose changed from TRUE to FALSE in crypto_history() function.
@@ -7,7 +15,7 @@ My sincere apologies for the resubmission, wasting your time was not my intentio
 
 ## crypto 1.0.1 - CRAN resubmission
 - Added list length check into daily_market function to handle different length columns
-**Notes regard usage of doSNOW, no alternative please see previous comments below for note resolution.**
+
 
 ```
 Your package crypto_1.0.0.tar.gz has been built (if working) and checked for Windows.

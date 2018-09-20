@@ -78,7 +78,8 @@ getExchanges <-
         slug = coins$slug
       )
     length <- as.numeric(length(coins$exchange_url))
-    zrange <- 1:as.numeric(length(coins$exchange_url))
+    zrange <- 1:as.numeric(length(coins$exchange_url)) %>% as.numeric()
+    if(length(zrange) != 1L) {
     if (is.null(cpu_cores)) {
       cpu_cores <- as.numeric(parallel::detectCores(all.tests = FALSE, logical = TRUE))
     }
@@ -99,18 +100,24 @@ getExchanges <-
     )
     message("XRP: rK59semLsuJZEWftxBFhWuNE6uhznjz2bK", appendLF = TRUE)
     message("LTC: LWpiZMd2cEyqCdrZrs9TjsouTLWbFFxwCj", appendLF = TRUE)
-    results <-
-      foreach::foreach(
-        i = zrange,
-        .errorhandling = c("remove"),
-        .options.snow = opts,
-        .combine = rbind,
-        .verbose = FALSE
-      ) %dopar% scraper(attributes[i], slug[i])
+    results <- foreach::foreach(
+      i = zrange,
+      .errorhandling = c("remove"),
+      .options.snow = opts,
+      .packages = c("dplyr","plyr"),
+      .combine = 'bind_rows',
+      .verbose = FALSE
+      ) %dopar% crypto::scraper(attributes[i], slug[i])
     close(pb)
     parallel::stopCluster(cluster)
     print(proc.time() - ptm)
-    results <- merge(results, coinnames, by = "slug")
+    }
+    if(length(zrange) == 1L) {
+      attributes <- coins$exchange_url
+      slug <- coins$slug
+      results <- crypto::scraper(attributes, slug)
+    }
+    results <- merge(results, coinnames, by.x = "slug", by.y = "slug")
     exchangedata <- results
     namecheck <- as.numeric(ncol(exchangedata))
     ifelse(

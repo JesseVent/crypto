@@ -119,7 +119,8 @@ getCoins <-
       i = zrange,
       .errorhandling = c("remove"),
       .options.snow = opts,
-      .combine = rbind,
+      .packages = c("dplyr","plyr"),
+      .combine = 'bind_rows',
       .verbose = FALSE
     ) %dopar% crypto::scraper(attributes[i], slug[i])
     close(pb)
@@ -131,7 +132,8 @@ getCoins <-
         i = zrange,
         .errorhandling = c("remove"),
         .options.snow = opts,
-        .combine = rbind,
+        .packages = c("dplyr","plyr"),
+        .combine = 'bind_rows',
         .verbose = FALSE
       ) %do% crypto::scraper(attributes[i], slug[i])
       close(pb)
