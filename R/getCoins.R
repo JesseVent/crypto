@@ -14,6 +14,7 @@
 #' @param ... No arguments, return all coins
 #' @param start_date string Start date to retrieve data from, format 'yyyymmdd'
 #' @param end_date string End date to retrieve data from, format 'yyyymmdd'
+#' @param verbose be verbose on timings of function
 #'
 #' @return Crypto currency historic OHLC market data in a dataframe:
 #'   \item{slug}{Coin url slug}
@@ -68,7 +69,7 @@
 #' @export
 #'
 getCoins <-
-  function(coin = NULL, limit = NULL, cpu_cores = NULL, start_date = NULL, end_date = NULL) {
+  function(coin = NULL, limit = NULL, cpu_cores = NULL, start_date = NULL, end_date = NULL, verbose=FALSE) {
     ifelse(as.character(sys.call()[[1]]) == "getCoins",
       warning("DEPRECATED: Please use crypto_history() instead of getCoins().", call. = FALSE, immediate. = TRUE),
       shh <- ""
@@ -119,17 +120,17 @@ getCoins <-
     results_data <- foreach::foreach(
       i = zrange,
       .errorhandling = c("remove"),
-#      .options.snow = opts,
+      .options.snow = opts,
       .packages = c("dplyr"), #,"plyr"
       .combine = 'bind_rows',
       .verbose = FALSE
-    ) %dopar% crypto::scraper(attributes[i], slug[i])
+    ) %dopar% {
+      crypto::scraper(attributes[i], slug[i])
+      }
     close(pb)
     if (cpu_cores != 1) {
      parallel::stopCluster(cluster)
     }
-
-    print(proc.time() - ptm)
     if(length(results_data) == 0L) {
       stop("No data currently exists for this cryptocurrency that can be scraped.", call. = FALSE)
       }
@@ -190,6 +191,10 @@ getCoins <-
     marketdata$spread <- (marketdata$high - marketdata$low)
     marketdata$spread <- round(marketdata$spread, 2)
     results <- marketdata[order(marketdata$ranknow, marketdata$date, decreasing = FALSE), ]
+
+    if (verbose) {
+      print(proc.time() - ptm)
+    }
     return(results)
   }
 
