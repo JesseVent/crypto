@@ -76,8 +76,6 @@ getCoins <-
     cat("Retrieves coin market history from CoinMarketCap. ")
     i <- "i"
     options(scipen = 999)
-    sys_locale <- Sys.getlocale(category = "LC_TIME")
-    replace_encoding(sys_locale)
 
     coins <- crypto_list(coin, start_date, end_date)
     if (!is.null(limit)) {
@@ -179,7 +177,7 @@ getCoins <-
       "market"
     )]
     marketdata$date <-
-      suppressWarnings(lubridate::mdy(unlist(marketdata$date)))
+      suppressWarnings(lubridate::mdy(unlist(marketdata$date),locale="en_US.UTF-8"))
     cols <- c(5:11)
     ccols <- c(7:11)
     marketdata[, cols] <-
@@ -201,7 +199,6 @@ getCoins <-
     marketdata$spread <- (marketdata$high - marketdata$low)
     marketdata$spread <- round(marketdata$spread, 2)
     results <- marketdata[order(marketdata$ranknow, marketdata$date, decreasing = FALSE), ]
-    reset_encoding(sys_locale)
     return(results)
   }
 
