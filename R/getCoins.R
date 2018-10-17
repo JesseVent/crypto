@@ -105,6 +105,8 @@ getCoins <-
     if (cpu_cores != 1) {
       cluster <- parallel::makeCluster(cpu_cores, type = "SOCK")
       doSNOW::registerDoSNOW(cluster)
+    } else {
+      foreach::registerDoSEQ()
     }
 
     pb <- txtProgressBar(max = length, style = 3)
@@ -114,29 +116,17 @@ getCoins <-
     attributes <- coins$history_url
     slug <- coins$slug
 
-    if (cpu_cores != 1) {
     results_data <- foreach::foreach(
       i = zrange,
       .errorhandling = c("remove"),
-      .options.snow = opts,
-      .packages = c("dplyr","plyr"),
+#      .options.snow = opts,
+      .packages = c("dplyr"), #,"plyr"
       .combine = 'bind_rows',
       .verbose = FALSE
     ) %dopar% crypto::scraper(attributes[i], slug[i])
     close(pb)
-    parallel::stopCluster(cluster)
-    }
-    if (cpu_cores == 1) {
-      cat("Not parallel processing, so this will take a while.. please be patient.", fill = TRUE)
-      results_data <- foreach::foreach(
-        i = zrange,
-        .errorhandling = c("remove"),
-        .options.snow = opts,
-        .packages = c("dplyr","plyr"),
-        .combine = 'bind_rows',
-        .verbose = FALSE
-      ) %do% crypto::scraper(attributes[i], slug[i])
-      close(pb)
+    if (cpu_cores != 1) {
+     parallel::stopCluster(cluster)
     }
 
     print(proc.time() - ptm)
