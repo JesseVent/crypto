@@ -43,6 +43,7 @@
 #' @importFrom utils "setTxtProgressBar"
 #' @importFrom utils "globalVariables"
 #' @importFrom tidyr "replace_na"
+#' @importFrom dplyr "bind_rows"
 #'
 #' @import stats
 #'

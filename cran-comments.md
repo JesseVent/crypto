@@ -1,5 +1,10 @@
 # Latest CRAN submission comments
 
+### crypto bug fix 1.0.4
+- fixing dependency bug by including dplyr:bind_rows
+
+**Notes regard usage of doSNOW, no alternative please see previous comments below for note resolution.**
+
 ### crypto minor release 1.0.3
 - turning off verbose mode from `crypto_history()` function
 - added additional check in `encoding.R` to not change locale for existing windows UTF-8 encoding

@@ -38,6 +38,7 @@
 #' @importFrom utils "txtProgressBar"
 #' @importFrom utils "setTxtProgressBar"
 #' @importFrom utils "globalVariables"
+#' @importFrom dplyr "bind_rows"
 #'
 #' @import stats
 #'
