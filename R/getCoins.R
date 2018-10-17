@@ -73,7 +73,15 @@ getCoins <-
       warning("DEPRECATED: Please use crypto_history() instead of getCoins().", call. = FALSE, immediate. = TRUE),
       shh <- ""
       )
-    cat("Retrieves coin market history from CoinMarketCap. ")
+    cat("Retrieves coin market history from CoinMarketCap. \n")
+    message("If this helps you become rich please consider donating:",
+            appendLF = TRUE
+    )
+    message(" ERC-20: 0x375923Bf82F0b728d23A5704261a6e16341fd860",
+            appendLF = TRUE
+    )
+    message(" XRP: rK59semLsuJZEWftxBFhWuNE6uhznjz2bK", appendLF = TRUE)
+    message(" LTC: LWpiZMd2cEyqCdrZrs9TjsouTLWbFFxwCj", appendLF = TRUE)
     i <- "i"
     options(scipen = 999)
 
@@ -105,14 +113,7 @@ getCoins <-
     opts <- list(progress = progress)
     attributes <- coins$history_url
     slug <- coins$slug
-    message("   If this helps you become rich please consider donating",
-      appendLF = TRUE
-    )
-    message("ERC-20: 0x375923Bf82F0b728d23A5704261a6e16341fd860",
-      appendLF = TRUE
-    )
-    message("XRP: rK59semLsuJZEWftxBFhWuNE6uhznjz2bK", appendLF = TRUE)
-    message("LTC: LWpiZMd2cEyqCdrZrs9TjsouTLWbFFxwCj", appendLF = TRUE)
+
     if (cpu_cores != 1) {
     results_data <- foreach::foreach(
       i = zrange,
