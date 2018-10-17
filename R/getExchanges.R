@@ -59,12 +59,20 @@
 #' @export
 #'
 getExchanges <-
-  function(coin = NULL, limit = NULL, cpu_cores = NULL, start_date = NULL, end_date = NULL) {
+  function(coin = NULL, limit = NULL, cpu_cores = NULL, start_date = NULL, end_date = NULL, verbose = FALSE) {
     ifelse(as.character(match.call()[[1]]) == "getExchanges",
       warning("DEPRECATED: Please use crypto_exchanges() instead of getExchanges().", call. = FALSE, immediate. = TRUE),
       shh <- ""
     )
-    cat("Retrieving crypto exchange information from CoinMarketCap. ")
+    cat("Retrieving crypto exchange information from CoinMarketCap. \n")
+    message("If this helps you become rich please consider donating:",
+            appendLF = TRUE
+    )
+    message(" ERC-20: 0x375923Bf82F0b728d23A5704261a6e16341fd860",
+            appendLF = TRUE
+    )
+    message(" XRP: rK59semLsuJZEWftxBFhWuNE6uhznjz2bK", appendLF = TRUE)
+    message(" LTC: LWpiZMd2cEyqCdrZrs9TjsouTLWbFFxwCj", appendLF = TRUE)
     i <- "i"
     options(scipen = 999)
     coins <- crypto_list(coin, start_date, end_date)
@@ -85,22 +93,19 @@ getExchanges <-
       cpu_cores <- as.numeric(parallel::detectCores(all.tests = FALSE, logical = TRUE))
     }
     ptm <- proc.time()
-    cluster <- parallel::makeCluster(cpu_cores, type = "SOCK")
-    doSNOW::registerDoSNOW(cluster)
+    if (cpu_cores != 1) {
+      cluster <- parallel::makeCluster(cpu_cores, type = "SOCK")
+      doSNOW::registerDoSNOW(cluster)
+    } else {
+      registerDoSEQ()
+    }
     pb <- txtProgressBar(max = length, style = 3)
     progress <- function(n)
       setTxtProgressBar(pb, n)
     opts <- list(progress = progress)
     attributes <- coins$exchange_url
     slug <- coins$slug
-    message("   If this helps you become rich please consider donating",
-      appendLF = TRUE
-    )
-    message("ERC-20: 0x375923Bf82F0b728d23A5704261a6e16341fd860",
-      appendLF = TRUE
-    )
-    message("XRP: rK59semLsuJZEWftxBFhWuNE6uhznjz2bK", appendLF = TRUE)
-    message("LTC: LWpiZMd2cEyqCdrZrs9TjsouTLWbFFxwCj", appendLF = TRUE)
+
     results <- foreach::foreach(
       i = zrange,
       .errorhandling = c("remove"),
@@ -110,8 +115,9 @@ getExchanges <-
       .verbose = FALSE
       ) %dopar% crypto::scraper(attributes[i], slug[i])
     close(pb)
-    parallel::stopCluster(cluster)
-    print(proc.time() - ptm)
+    if (cpu_cores!=1) {
+      parallel::stopCluster(cluster)
+    }
     }
     if(length(zrange) == 1L) {
       attributes <- coins$exchange_url
@@ -173,6 +179,9 @@ getExchanges <-
     exchangedata <- na.omit(exchangedata)
     results <-
       exchangedata[order(exchangedata$coin_rank, exchangedata$exchange_rank, decreasing = FALSE), ]
+    if (verbose) {
+     print(proc.time() - ptm)
+    }
     return(results)
   }
 
