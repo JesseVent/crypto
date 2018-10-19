@@ -1,6 +1,6 @@
 #' @title Get current crypto currency prices
 #' @description This will retrieve the current market prices from CoinMarketCap. Data gets refreshed every 5 minutes.
-#' @param coin Token name, default is all, Default: NULL
+#' @param coins Token name, default is all, Default: NULL
 #' @param limit Return top n coins, default is all, Default: 0
 #' @param currency Convert into local currency. Must be one of "AUD", "BRL", "CAD", "CHF", "CLP", "CNY", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "IDR", "ILS", "INR", "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP", "PKR", "PLN", "RUB", "SEK", "SGD", "THB", "TRY", "TWD", "ZAR", Default: NULL
 #' @return Will provide data frame of current prices
@@ -13,29 +13,34 @@
 #' @importFrom jsonlite read_json
 #' @importFrom magrittr %>%
 #' @import tidyr
-getPrices <- function(coin = NULL, limit = 0, currency = NULL) {
+getPrices <- function(coins = NULL, limit = 0, currency = NULL) {
   ifelse(as.character(match.call()[[1]]) == "getPrices",
     warning("DEPRECATED: Please use crypto_prices() instead of getPrices().", call. = FALSE, immediate. = TRUE),
     shh <- ""
     )
   options(scipen = 999)
+  print(coins)
+  coinlist = crypto_list()
+  coins = coinlist[which(coinlist$slug %in% coins| coinlist$symbol %in% coins |coinlist$name %in% coins),]$slug
+  print(coins)
   url <- "https://api.coinmarketcap.com/v1/ticker/"
-  if (is.null(coin)) {
+  if (is.null(coins) | length(coins) >1) {
+    if (length(coins) >1) {
+      limit = 0
+    }
     url <- paste0(url, "?limit=", limit)
-  }
-  if (!is.null(coin)) {
-    url <- paste0(url, coin, "/")
+  } else  {
+    url <- paste0(url, coins, "")
   }
   if (!is.null(currency)) {
     currency <- toupper(currency)
-
-    if (is.null(coin)) {
+    if (is.null(coins) | length(coins) >1) {
       url <- paste0(url, "&convert=", currency)
-    }
-    if (!is.null(coin)) {
+    } else {
       url <- paste0(url, "?convert=", currency)
     }
   }
+
   prices <- jsonlite::read_json(url, simplifyVector = TRUE)
   prices$market_cap_usd <- prices$market_cap_usd %>% tidyr::replace_na(0) %>% as.numeric()
   prices$available_supply <- prices$available_supply %>% tidyr::replace_na(0) %>% as.numeric()
@@ -48,6 +53,10 @@ getPrices <- function(coin = NULL, limit = 0, currency = NULL) {
   if (!is.null(currency)) {
     concols <- c(16:18)
     prices[, concols] <- suppressWarnings(apply(prices[, concols], 2, function(x) as.numeric(x)))
+  }
+
+  if (length(coins) > 1) {
+    prices = prices[which(prices$id %in% coins),]
   }
   return(prices)
 }
