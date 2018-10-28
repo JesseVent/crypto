@@ -123,7 +123,7 @@ getCoins <-
       .packages = c("dplyr","plyr"),
       .combine = 'bind_rows',
       .verbose = FALSE
-    ) %dopar% crypto::scraper(attributes[i], slug[i])
+    ) %dopar% crypto::scraper(attributes[i], slug[i], cpu_cores)
     close(pb)
     parallel::stopCluster(cluster)
     }
@@ -136,7 +136,7 @@ getCoins <-
         .packages = c("dplyr","plyr"),
         .combine = 'bind_rows',
         .verbose = FALSE
-      ) %do% crypto::scraper(attributes[i], slug[i])
+      ) %do% crypto::scraper(attributes[i], slug[i], cpu_cores)
       close(pb)
     }
 

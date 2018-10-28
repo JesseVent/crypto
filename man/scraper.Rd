@@ -4,12 +4,14 @@
 \alias{scraper}
 \title{Historical table scraper}
 \usage{
-scraper(attributes, slug)
+scraper(attributes, slug, cpu_cores)
 }
 \arguments{
 \item{attributes}{URL generated from \code{listCoins()}}
 
 \item{slug}{Unique identifier required for merging}
+
+\item{cpu_cores}{Required to calculate CMC rate limiter}
 }
 \value{
 Raw OHLC market data in a dataframe:

@@ -38,6 +38,8 @@ devtools::install_github("jessevent/crypto")
 
 These are the main functions that are added so far and a brief summary of what they do. Additional parameters are viewable in the documentation for each function.
 
+**Please note that CoinMarketCap have recently introduced a rate limiter on their service of 30 calls per minute, this package will now run slower to accomodate for the rate limit.**
+
 > Please give this package a star if you find it helpful
 
 ```R

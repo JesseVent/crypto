@@ -108,7 +108,7 @@ getExchanges <-
       .packages = c("dplyr","plyr"),
       .combine = 'bind_rows',
       .verbose = FALSE
-      ) %dopar% crypto::scraper(attributes[i], slug[i])
+      ) %dopar% crypto::scraper(attributes[i], slug[i], cpu_cores)
     close(pb)
     parallel::stopCluster(cluster)
     print(proc.time() - ptm)
@@ -116,7 +116,7 @@ getExchanges <-
     if(length(zrange) == 1L) {
       attributes <- coins$exchange_url
       slug <- coins$slug
-      results <- crypto::scraper(attributes, slug)
+      results <- crypto::scraper(attributes, slug, cpu_cores)
     }
     results <- merge(results, coinnames, by.x = "slug", by.y = "slug")
     exchangedata <- results
