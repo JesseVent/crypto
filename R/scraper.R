@@ -7,6 +7,7 @@
 #'
 #' @param attributes URL generated from \code{listCoins()}
 #' @param slug Unique identifier required for merging
+#' @param cpu_cores Required to calculate CMC rate limiter
 #'
 #' @return Raw OHLC market data in a dataframe:
 #'   \item{slug}{Coin url slug}
@@ -37,10 +38,18 @@
 #'
 #' @export
 #'
-scraper <- function(attributes, slug) {
+scraper <- function(attributes, slug, cpu_cores) {
+
+  # Handle rate limiter CMC have now applied
+  rate <- 60
+  limit <- 30
+  rate_limiter <- (rate/limit) * cpu_cores
+  Sys.sleep(rate_limiter)
+
   . <- "."
   history_url <- as.character(attributes)
   coin_slug <- as.character(slug)
+
   cpage <-
     xml2::read_html(history_url,
       handle = curl::new_handle("useragent" = "Mozilla/5.0")
