@@ -41,9 +41,10 @@
 scraper <- function(attributes, slug, cpu_cores) {
 
   # Handle rate limiter CMC have now applied
-  rate <- 60
-  limit <- 30
-  rate_limiter <- (rate/limit) * cpu_cores
+  rate   <- 60
+  limit  <- 30
+  safety <- cpu_cores / 2
+  rate_limiter <- ((rate/limit) * cpu_cores) + safety
   Sys.sleep(rate_limiter)
 
   . <- "."
