@@ -120,7 +120,7 @@ getCoins <-
       i = zrange,
       .errorhandling = c("remove"),
       .options.snow = opts,
-      .packages = c("dplyr","plyr"),
+      .packages = c("dplyr"),
       .combine = 'bind_rows',
       .verbose = FALSE
     ) %dopar% crypto::scraper(attributes[i], slug[i], cpu_cores)

@@ -28,7 +28,7 @@ daily_market <- function(coin = NULL) {
     coin <- "bitcoin"
   }
   json   <- "https://s2.coinmarketcap.com/generated/search/quick_search.json"
-  coins  <- jsonlite::read_json(json, simplifyVector = TRUE)
+  coins  <- use_rate_limit(jsonlite::read_json(json, simplifyVector = TRUE))
   if (!is.null(coin)) {
   name   <- coins$name
   slug   <- coins$slug
@@ -44,7 +44,7 @@ daily_market <- function(coin = NULL) {
   }
   slug   <- coins$slug %>% as.character()
   url    <- paste0("https://graphs2.coinmarketcap.com/currencies/", slug)
-  df     <- jsonlite::fromJSON(url, flatten = TRUE)
+  df     <- use_rate_limit(jsonlite::fromJSON(url, flatten = TRUE))
   if(length(df) >= 5L){
     df$price_platform <- NULL
   }

@@ -48,8 +48,9 @@ listCoins <-
              call. = FALSE
            ),
            shh <- "")
+    initiate_timelog()
     json   <- "https://s2.coinmarketcap.com/generated/search/quick_search.json"
-    coins  <- jsonlite::read_json(json, simplifyVector = TRUE)
+    coins  <- use_rate_limit(jsonlite::read_json(json, simplifyVector = TRUE))
     if (!is.null(coin)) {
     name   <- coins$name
     slug   <- coins$slug

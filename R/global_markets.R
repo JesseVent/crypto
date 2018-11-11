@@ -29,7 +29,7 @@ global_market <- function(market = NULL) {
   }
 
   url <- paste0("https://graphs2.coinmarketcap.com/global/marketcap-", market)
-  df <- jsonlite::fromJSON(url, flatten = TRUE) %>% as.data.frame()
+  df <- use_rate_limit(jsonlite::fromJSON(url, flatten = TRUE)) %>% as.data.frame()
   df[, 3] <- NULL
   names(df) <- paste0(market, "_", c("timestamp", "market_cap", "volume"))
   df[, 1] <- as.POSIXct(as.numeric(df[, 1]) / 1000, origin = "1970-01-01", tz = "UTC")

@@ -36,7 +36,7 @@ getPrices <- function(coin = NULL, limit = 0, currency = NULL) {
       url <- paste0(url, "?convert=", currency)
     }
   }
-  prices <- jsonlite::read_json(url, simplifyVector = TRUE)
+  prices <- use_rate_limit(jsonlite::read_json(url, simplifyVector = TRUE))
   prices$market_cap_usd <- prices$market_cap_usd %>% tidyr::replace_na(0) %>% as.numeric()
   prices$available_supply <- prices$available_supply %>% tidyr::replace_na(0) %>% as.numeric()
   prices$max_supply <- prices$max_supply %>% tidyr::replace_na(0) %>% as.numeric()
