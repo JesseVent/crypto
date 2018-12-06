@@ -6,10 +6,10 @@
 \title{Get historic crypto currency market data}
 \usage{
 getCoins(coin = NULL, limit = NULL, cpu_cores = NULL,
-  start_date = NULL, end_date = NULL)
+  start_date = NULL, end_date = NULL, coin_list = NULL)
 
 crypto_history(coin = NULL, limit = NULL, cpu_cores = NULL,
-  start_date = NULL, end_date = NULL)
+  start_date = NULL, end_date = NULL, coin_list = NULL)
 }
 \arguments{
 \item{coin}{string Name, symbol or slug of crypto currency, default is all tokens}
@@ -21,6 +21,8 @@ crypto_history(coin = NULL, limit = NULL, cpu_cores = NULL,
 \item{start_date}{string Start date to retrieve data from, format 'yyyymmdd'}
 
 \item{end_date}{string End date to retrieve data from, format 'yyyymmdd'}
+
+\item{coin_list}{'api', 'static' or NULL}
 
 \item{...}{No arguments, return all coins}
 }

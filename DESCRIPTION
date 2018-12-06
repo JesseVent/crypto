@@ -27,5 +27,8 @@ Imports: magrittr,
   stats,
   doSNOW,
   tidyr, 
-  yaml
-RoxygenNote: 6.1.0
+  yaml,
+  rstudioapi,
+  httr
+Suggests: keyring
+RoxygenNote: 6.1.1

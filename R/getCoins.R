@@ -14,6 +14,8 @@
 #' @param ... No arguments, return all coins
 #' @param start_date string Start date to retrieve data from, format 'yyyymmdd'
 #' @param end_date string End date to retrieve data from, format 'yyyymmdd'
+#' @param coin_list 'api', 'static' or NULL
+#
 #'
 #' @return Crypto currency historic OHLC market data in a dataframe:
 #'   \item{slug}{Coin url slug}
@@ -67,8 +69,12 @@
 #'
 #' @export
 #'
-getCoins <-
-  function(coin = NULL, limit = NULL, cpu_cores = NULL, start_date = NULL, end_date = NULL) {
+getCoins <- function(coin = NULL,
+           limit      = NULL,
+           cpu_cores  = NULL,
+           start_date = NULL,
+           end_date   = NULL,
+           coin_list  = NULL) {
     ifelse(as.character(sys.call()[[1]]) == "getCoins",
       warning("DEPRECATED: Please use crypto_history() instead of getCoins().", call. = FALSE, immediate. = TRUE),
       shh <- ""
@@ -79,7 +85,7 @@ getCoins <-
     sys_locale <- Sys.getlocale(category = "LC_TIME")
     replace_encoding(sys_locale)
 
-    coins <- crypto_list(coin, start_date, end_date)
+    coins <- crypto_list(coin, start_date, end_date, coin_list)
     if (!is.null(limit)) {
       coins <- coins[1:limit, ]
     }

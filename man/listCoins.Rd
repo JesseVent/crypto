@@ -5,9 +5,11 @@
 \alias{crypto_list}
 \title{Retrieves name, symbol, slug and rank for all tokens}
 \usage{
-listCoins(coin = NULL, start_date = NULL, end_date = NULL)
+listCoins(coin = NULL, start_date = NULL, end_date = NULL,
+  coin_list = NULL)
 
-crypto_list(coin = NULL, start_date = NULL, end_date = NULL)
+crypto_list(coin = NULL, start_date = NULL, end_date = NULL,
+  coin_list = NULL)
 }
 \arguments{
 \item{coin}{Name, symbol or slug of crypto currency}
@@ -15,6 +17,8 @@ crypto_list(coin = NULL, start_date = NULL, end_date = NULL)
 \item{start_date}{Start date to retrieve data from, format yyyymmdd}
 
 \item{end_date}{Start date to retrieve data from, format yyyymmdd}
+
+\item{coin_list}{'api', 'static' or NULL}
 
 \item{...}{No arguments, return all coins}
 }

@@ -9,6 +9,7 @@
 #' @param ... No arguments, return all coins
 #' @param start_date Start date to retrieve data from, format yyyymmdd
 #' @param end_date Start date to retrieve data from, format yyyymmdd
+#' @param coin_list 'api', 'static' or NULL
 #'
 #' @return Crypto currency historic OHLC market data in a dataframe:
 #'   \item{symbol}{Coin symbol (not-unique)}
@@ -40,7 +41,8 @@ listCoins <-
   crypto_list <-
   function(coin         = NULL,
            start_date   = NULL,
-           end_date     = NULL) {
+           end_date     = NULL,
+           coin_list    = NULL) {
     ifelse(as.character(match.call()[[1]]) == "listCoins",
            warning(
              "DEPRECATED: Please use crypto_list() instead of listCoins().",
@@ -49,8 +51,15 @@ listCoins <-
            ),
            shh <- "")
     initiate_timelog()
-    json   <- "https://s2.coinmarketcap.com/generated/search/quick_search.json"
-    coins  <- use_rate_limit(jsonlite::read_json(json, simplifyVector = TRUE))
+    if (is.null(coin_list)) {
+      json   <- "https://s2.coinmarketcap.com/generated/search/quick_search.json"
+      coins  <- use_rate_limit(jsonlite::read_json(json, simplifyVector = TRUE))
+    } else {
+      ifelse(coin_list == "api",
+             coins <- get_coinlist_api(),
+             coins <- get_coinlist_static())
+    }
+
     if (!is.null(coin)) {
     name   <- coins$name
     slug   <- coins$slug

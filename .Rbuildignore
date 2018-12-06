@@ -9,3 +9,7 @@ CONTRIBUTING.md
 ISSUE_TEMPLATE.md
 cran-comments.md
 /inst/
+/data/
+.gitconfig
+cmc_apikey
+sandbox_cmc_apikey
