@@ -1,5 +1,26 @@
 # Latest CRAN submission comments
 
+### crypto major release 1.1.0
+- Significant changes to entire package due to upgrade to CMC API.
+- All parallel processing functionality has been removed (Yay no more doSNOW notes!).
+- All previously notified functions that were deprecated are now removed.
+- Better progress bar and API key handling introduced.
+- Removed redundant functions no longer required.
+- Added helper functions to assist with dependency management.
+
+**Checks Completed On RHub**
+**Winbuilder Check Results**
+```
+Your package crypto_1.2.0.tar.gz has been built (if working) and checked for Windows.
+Please check the log files and (if working) the binary package at:
+https://win-builder.r-project.org/N53I6FsQ14bU
+The files will be removed after roughly 72 hours.
+Installation time in seconds: 10
+Check time in seconds: 100
+Status: OK
+R version 3.5.1 (2018-07-02)
+```
+
 ### crypto bug fix 1.0.4
 - fixing dependency bug by including dplyr:bind_rows
 

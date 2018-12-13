@@ -4,14 +4,14 @@
 \alias{scraper}
 \title{Historical table scraper}
 \usage{
-scraper(attributes, slug, cpu_cores)
+scraper(attributes, slug, sleep = NULL)
 }
 \arguments{
 \item{attributes}{URL generated from \code{listCoins()}}
 
 \item{slug}{Unique identifier required for merging}
 
-\item{cpu_cores}{Required to calculate CMC rate limiter}
+\item{sleep}{Duration to sleep to resolve rate limiter}
 }
 \value{
 Raw OHLC market data in a dataframe:
@@ -25,20 +25,10 @@ Raw OHLC market data in a dataframe:
   \item{close}{Market close}
   \item{volume}{Volume 24 hours}
   \item{market}{USD Market cap}
-
-This function is not to be called individually by a user but is to be
-consumed as part of the getCoins.
 }
 \description{
 This web scrapes the historic price tables from CoinMarketCap
 and provides back a dataframe for the coin provided as an input.
 This function is a dependency of getCoins and is used
 as part of a loop to retrieve all crypto currencies.
-}
-\examples{
-\dontrun{
-# Only to be executed by getCoins
-scraper(attributes)
-}
-
 }

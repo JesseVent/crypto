@@ -3,20 +3,28 @@
 
 ## Historical Cryptocurrency Prices For ALL Tokens!
 
+**Now providing support for the CMC professional API**
+Easily interact with the professional API for CoinMarketCap through use of the `keychain` and `rstudioapi` packages. 
+
+Additional information on setup and usage can be found here.
+[R-Studio and using Keyring](https://support.rstudio.com/hc/en-us/articles/360000969634-Using-Keyring)
+
 Retrieves all the open, high, low, close values for all cryptocurrencies. This retrieves data from CoinMarketCap's historical prices, exchange details and current prices API.
 
-- Retrieves historical crypto currency data `getCoins()`
-- Retrieves current crypto currency prices `getPrices()`
-- Retrieves list of all crypto currencies `listCoins()`
-- Retrieves all crypto exchanges and their listings `getExchanges()`
-- Converts/summarises historical data into xts objects `crypto2xts`
+- Retrieves historical crypto currency data `crypto_history()`
+- Retrieves current crypto currency prices `crypto_prices()`
+- Retrieves list of all crypto currencies `crypto_list()`
+- Retrieves all crypto exchanges and their listings `crypto_exchanges()`
+- Converts/summarises historical data into xts objects `crypto_xts()`
+- Inidividual crypto currency time series data `crypto_timeseries()`
+- Global markets time series data `crypto_global_markets()`
 
 ### Prerequisites
 
 Below are the high level dependencies for the package to install correctly.
 
 ```
-R (>= 3.4.0), foreach, rvest, xml2, doSNOW
+R (>= 3.4.0), rvest, xml2
 
 # Ubuntu 
 sudo apt install libxml2-dev libcurl4-openssl-dev libssl-dev
@@ -71,11 +79,11 @@ when_will_i_get_rich <- crypto_xts(will_i_get_rich, "week")
 
 # Get timeseries market data for token for displaying in charts
 ?daily_market
-show_me_getting_rich <- daily_market('bitcoin')
+show_me_getting_rich <- crypto_timeseries('bitcoin')
 
 # Get timeseries global market data for all coins or alt coins for displaying in charts
 ?global_market
-show_me_everyone_getting_rich <- global_market()
+show_me_everyone_getting_rich <- crypto_global_markets()
 ```
 
 ## Package Issues

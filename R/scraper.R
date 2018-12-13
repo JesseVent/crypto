@@ -7,7 +7,7 @@
 #'
 #' @param attributes URL generated from \code{listCoins()}
 #' @param slug Unique identifier required for merging
-#' @param cpu_cores Required to calculate CMC rate limiter
+#' @param sleep Duration to sleep to resolve rate limiter
 #'
 #' @return Raw OHLC market data in a dataframe:
 #'   \item{slug}{Coin url slug}
@@ -21,44 +21,38 @@
 #'   \item{volume}{Volume 24 hours}
 #'   \item{market}{USD Market cap}
 #'
-#' This function is not to be called individually by a user but is to be
-#' consumed as part of the getCoins.
-#'
-#' @importFrom dplyr "%>%"
-#' @importFrom rvest "html_nodes"
+#' @importFrom dplyr "%>%" "mutate"
+#' @importFrom tibble "as.tibble"
+#' @importFrom rvest "html_nodes" "html_table"
 #' @importFrom xml2 "read_html"
+#' @importFrom curl "new_handle"
 #'
-#' @examples
-#' \dontrun{
-#' # Only to be executed by getCoins
-#' scraper(attributes)
-#' }
-#'
-#' @name scraper
-#'
-#' @export
-#'
-scraper <- function(attributes, slug, cpu_cores) {
+scraper <- function(attributes, slug, sleep = NULL) {
+  .            <- "."
+  history_url  <- as.character(attributes)
+  coin_slug    <- as.character(slug)
+  if (!is.null(sleep)) Sys.sleep(sleep)
 
-  # Handle rate limiter CMC have now applied
-  rate <- 60
-  limit <- 30
-  rate_limiter <- ((rate/limit) * (rate/limit)) * cpu_cores
-  Sys.sleep(rate_limiter)
+  page <- tryCatch(
+    xml2::read_html(history_url,
+                    handle = curl::new_handle("useragent" = "Mozilla/5.0")),
+    error = function(e) e)
 
-  . <- "."
-  history_url <- as.character(attributes)
-  coin_slug <- as.character(slug)
+  if (inherits(page, "error")) {
+    closeAllConnections()
+    message("\n")
+    message(cli::cat_bullet("Rate limit hit. Sleeping for 60 seconds.", bullet = "warning", bullet_col = "red"), appendLF = TRUE)
+    Sys.sleep(65)
+    page <- xml2::read_html(history_url,
+                            handle = curl::new_handle("useragent" = "Mozilla/5.0"))
+  }
 
-  cpage <- use_rate_limit(
-    xml2::read_html(history_url, handle = curl::new_handle("useragent" = "Mozilla/5.0")))
-  cnodes <- cpage %>%
-    rvest::html_nodes(css = "table") %>%
-    .[1] %>%
+  table   <- rvest::html_nodes(page, css = "table") %>% .[1] %>%
     rvest::html_table(fill = TRUE) %>%
     replace(!nzchar(.), NA)
-  scraper <- data.frame(cnodes = cnodes)
-  scraper <- Reduce(rbind, cnodes)
-  scraper$slug <- as.character(coin_slug)
+
+  scraper <- table[[1]] %>% tibble::as.tibble() %>%
+    dplyr::mutate(slug = coin_slug)
+
   return(scraper)
 }

@@ -1,6 +1,17 @@
 # Latest updates, fixes and news for the Crypto package
 ![Cran](http://cranlogs.r-pkg.org/badges/grand-total/crypto) ![Cran](http://cranlogs.r-pkg.org/badges/crypto) ![Cran](http://cranlogs.r-pkg.org/badges/last-week/crypto) ![Cran](http://cranlogs.r-pkg.org/badges/last-day/crypto) [![Rdoc](http://www.rdocumentation.org/badges/version/crypto)](http://www.rdocumentation.org/packages/crypto)
 
+### crypto major release 1.1.0
+- Significant changes to entire package due to upgrade to CMC API.
+- Now supports use of the CoinMarketCap professional API.
+- All parallel processing functionality has been removed.
+- All deprecated functions now use their new name, and warnings for old names removed.
+- Better visualisation of progress bar and API key handling introduced.
+- Support for secure API key management through keychain and rstudioapi packages.
+- Enhanced error handling and support for rate limiter, including automatic reattempts.
+- Removed redundant functions no longer required.
+- Added helper functions to assist with dependency management.
+
 ### crypto minor release 1.0.4
 #### BUG FIX
 - added change to handle rate limiter of 30 calls a minute introduced by CoinMarketCap

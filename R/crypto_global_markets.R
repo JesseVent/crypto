@@ -1,22 +1,23 @@
-#' Global cryptocurrency market data
+#' Global crypto currency market data
 #'
 #' Retrieve daily snapshot of market_cap and the volume traded
-#' for either total cryptocurrency market or the altcoin market
+#' for either total crypto currency market or the altcoin market
 #' only. Selecting 'total' will include bitcoin and all altcoins.
 #'
 #' @param market Either 'total' or 'altcoin'
 #'
-#' @return Daily timeseries of token data in a dataframe:
+#' @importFrom jsonlite fromJSON
+#'
+#' @return Daily time series of token data in a dataframe:
 #'   \item{timestamp}{Timestamp (POSIXct)}
 #'   \item{market_cap}{Market Cap in USD}
 #'   \item{volume}{Volume traded in USD}
 #'
 #' @examples
 #' market         <- "total"
-#' global_markets <- global_market(market)
+#' crypto_global_markets <- crypto_global_market(market)
 #' @export
-
-global_market <- function(market = NULL) {
+crypto_global_market <- function(market = NULL) {
   if (is.null(market)) {
     market <- "total"
   }
@@ -29,10 +30,10 @@ global_market <- function(market = NULL) {
   }
 
   url <- paste0("https://graphs2.coinmarketcap.com/global/marketcap-", market)
-  df <- use_rate_limit(jsonlite::fromJSON(url, flatten = TRUE)) %>% as.data.frame()
+  df <- jsonlite::fromJSON(url, flatten = TRUE) %>% as.data.frame()
   df[, 3] <- NULL
   names(df) <- paste0(market, "_", c("timestamp", "market_cap", "volume"))
   df[, 1] <- as.POSIXct(as.numeric(df[, 1]) / 1000, origin = "1970-01-01", tz = "UTC")
-  global_markets <- df %>% as.data.frame()
-  return(global_markets)
+  crypto_global_markets <- df %>% as.data.frame()
+  return(crypto_global_markets)
 }
