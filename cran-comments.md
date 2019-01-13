@@ -1,10 +1,57 @@
 # Latest CRAN submission comments
 
 ### crypto minor release 1.1.1
+To resolve the following [crypto ERRORs and NOTEs under R-oldrelease](https://cran.r-project.org/web/checks/check_results_crypto.html)
+
+Thanks for letting me know
+
+**Changes**
 
 -   Added new function to handle UTF-8 encoding dynamically on windows and unix bases systems
--   Removed install_keyring() function which required utils::askYesNo which is only available for R >= 3.5 (opted to provide message with advice to install keyring package instead of prompting installation keyring package).
+-   Removed install_keyring() function which required utils::askYesNo which is only available for R >= 3.5
 -   Removed keyring from Imports to fix CRAN note
+
+I have opted to provide message advising to install keyring package instead of prompting installation of keyring package through use of askYesNo, as my preference is for the package to work for R 3.4
+
+**Expected Note**
+
+```
+Possibly mis-spelled words in DESCRIPTION:
+  crypto (4:24, 4:230)
+  Cryptocurrency (3:8)
+```
+
+**Note Comments**
+
+The following words are now included in the oxford dictionary:
+
+-   crypto - [Crypto Oxford Dictionary Entry](https://en.oxforddictionaries.com/definition/us/crypto)
+-   cryptocurrency - [Cryptocurrency Oxford Dictionary Entry](https://en.oxforddictionaries.com/definition/cryptocurrency)
+
+**Winbuilder Check Results**
+```
+Your package crypto_1.1.1.tar.gz has been built (if working) and checked for Windows.
+Please check the log files and (if working) the binary package at:
+https://win-builder.r-project.org/4axVQenM4q1a
+The files will be removed after roughly 72 hours.
+Installation time in seconds: 11
+Check time in seconds: 194
+Status: 1 NOTE
+R version 3.5.2 (2018-12-20)
+```
+
+**Rhub Check Results**
+```
+> rhub::list_package_checks(howmany = 6)
+  package version status submitted             platform
+1  crypto   1.1.1   note   ~2h ago   fedora-clang-devel
+2  crypto   1.1.1   note   ~2h ago   ubuntu-gcc-release
+3  crypto   1.1.1   note   ~2h ago windows-x86_64-devel
+4  crypto   1.1.1     ok   ~2h ago   fedora-clang-devel
+5  crypto   1.1.1   note   ~2h ago   ubuntu-gcc-release
+6  crypto   1.1.1   note   ~2h ago windows-x86_64-devel
+```
+
 
 ### crypto major release 1.1.0
 
