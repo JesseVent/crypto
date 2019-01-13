@@ -2,8 +2,8 @@ Package: crypto
 Type: Package
 Title: Crypto Currency Market Data
 Description: Retrieves crypto currency current and historical information as well as information on the exchanges they are listed on. For current and historical it will retrieve the daily open, high, low and close values for all crypto currencies. This retrieves the historical market data by web scraping tables provided by 'Cryptocurrency Market Capitalizations' <https://coinmarketcap.com>.
-Version: 1.1.0
-Date: 2018-12-13
+Version: 1.1.1
+Date: 2019-01-13
 Authors@R: c(person("Jesse", "Vent",
                     role = c("aut", "cre"), 
                     email = "cryptopackage@icloud.com")
@@ -28,8 +28,7 @@ Imports: dplyr,
   stats,
   tidyr,
   httr,
-  rstudioapi,
-  keyring
+  rstudioapi
 Suggests: R6
 SystemRequirements: libxml2-devel, 
   libcurl-devel,
