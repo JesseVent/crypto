@@ -28,8 +28,7 @@ Imports: dplyr,
   stats,
   tidyr,
   httr,
-  rstudioapi,
-  keyring
+  rstudioapi
 Suggests: R6
 SystemRequirements: libxml2-devel, 
   libcurl-devel,

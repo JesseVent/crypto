@@ -1,19 +1,5 @@
 #' CoinMarketCap Professional API Call
 #'
-#' @description Checks to see if keyring package is installed
-#' and then if not prompts for installation
-#' @importFrom utils "askYesNo"
-install_keyring <- function() {
-  dependent_packages <- c("keyring","rstudioapi")
-  message("Crypto highly recommends you install keyring to manage your API keys.", appendLF = TRUE)
-  prompt <- utils::askYesNo("Install keyring?")
-  if (prompt == "TRUE") {
-    utils::install.packages(dependent_packages, dependencies = TRUE)
-  }
-}
-
-#' CoinMarketCap Professional API Call
-#'
 #' @param url CoinMarketCap API URL
 #' @importFrom httr "content" "GET" "add_headers" "accept_json"
 #' @importFrom rstudioapi askForSecret
@@ -52,7 +38,7 @@ get_coinlist_api <- function() {
                 is.element("rstudioapi", utils::installed.packages()[,1]))
 
   if (!any(packages)) {
-    install_keyring()
+    message("Crypto highly recommends you install keyring `install.packages(\"keyring\")` to manage your API keys.", appendLF = TRUE)
   }
 
   base     <- "https://pro-api.coinmarketcap.com"
@@ -145,3 +131,21 @@ reset_encoding <- function(sys_locale) {
   }
   return(reset_enc)
 }
+
+#' Platform Locale
+#'
+#' Helper function to identify locale to use for date encoding
+#' based on source platform being unix based or windows
+#'
+#' @return locale
+#' @export
+#'
+#' @examples {
+#' platform_locale()
+#' }
+platform_locale <- function() {
+  sys_os <- .Platform$OS.type
+  locale <- ifelse(sys_os == "unix", "en_US.UTF-8", "English_United States.1252")
+  return(locale)
+}
+
