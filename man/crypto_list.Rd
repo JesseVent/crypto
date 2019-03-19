@@ -2,19 +2,26 @@
 % Please edit documentation in R/crypto_list.R
 \name{crypto_list}
 \alias{crypto_list}
-\title{Retrieves name, symbol, slug and rank for all tokens}
+\title{Retrieves name, symbol, slug and rank for all tokens at specific historic date}
 \usage{
 crypto_list(coin = NULL, start_date = NULL, end_date = NULL,
-  coin_list = NULL)
+  start_date_hist = NULL, end_date_hist = NULL, coin_list = NULL,
+  date_gap = "months")
 }
 \arguments{
 \item{coin}{Name, symbol or slug of crypto currency}
 
 \item{start_date}{Start date to retrieve data from, format yyyymmdd}
 
-\item{end_date}{Start date to retrieve data from, format yyyymmdd}
+\item{end_date}{End date to retrieve data from, format yyyymmdd, if not provided, today will be assumed}
+
+\item{start_date_hist}{Start date to retrieve coin history from, format yyyymmdd}
+
+\item{end_date_hist}{End date to retrieve coin history from, format yyyymmdd, if not provided, today will be assumed}
 
 \item{coin_list}{'api', 'static' or NULL}
+
+\item{date_gap}{'months'}
 }
 \value{
 Crypto currency historic OHLC market data in a dataframe:
@@ -28,8 +35,9 @@ Crypto currency historic OHLC market data in a dataframe:
 Required dependency that is used in function call \code{getCoins()}.
 }
 \description{
-List all of the crypto currencies that have existed on CoinMarketCap
-and use this to populate the URL base for scraping historical market
+List all of the crypto currencies that have existed on CoinMarketCap on specific date.
+This can be used to add "dead" coins to the list of coins retrieved by `crypto_list()`.
+Use this to populate/add to the URL base for scraping historical market
 data. It retrieves name, slug, symbol and rank of crypto currencies from
 CoinMarketCap and creates URLS for \code{scraper()} to use.
 }
@@ -40,6 +48,10 @@ coins <- crypto_list(coin)
 
 # return all coins
 coin_list <- crypto_list()
+
+# return all coins listed in 2015
+coins_list_2015 <- crypto_list(start_date_hist="20150101",end_date_hist="20151231",date_gap="months")
+
 }
 
 }

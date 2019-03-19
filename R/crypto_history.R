@@ -70,8 +70,8 @@ crypto_history <- function(coin = NULL, limit = NULL, start_date = NULL, end_dat
   message("ERC-20: 0x375923Bf82F0b728d23A5704261a6e16341fd860", appendLF = TRUE)
   message("XRP: rK59semLsuJZEWftxBFhWuNE6uhznjz2bK", appendLF = TRUE)
   message("\n")
-
-  coins <- crypto_list(coin, start_date, end_date, coin_list)
+  # only if no coin_list is provided
+  if (is.null(coin_list)) coins <- crypto_list(coin, start_date, end_date, coin_list)
 
   if (!is.null(limit))
     coins <- coins[1:limit, ]

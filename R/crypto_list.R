@@ -18,7 +18,6 @@
 #'   \item{symbol}{Coin symbol (not-unique)}
 #'   \item{name}{Coin name}
 #'   \item{slug}{Coin URL slug (unique)}
-#'   \item{rank}{Current rank by market cap}
 #'   \item{exchange_url}{Exchange market tables urls for scraping}
 #'   \item{history_url}{Historical market tables urls for scraping}
 #'
