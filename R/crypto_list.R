@@ -64,11 +64,12 @@
           out_list <- rbind(out_list,scraper_hist(attributes, sleep = NULL) %>% dplyr::mutate(hist_date=dates[i]))
         }
       }
-      if (is.null(end_dates_hist)){
+      coins <- out_list
+      if (is.null(end_date_hist)){
         json   <- "https://s2.coinmarketcap.com/generated/search/quick_search.json"
         out_list_recent  <- jsonlite::fromJSON(json)
+        coins <- rbind(out_list,out_list_recent %>% select(name,symbol,slug) %>% dplyr::mutate(hist_date=lubridate::today()))
       }
-      coins <- rbind(out_list,out_list_recent %>% select(name,symbol,slug) %>% dplyr::mutate(hist_date=lubridate::today()))
     } else {
       ifelse(coin_list == "api",
              coins <- get_coinlist_api(),
