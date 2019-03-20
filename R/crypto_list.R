@@ -36,7 +36,7 @@
 #' coin_list <- crypto_list()
 #'
 #' # return all coins listed in 2015
-#' coins_list_2015 <- crypto_list(start_date_hist="20150101",end_date_hist="20151231",date_gap="months")
+#' coin_list_2015 <- crypto_list(start_date_hist="20150101",end_date_hist="20151231",date_gap="months")
 #'
 #' }
 #'

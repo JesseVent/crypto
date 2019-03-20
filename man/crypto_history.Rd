@@ -4,11 +4,12 @@
 \alias{crypto_history}
 \title{Get historic crypto currency market data}
 \usage{
-crypto_history(coin = NULL, limit = NULL, start_date = NULL,
+crypto_history(coins = NULL, limit = NULL, start_date = NULL,
   end_date = NULL, coin_list = NULL, sleep = NULL)
 }
 \arguments{
-\item{coin}{string Name, symbol or slug of crypto currency, default is all tokens}
+\item{coins}{string if NULL retrieve all currently existing coins (crypto_list()),
+or provide list of crypto currencies in the crypto_list() format (e.g. current and dead coins since 2015)}
 
 \item{limit}{integer Return the top n records, default is all tokens}
 
@@ -26,7 +27,6 @@ Crypto currency historic OHLC market data in a dataframe:
   \item{symbol}{Coin symbol}
   \item{name}{Coin name}
   \item{date}{Market date}
-  \item{ranknow}{Current Rank}
   \item{open}{Market open}
   \item{high}{Market high}
   \item{low}{Market low}
@@ -54,5 +54,9 @@ all_coins <- crypto_history(limit = 1)
 
 # Retrieving this years market history for ALL crypto currencies
 all_coins <- crypto_history(start_date = '20180101')
+
+# Retrieve 2015 history for all 2015 crypto currencies
+coin_list_2015 <- crypto_list(start_date_hist="20150101",end_date_hist="20151231",date_gap="months")
+2015_coins <- crypto_history(coins = coin_list_2015, start_date = "20150101", end_date="20151231")
 }
 }

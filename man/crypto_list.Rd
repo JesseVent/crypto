@@ -28,7 +28,6 @@ Crypto currency historic OHLC market data in a dataframe:
   \item{symbol}{Coin symbol (not-unique)}
   \item{name}{Coin name}
   \item{slug}{Coin URL slug (unique)}
-  \item{rank}{Current rank by market cap}
   \item{exchange_url}{Exchange market tables urls for scraping}
   \item{history_url}{Historical market tables urls for scraping}
 
@@ -50,7 +49,7 @@ coins <- crypto_list(coin)
 coin_list <- crypto_list()
 
 # return all coins listed in 2015
-coins_list_2015 <- crypto_list(start_date_hist="20150101",end_date_hist="20151231",date_gap="months")
+coin_list_2015 <- crypto_list(start_date_hist="20150101",end_date_hist="20151231",date_gap="months")
 
 }
 

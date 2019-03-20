@@ -6,7 +6,8 @@
 #' analysis on the crypto financial markets or to attempt
 #' to predict future market movements or trends.
 #'
-#' @param coin string Name, symbol or slug of crypto currency, default is all tokens
+#' @param coins string if NULL retrieve all currently existing coins (crypto_list()),
+#' or provide list of crypto currencies in the crypto_list() format (e.g. current and dead coins since 2015)
 #' @param limit integer Return the top n records, default is all tokens
 #' @param start_date string Start date to retrieve data from, format 'yyyymmdd'
 #' @param end_date string End date to retrieve data from, format 'yyyymmdd'
@@ -18,7 +19,6 @@
 #'   \item{symbol}{Coin symbol}
 #'   \item{name}{Coin name}
 #'   \item{date}{Market date}
-#'   \item{ranknow}{Current Rank}
 #'   \item{open}{Market open}
 #'   \item{high}{Market high}
 #'   \item{low}{Market low}
@@ -35,7 +35,7 @@
 #' @importFrom tidyr 'replace_na'
 #' @importFrom crayon 'make_style'
 #' @importFrom grDevices 'rgb'
-#' @importFrom tibble 'tibble' 'as.tibble'
+#' @importFrom tibble 'tibble' 'as_tibble'
 #' @importFrom cli 'cat_bullet'
 #' @importFrom lubridate 'mdy'
 #'
@@ -50,12 +50,16 @@
 #'
 #' # Retrieving this years market history for ALL crypto currencies
 #' all_coins <- crypto_history(start_date = '20180101')
+#'
+#' # Retrieve 2015 history for all 2015 crypto currencies
+#' coin_list_2015 <- crypto_list(start_date_hist="20150101",end_date_hist="20151231",date_gap="months")
+#' 2015_coins <- crypto_history(coins = coin_list_2015, start_date = "20150101", end_date="20151231")
 #' }
 #' @name crypto_history
 #'
 #' @export
 #'
-crypto_history <- function(coin = NULL, limit = NULL, start_date = NULL, end_date = NULL,
+crypto_history <- function(coins = NULL, limit = NULL, start_date = NULL, end_date = NULL,
   coin_list = NULL, sleep = NULL) {
   pink <- crayon::make_style(grDevices::rgb(0.93, 0.19, 0.65))
   options(scipen = 999)
@@ -70,14 +74,13 @@ crypto_history <- function(coin = NULL, limit = NULL, start_date = NULL, end_dat
   message("ERC-20: 0x375923Bf82F0b728d23A5704261a6e16341fd860", appendLF = TRUE)
   message("XRP: rK59semLsuJZEWftxBFhWuNE6uhznjz2bK", appendLF = TRUE)
   message("\n")
-  # only if no coin_list is provided
-  if (is.null(coin_list)) coins <- crypto_list(coin, start_date, end_date, coin_list)
+  # only if no coins are provided
+  if (is.null(coins)) coins <- crypto_list(coin, start_date, end_date, coin_list)
 
   if (!is.null(limit))
     coins <- coins[1:limit, ]
 
-  coin_names <- tibble::tibble(symbol = coins$symbol, name = coins$name, rank = coins$rank,
-    slug = coins$slug)
+  coin_names <- tibble::tibble(symbol = coins$symbol, name = coins$name,slug = coins$slug)
   to_scrape <- tibble::tibble(attributes = coins$history_url, slug = coins$slug)
   loop_data <- vector("list", nrow(to_scrape))
 
