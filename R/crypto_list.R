@@ -25,7 +25,7 @@
 #' @importFrom tibble tibble
 #' @importFrom jsonlite fromJSON
 #' @importFrom lubridate today ymd
-#'
+#' @importFrom dplyr left_join mutate
 #'
 #' @examples
 #' \dontrun{
@@ -64,9 +64,13 @@
         }
       }
       coins <- out_list
+      # always get list for data validation
+      json   <- "https://s2.coinmarketcap.com/generated/search/quick_search.json"
+      out_list_recent  <- jsonlite::fromJSON(json)
+      # validate name & slug via symbol from recent list
+      coins <- coins %>% dplyr::left_join(out_list_recent %>% select(symbol,name,slug) %>% rename(slug_main=slug, name_main=name),by="symbol") %>%
+        mutate(name=ifelse(is.na(name_main),name,name_main),slug=ifelse(is.na(slug_main),slug,slug_main)) %>% select(symbol, name, slug, hist_date)
       if (is.null(end_date_hist)){
-        json   <- "https://s2.coinmarketcap.com/generated/search/quick_search.json"
-        out_list_recent  <- jsonlite::fromJSON(json)
         coins <- rbind(out_list,out_list_recent %>% select(name,symbol,slug) %>% dplyr::mutate(hist_date=lubridate::today()))
       }
     } else {
