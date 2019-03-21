@@ -31,11 +31,11 @@
 #' This is the main function of the crypto package. If you want to retrieve
 #' ALL coins then do not pass a argument to crypto_history(), or pass the coin name.
 #'
-#' @importFrom dplyr '%>%' 'mutate' 'arrange'
+#' @importFrom dplyr '%>%' 'mutate' 'arrange' 'left_join' "group" "ungroup" "slice"
 #' @importFrom tidyr 'replace_na'
 #' @importFrom crayon 'make_style'
 #' @importFrom grDevices 'rgb'
-#' @importFrom tibble 'tibble' 'as_tibble'
+#' @importFrom tibble 'tibble' 'as_tibble' 'rowid_to_column'
 #' @importFrom cli 'cat_bullet'
 #' @importFrom lubridate 'mdy'
 #'
@@ -53,7 +53,7 @@
 #'
 #' # Retrieve 2015 history for all 2015 crypto currencies
 #' coin_list_2015 <- crypto_list(start_date_hist="20150101",end_date_hist="20151231",date_gap="months")
-#' 2015_coins <- crypto_history(coins = coin_list_2015, start_date = "20150101", end_date="20151231")
+#' coins_2015 <- crypto_history(coins = coin_list_2015, start_date = "20150101", end_date="20151231")
 #' }
 #' @name crypto_history
 #'
@@ -75,7 +75,7 @@ crypto_history <- function(coins = NULL, limit = NULL, start_date = NULL, end_da
   message("XRP: rK59semLsuJZEWftxBFhWuNE6uhznjz2bK", appendLF = TRUE)
   message("\n")
   # only if no coins are provided
-  if (is.null(coins)) coins <- crypto_list(coin, start_date, end_date, coin_list)
+  if (is.null(coins)) coins <- crypto_list(coin=NULL, start_date, end_date, coin_list)
 
   if (!is.null(limit))
     coins <- coins[1:limit, ]
@@ -94,32 +94,28 @@ crypto_history <- function(coins = NULL, limit = NULL, start_date = NULL, end_da
     loop_data[[i]] <- scraper(to_scrape$attributes[i], to_scrape$slug[i], sleep)
   }
 
-  results <- do.call(rbind, loop_data) %>% tibble::as.tibble()
+  results <- do.call(rbind, loop_data) %>% tibble::as_tibble()
 
   if (length(results) == 0L)
     stop("No data currently exists for this crypto currency.", call. = FALSE)
 
-  market_data <- merge(results, coin_names, by = "slug")
-  colnames(market_data) <- c("slug", "date", "open", "high", "low", "close", "volume",
-    "market", "symbol", "name", "ranknow")
-  market_data <- market_data[c("slug", "symbol", "name", "date", "ranknow", "open",
-    "high", "low", "close", "volume", "market")]
-  market_data$date <- lubridate::mdy(market_data$date, locale = platform_locale())
+  market_data <- results %>% left_join(coin_names, by = "slug")
+  colnames(market_data) <- c("date", "open", "high", "low", "close", "volume",
+    "market", "slug", "symbol", "name")
 
-  market_data[, 5:11] <- apply(market_data[, 5:11], 2, function(x) gsub(",", "",
-    x))
-  market_data[, 7:11] <- apply(market_data[, 7:11], 2, function(x) gsub("-", "0",
-    x))
-  market_data$volume <- market_data$volume %>% tidyr::replace_na(0) %>% as.numeric()
-  market_data$market <- market_data$market %>% tidyr::replace_na(0) %>% as.numeric()
-  market_data[, 5:11] <- apply(market_data[, 5:11], 2, function(x) as.numeric(x))
-  market_data <- na.omit(market_data)
-
-  market_data <- market_data %>% dplyr::mutate(close_ratio = (close - low)/(high -
-    low) %>% round(4) %>% as.numeric(), spread = (high - low) %>% round(2) %>%
-    as.numeric())
-
-  market_data$close_ratio <- market_data$close_ratio %>% tidyr::replace_na(0)
-  history_results <- market_data %>% dplyr::arrange(ranknow, date)
+  history_results <- market_data %>%
+    # create fake ranknow
+    dplyr::left_join(market_data %>% dplyr::group_by(symbol) %>% dplyr::arrange(desc(date)) %>% dplyr::slice(1) %>% dplyr::ungroup() %>%
+                       tibble::rowid_to_column("ranknow") %>% dplyr::select(slug,ranknow), by="slug") %>%
+    dplyr::select(slug,symbol,name,date,ranknow,open,high,low,close,volume,market) %>%
+    dplyr::mutate(date=lubridate::mdy(date, locale = platform_locale())) %>%
+    dplyr::mutate_at(vars(open,high,low,close,volume,market),~gsub(",","",.)) %>%
+    dplyr::mutate_at(vars(high,low,close,volume,market),~gsub("-","0",.)) %>%
+    dplyr::mutate_at(vars(open,high,low,close,volume,market),~as.numeric(tidyr::replace_na(.,0))) %>%
+    dplyr::mutate(close_ratio = (close - low)/(high - low) %>% round(4) %>% as.numeric(),
+                  spread = (high - low) %>% round(2) %>% as.numeric()) %>%
+    dplyr::mutate_at(vars(close_ratio),~as.numeric(tidyr::replace_na(.,0))) %>%
+    dplyr::group_by(symbol) %>%
+    dplyr::arrange(ranknow,desc(date))
   return(history_results)
 }
