@@ -39,20 +39,27 @@ scraper <- function(attributes, slug, sleep = NULL) {
     error = function(e) e)
 
   if (inherits(page, "error")) {
-    closeAllConnections()
-    message("\n")
-    message(cli::cat_bullet("Rate limit hit. Sleeping for 60 seconds.", bullet = "warning", bullet_col = "red"), appendLF = TRUE)
-    Sys.sleep(65)
-    page <- xml2::read_html(history_url,
-                            handle = curl::new_handle("useragent" = "Mozilla/5.0"))
+    if (grep("404",page$message)){cat("No coin data found for",coin_slug,"!\n")} else {
+      closeAllConnections()
+      message("\n")
+      message(cli::cat_bullet("Rate limit hit. Sleeping for 60 seconds.", bullet = "warning", bullet_col = "red"), appendLF = TRUE)
+      Sys.sleep(65)
+      page <- xml2::read_html(history_url,
+                              handle = curl::new_handle("useragent" = "Mozilla/5.0"))
+    }
   }
 
-  table   <- rvest::html_nodes(page, css = "table") %>% .[1] %>%
-    rvest::html_table(fill = TRUE) %>%
-    replace(!nzchar(.), NA)
+  if (inherits(page, "error")){
+    table <- NULL
+    info <- tibble::tibble(slug = coin_slug, start_date=NA, end_date=NA, message = page$message)
+  } else {
+    table <- rvest::html_nodes(page, css = "table") %>% .[1] %>%
+      rvest::html_table(fill = TRUE) %>%
+      replace(!nzchar(.), NA) %>% .[[1]] %>% tibble::as.tibble() %>%
+      dplyr::mutate(slug = coin_slug) %>% mutate(Date=lubridate::mdy(Date, locale = platform_locale()))
+    info <- tibble::tibble(slug = coin_slug, start_date=min(table$Date), end_date=max(table$Date), message = "Success")
+  }
 
-  scraper <- table[[1]] %>% tibble::as.tibble() %>%
-    dplyr::mutate(slug = coin_slug)
-
+  scraper <- list("data"=table, "info"= info)
   return(scraper)
 }
