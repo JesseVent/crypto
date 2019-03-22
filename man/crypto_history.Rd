@@ -59,7 +59,7 @@ all_coins <- crypto_history(limit = 1)
 all_coins <- crypto_history(start_date = '20180101')
 
 # Retrieve 2015 history for all 2015 crypto currencies
-coin_list_2015 <- crypto_list(start_date_hist="20150101",end_date_hist="20151231",date_gap="months")
-coins_2015 <- crypto_history(coins = coin_list_2015, start_date = "20150101", end_date="20151231")
+coin_list_2015 <- crypto_list(start_date_hist="20150101",end_date_hist="20150201",date_gap="months")
+coins_2015 <- crypto_history(coins = coin_list_2015, start_date = "20150101", end_date="20151231", limit=3)
 }
 }
