@@ -14,7 +14,7 @@
 #' @param coin_list string Valid values are 'api', 'static' or NULL
 #' @param sleep integer Seconds to sleep for between API requests
 #
-#' @return Crypto currency historic OHLC market data in a dataframe:
+#' @return Crypto currency historic OHLC market data in a dataframe and additional information via attribute "info":
 #'   \item{slug}{Coin url slug}
 #'   \item{symbol}{Coin symbol}
 #'   \item{name}{Coin name}
@@ -27,11 +27,14 @@
 #'   \item{market}{USD Market cap}
 #'   \item{close_ratio}{Close rate, min-maxed with the high and low values that day}
 #'   \item{spread}{Volatility premium, high minus low for that day}
+#'   \item{start_date}{in info: Begin of historic data}
+#'   \item{end_date}{in info: End of historic data}
+#'   \item{message}{in info: Either "Success" when data was available or error message from scraper}
 #'
 #' This is the main function of the crypto package. If you want to retrieve
 #' ALL coins then do not pass a argument to crypto_history(), or pass the coin name.
 #'
-#' @importFrom dplyr '%>%' 'mutate' 'arrange' 'left_join' "group" "ungroup" "slice"
+#' @importFrom dplyr '%>%' 'mutate' 'arrange' 'left_join' 'group_by' 'ungroup' 'slice'
 #' @importFrom tidyr 'replace_na'
 #' @importFrom crayon 'make_style'
 #' @importFrom grDevices 'rgb'
@@ -83,6 +86,7 @@ crypto_history <- function(coins = NULL, limit = NULL, start_date = NULL, end_da
   coin_names <- tibble::tibble(symbol = coins$symbol, name = coins$name,slug = coins$slug)
   to_scrape <- tibble::tibble(attributes = coins$history_url, slug = coins$slug)
   loop_data <- vector("list", nrow(to_scrape))
+  loop_info <- vector("list", nrow(to_scrape))
 
   message(cli::cat_bullet("Scraping historical crypto data", bullet = "pointer",
     bullet_col = "green"))
@@ -91,10 +95,13 @@ crypto_history <- function(coins = NULL, limit = NULL, start_date = NULL, end_da
 
   for (i in seq_len(nrow(to_scrape))) {
     pb$tick()
-    loop_data[[i]] <- scraper(to_scrape$attributes[i], to_scrape$slug[i], sleep)
+    temp <- scraper(to_scrape$attributes[i], to_scrape$slug[i], sleep)
+    loop_info[[i]] <- temp$info
+    loop_data[[i]] <- temp$data
   }
 
   results <- do.call(rbind, loop_data) %>% tibble::as_tibble()
+  results_info <- do.call(rbind, loop_info) %>% tibble::as_tibble()
 
   if (length(results) == 0L)
     stop("No data currently exists for this crypto currency.", call. = FALSE)
@@ -117,5 +124,8 @@ crypto_history <- function(coins = NULL, limit = NULL, start_date = NULL, end_da
     dplyr::mutate_at(vars(close_ratio),~as.numeric(tidyr::replace_na(.,0))) %>%
     dplyr::group_by(symbol) %>%
     dplyr::arrange(ranknow,desc(date))
-  return(history_results)
+  # info output
+  coins_info <- coins %>% left_join(results_info,by="slug")
+  out <- history_results; attr(out,"info") <- coins_info
+  return(out)
 }

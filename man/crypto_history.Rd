@@ -22,7 +22,7 @@ or provide list of crypto currencies in the crypto_list() format (e.g. current a
 \item{sleep}{integer Seconds to sleep for between API requests}
 }
 \value{
-Crypto currency historic OHLC market data in a dataframe:
+Crypto currency historic OHLC market data in a dataframe and additional information via attribute "info":
   \item{slug}{Coin url slug}
   \item{symbol}{Coin symbol}
   \item{name}{Coin name}
@@ -35,6 +35,9 @@ Crypto currency historic OHLC market data in a dataframe:
   \item{market}{USD Market cap}
   \item{close_ratio}{Close rate, min-maxed with the high and low values that day}
   \item{spread}{Volatility premium, high minus low for that day}
+  \item{start_date}{in info: Begin of historic data}
+  \item{end_date}{in info: End of historic data}
+  \item{message}{in info: Either "Success" when data was available or error message from scraper}
 
 This is the main function of the crypto package. If you want to retrieve
 ALL coins then do not pass a argument to crypto_history(), or pass the coin name.
@@ -57,6 +60,6 @@ all_coins <- crypto_history(start_date = '20180101')
 
 # Retrieve 2015 history for all 2015 crypto currencies
 coin_list_2015 <- crypto_list(start_date_hist="20150101",end_date_hist="20151231",date_gap="months")
-coins_2015 <- crypto_history(coins = "coin_list_2015", start_date = "20150101", end_date="20151231")
+coins_2015 <- crypto_history(coins = coin_list_2015, start_date = "20150101", end_date="20151231")
 }
 }
