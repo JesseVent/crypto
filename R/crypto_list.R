@@ -25,7 +25,7 @@
 #' @importFrom tibble tibble
 #' @importFrom jsonlite fromJSON
 #' @importFrom lubridate today ymd
-#' @importFrom dplyr left_join mutate
+#' @importFrom dplyr left_join mutate rename
 #'
 #' @examples
 #' \dontrun{
@@ -69,8 +69,8 @@
       out_list_recent  <- jsonlite::fromJSON(json)
       # validate name & slug via symbol from recent list
       if (!is.null(coins)){
-        coins <- coins %>% dplyr::left_join(out_list_recent %>% select(symbol,name,slug) %>% rename(slug_main=slug, name_main=name),by="symbol") %>%
-          mutate(name=ifelse(is.na(name_main),name,name_main),slug=ifelse(is.na(slug_main),slug,slug_main)) %>% select(symbol, name, slug, hist_date)
+        coins <- coins %>% dplyr::left_join(out_list_recent %>% select(symbol,name,slug) %>% dplyr::rename(slug_main=slug, name_main=name),by="symbol") %>%
+          dplyr::mutate(name=ifelse(is.na(name_main),name,name_main),slug=ifelse(is.na(slug_main),slug,slug_main)) %>% dplyr::select(symbol, name, slug, hist_date)
       }
       if (is.null(end_date_hist)|is.null(coins)){
         coins <- rbind(out_list,out_list_recent %>% select(name,symbol,slug) %>% dplyr::mutate(hist_date=lubridate::today()))

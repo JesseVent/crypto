@@ -34,7 +34,6 @@
 #' This is the main function of the crypto package. If you want to retrieve
 #' ALL coins then do not pass a argument to crypto_history(), or pass the coin name.
 #'
-#' @importFrom dplyr '%>%' 'mutate' 'arrange' 'left_join' 'group_by' 'ungroup' 'slice'
 #' @importFrom tidyr 'replace_na'
 #' @importFrom crayon 'make_style'
 #' @importFrom grDevices 'rgb'
@@ -45,6 +44,7 @@
 #' @import progress
 #' @import stats
 #' @import purrr
+#' @import dplyr
 #'
 #' @examples
 #' \dontrun{
@@ -93,7 +93,7 @@ crypto_history <- function(coins = NULL, limit = NULL, start_date = NULL, end_da
   # define backoff rate
   rate <- rate_backoff(pause_base = 3, pause_cap = 70, pause_min = 10, max_times = 10, jitter = TRUE)
   # Modify function to run insistently.
-  insistent_scrape <- insistently(scrape_web, rate, quiet = FALSE)
+  insistent_scrape <- possibly(insistently(scrape_web, rate, quiet = FALSE),otherwise=NULL)
   # Progress Bar 1
   pb <- progress_bar$new(format = ":spin [:current / :total] [:bar] :percent in :elapsedfull ETA: :eta",
                          total = nrow(coins[1:limit,]), clear = FALSE)
@@ -126,12 +126,12 @@ crypto_history <- function(coins = NULL, limit = NULL, start_date = NULL, end_da
     dplyr::left_join(market_data %>% dplyr::group_by(symbol) %>% dplyr::arrange(desc(date)) %>% dplyr::slice(1) %>% dplyr::ungroup() %>%
                        tibble::rowid_to_column("ranknow") %>% dplyr::select(slug,ranknow), by="slug") %>%
     dplyr::select(slug,symbol,name,date,ranknow,open,high,low,close,volume,market) %>%
-    dplyr::mutate_at(vars(open,high,low,close,volume,market),~gsub(",","",.)) %>%
-    dplyr::mutate_at(vars(high,low,close,volume,market),~gsub("-","0",.)) %>%
-    dplyr::mutate_at(vars(open,high,low,close,volume,market),~as.numeric(tidyr::replace_na(.,0))) %>%
+    dplyr::mutate_at(dplyr::vars(open,high,low,close,volume,market),~gsub(",","",.)) %>%
+    dplyr::mutate_at(dplyr::vars(high,low,close,volume,market),~gsub("-","0",.)) %>%
+    dplyr::mutate_at(dplyr::vars(open,high,low,close,volume,market),~as.numeric(tidyr::replace_na(.,0))) %>%
     dplyr::mutate(close_ratio = (close - low)/(high - low) %>% round(4) %>% as.numeric(),
                   spread = (high - low) %>% round(2) %>% as.numeric()) %>%
-    dplyr::mutate_at(vars(close_ratio),~as.numeric(tidyr::replace_na(.,0))) %>%
+    dplyr::mutate_at(dplyr::vars(close_ratio),~as.numeric(tidyr::replace_na(.,0))) %>%
     dplyr::group_by(symbol) %>%
     dplyr::arrange(ranknow,desc(date))
 
