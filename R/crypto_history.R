@@ -59,7 +59,7 @@
 #' coin_list_2015 <- crypto_list(start_date_hist="20150101",
 #' end_date_hist="20150201",date_gap="months")
 #' coins_2015 <- crypto_history(coins = coin_list_2015,
-#' start_date = "20150101", end_date="20151231", limit=3)
+#' start_date = "20150101", end_date="20151231", limit=20)
 #' }
 #' @name crypto_history
 #'
@@ -91,12 +91,13 @@ crypto_history <- function(coins = NULL, limit = NULL, start_date = NULL, end_da
     return(page)
   }
   # define backoff rate
-  rate <- rate_backoff(pause_base = 3, pause_cap = 70, pause_min = 10, max_times = 10, jitter = TRUE)
+  rate <- rate_delay(pause=60,max_times = 2)
+    #rate_backoff(pause_base = 3, pause_cap = 70, pause_min = 40, max_times = 10, jitter = TRUE)
   # Modify function to run insistently.
   insistent_scrape <- possibly(insistently(scrape_web, rate, quiet = FALSE),otherwise=NULL)
   # Progress Bar 1
   pb <- progress_bar$new(format = ":spin [:current / :total] [:bar] :percent in :elapsedfull ETA: :eta",
-                         total = nrow(coins[1:limit,]), clear = FALSE)
+                         total = nrow(coins), clear = FALSE)
   message(cli::cat_bullet("Scraping historical crypto data", bullet = "pointer",bullet_col = "green"))
   data <- coins %>% select(history_url,slug) %>% mutate(out = map2(history_url,slug,.f=~insistent_scrape(.x,.y)))
   # Progress Bar 2
@@ -104,10 +105,11 @@ crypto_history <- function(coins = NULL, limit = NULL, start_date = NULL, end_da
                          total = nrow(data), clear = FALSE)
   map_scrape <- function(out,slug){
     pb2$tick()
+    if (is.null(out)) {cat("\nCoin",slug,"could not be downloaded. Please check URL!\n")} else{
     rvest::html_nodes(out, css = "table") %>% .[1] %>%
       rvest::html_table(fill = TRUE) %>%
-      replace(!nzchar(.), NA) %>% .[[1]] %>% tibble::as.tibble() %>%
-      dplyr::mutate(slug = slug) %>% mutate(Date=lubridate::mdy(Date, locale = platform_locale()))
+      replace(!nzchar(.), NA) %>% .[[1]] %>% tibble::as_tibble() %>%
+      dplyr::mutate(slug = slug) %>% mutate(Date=lubridate::mdy(Date, locale = platform_locale()))}
   }
   message(cli::cat_bullet("Processing historical crypto data", bullet = "pointer",bullet_col = "green"))
   out <- map2(data$out,data$slug, .f = ~ map_scrape(.x,.y))
@@ -123,7 +125,12 @@ crypto_history <- function(coins = NULL, limit = NULL, start_date = NULL, end_da
 
   history_results <- market_data %>%
     # create fake ranknow
-    dplyr::left_join(market_data %>% dplyr::group_by(symbol) %>% dplyr::arrange(desc(date)) %>% dplyr::slice(1) %>% dplyr::ungroup() %>%
+    dplyr::left_join(market_data %>% select(slug,date,volume) %>% dplyr::group_by(slug) %>%
+                       dplyr::arrange(desc(date)) %>% dplyr::slice(1) %>%
+                       dplyr::mutate_at(dplyr::vars(volume),~gsub(",","",.)) %>%
+                       dplyr::mutate_at(dplyr::vars(volume),~gsub("-","0",.)) %>%
+                       dplyr::mutate_at(dplyr::vars(volume),~as.numeric(.)) %>%
+                       dplyr::ungroup() %>%  dplyr::arrange(desc(volume)) %>%
                        tibble::rowid_to_column("ranknow") %>% dplyr::select(slug,ranknow), by="slug") %>%
     dplyr::select(slug,symbol,name,date,ranknow,open,high,low,close,volume,market) %>%
     dplyr::mutate_at(dplyr::vars(open,high,low,close,volume,market),~gsub(",","",.)) %>%
