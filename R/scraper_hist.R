@@ -21,16 +21,16 @@
 #'   \item{volume}{Volume 24 hours}
 #'   \item{market}{USD Market cap}
 #'
-#' @importFrom dplyr "%>%" "mutate"
-#' @importFrom tibble "as.tibble"
+#' @importFrom dplyr "%>%" "mutate" "select"
+#' @importFrom tibble "as_tibble"
+#' @importFrom tidyr "separate"
 #' @importFrom rvest "html_nodes" "html_table"
 #' @importFrom xml2 "read_html"
 #' @importFrom curl "new_handle"
 #'
-scraper <- function(attributes, slug, sleep = NULL) {
+scraper_hist <- function(attributes, sleep = NULL) {
   .            <- "."
   history_url  <- as.character(attributes)
-  coin_slug    <- as.character(slug)
   if (!is.null(sleep)) Sys.sleep(sleep)
 
   page <- tryCatch(
@@ -39,27 +39,20 @@ scraper <- function(attributes, slug, sleep = NULL) {
     error = function(e) e)
 
   if (inherits(page, "error")) {
-    if (grepl("404",page$message)){cat("No coin data found for",coin_slug," ",foferror,"/",page$messsage,"!\n")} else {
-      closeAllConnections()
-      message("\n")
-      message(cli::cat_bullet("Rate limit hit. Sleeping for 60 seconds.", bullet = "warning", bullet_col = "red"), appendLF = TRUE)
-      Sys.sleep(65)
-      page <- xml2::read_html(history_url,
-                              handle = curl::new_handle("useragent" = "Mozilla/5.0"))
-    }
+    closeAllConnections()
+    message("\n")
+    message(cli::cat_bullet("Rate limit hit. Sleeping for 60 seconds.", bullet = "warning", bullet_col = "red"), appendLF = TRUE)
+    Sys.sleep(65)
+    page <- xml2::read_html(history_url,
+                            handle = curl::new_handle("useragent" = "Mozilla/5.0"))
   }
 
-  if (inherits(page, "error")){
-    table <- NULL
-    info <- tibble::tibble(slug = coin_slug, start_date=NA, end_date=NA, message = page$message)
-  } else {
-    table <- rvest::html_nodes(page, css = "table") %>% .[1] %>%
-      rvest::html_table(fill = TRUE) %>%
-      replace(!nzchar(.), NA) %>% .[[1]] %>% tibble::as.tibble() %>%
-      dplyr::mutate(slug = coin_slug) %>% mutate(Date=lubridate::mdy(Date, locale = platform_locale()))
-    info <- tibble::tibble(slug = coin_slug, start_date=min(table$Date), end_date=max(table$Date), message = "Success")
-  }
+  table   <- rvest::html_nodes(page, css = "table") %>% .[1] %>%
+    rvest::html_table(fill = TRUE) %>%
+    replace(!nzchar(.), NA)
 
-  scraper <- list("data"=table, "info"= info)
+  scraper <- table[[1]][,2:3] %>% tibble::as_tibble() %>%
+    tidyr::separate(Name,sep = "\n",into=c("symbol","name")) %>% mutate(slug=sub("[^[:alnum:]]","-",sub("[[:punct:]]","-",tolower(name)))) %>%
+    dplyr::select(-Symbol)
   return(scraper)
 }
