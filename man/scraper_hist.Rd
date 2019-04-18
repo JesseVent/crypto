@@ -10,8 +10,6 @@ scraper_hist(attributes, sleep = NULL)
 \item{attributes}{URL generated from \code{listCoins()}}
 
 \item{sleep}{Duration to sleep to resolve rate limiter}
-
-\item{slug}{Unique identifier required for merging}
 }
 \value{
 Raw OHLC market data in a dataframe:

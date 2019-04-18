@@ -6,7 +6,6 @@
 #' as part of a loop to retrieve all crypto currencies.
 #'
 #' @param attributes URL generated from \code{listCoins()}
-#' @param slug Unique identifier required for merging
 #' @param sleep Duration to sleep to resolve rate limiter
 #'
 #' @return Raw OHLC market data in a dataframe:
@@ -21,7 +20,7 @@
 #'   \item{volume}{Volume 24 hours}
 #'   \item{market}{USD Market cap}
 #'
-#' @importFrom dplyr "%>%" "mutate" "select"
+#' @importFrom dplyr "%>%" "mutate" "select" "filter"
 #' @importFrom tibble "as_tibble"
 #' @importFrom tidyr "separate"
 #' @importFrom rvest "html_nodes" "html_table"
@@ -47,12 +46,18 @@ scraper_hist <- function(attributes, sleep = NULL) {
                             handle = curl::new_handle("useragent" = "Mozilla/5.0"))
   }
 
-  table   <- rvest::html_nodes(page, css = "table") %>% .[1] %>%
+  table <- rvest::html_nodes(page, css = "table") %>% .[1] %>%
     rvest::html_table(fill = TRUE) %>%
     replace(!nzchar(.), NA)
 
+  slug <- page %>%
+    rvest::html_nodes(xpath = "//td/a") %>%
+    html_attr("href") %>% as_tibble() %>% dplyr::filter(!grepl("#markets",value)) %>%
+    tidyr::separate(value,sep="/",into=c("waste1","waste2","slug","waste3")) %>% dplyr::select(slug)
+
+
   scraper <- table[[1]][,2:3] %>% tibble::as_tibble() %>%
-    tidyr::separate(Name,sep = "\n",into=c("symbol","name")) %>% mutate(slug=sub("[^[:alnum:]]","-",sub("[[:punct:]]","-",tolower(name)))) %>%
+    tidyr::separate(Name,sep = "\n",into=c("symbol","name")) %>% cbind(slug) %>%
     dplyr::select(-Symbol)
   return(scraper)
 }

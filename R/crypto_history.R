@@ -40,9 +40,9 @@
 #' @importFrom tibble 'tibble' 'as_tibble' 'rowid_to_column'
 #' @importFrom cli 'cat_bullet'
 #' @importFrom lubridate 'mdy'
+#' @importFrom stats 'na.omit'
 #'
 #' @import progress
-#' @import stats
 #' @import purrr
 #' @import dplyr
 #'
