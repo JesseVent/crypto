@@ -83,7 +83,7 @@ show_me_getting_rich <- crypto_timeseries('bitcoin')
 
 # Get timeseries global market data for all coins or alt coins for displaying in charts
 ?global_market
-show_me_everyone_getting_rich <- crypto_global_markets()
+show_me_everyone_getting_rich <- crypto_global_market()
 ```
 
 ## Package Issues
