@@ -35,7 +35,7 @@ CoinMarketCap and creates URLS for \code{scraper()} to use.
 }
 \examples{
 \dontrun{
-coin <- "kin"
+coin <- 'kin'
 coins <- crypto_list(coin)
 
 # return all coins

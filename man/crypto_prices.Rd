@@ -4,26 +4,32 @@
 \alias{crypto_prices}
 \title{Get current crypto currency prices}
 \usage{
-crypto_prices(coin = NULL, limit = 0, currency = NULL)
+crypto_prices(coin = NULL, limit = 0, currency = NULL,
+  offset = NULL)
 }
 \arguments{
 \item{coin}{Token name, default is all, Default: NULL}
 
 \item{limit}{Return top n coins, default is all, Default: 0}
 
-\item{currency}{Convert into local currency. Must be one of "AUD", "BRL", "CAD", "CHF", "CLP", "CNY", "CZK", "DKK", "EUR", "GBP", "HKD", "HUF", "IDR", "ILS", "INR", "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP", "PKR", "PLN", "RUB", "SEK", "SGD", "THB", "TRY", "TWD", "ZAR", Default: NULL}
+\item{currency}{Convert into local currency. Must be one of 'AUD', 'BRL', 'CAD', 'CHF', 'CLP', 'CNY', 'CZK', 'DKK', 'EUR', 'GBP', 'HKD', 'HUF', 'IDR', 'ILS', 'INR', 'JPY', 'KRW', 'MXN', 'MYR', 'NOK', 'NZD', 'PHP', 'PKR', 'PLN', 'RUB', 'SEK', 'SGD', 'THB', 'TRY', 'TWD', 'ZAR', Default: NULL}
+
+\item{offset}{Optional number to offset the initial index of listings}
 }
 \value{
 Will provide data frame of current prices
 }
 \description{
-This will retrieve the current market prices from CoinMarketCap. Data gets refreshed every 5 minutes.
+This will retrieve the current market prices from CoinMarketCap. Data gets refreshed every 5 minutes but will only return 100 at a time.
 }
 \details{
 Updated every 5 minutes
 }
+\note{
+The 'offset' parameter can be used to return the next 100 prices
+}
 \examples{
 {
-kin_price <- crypto_prices("kin")
+kin_price <- crypto_prices('kin')
 }
 }

@@ -18,7 +18,7 @@ to R sessions original locale value.
 }
 \examples{
 \dontrun{
-sys_locale <- Sys.getlocale(category = "LC_TIME")
+sys_locale <- Sys.getlocale(category = 'LC_TIME')
 reset_encoding(sys_locale)
 }
 }

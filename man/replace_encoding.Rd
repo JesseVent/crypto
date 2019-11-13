@@ -17,7 +17,7 @@ Helper function to ensure encoding is UTF-8
 }
 \examples{
 \dontrun{
-sys_locale <- Sys.getlocale(category = "LC_TIME")
+sys_locale <- Sys.getlocale(category = 'LC_TIME')
 replace_encoding(sys_locale)
 }
 }
