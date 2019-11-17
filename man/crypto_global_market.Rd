@@ -22,5 +22,5 @@ only. Selecting 'total' will include bitcoin and all altcoins.
 }
 \examples{
 market         <- 'total'
-crypto_global_markets <- crypto_global_market(market)
+crypto_global_market <- crypto_global_market(market)
 }

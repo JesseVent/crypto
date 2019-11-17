@@ -22,7 +22,7 @@
 #'   \item{market}{USD Market cap}
 #'
 #' @importFrom dplyr "%>%" "mutate"
-#' @importFrom tibble "as.tibble"
+#' @importFrom tibble "as_tibble"
 #' @importFrom rvest "html_nodes" "html_table"
 #' @importFrom xml2 "read_html"
 #' @importFrom curl "new_handle"
@@ -31,28 +31,26 @@ scraper <- function(attributes, slug, sleep = NULL) {
   .            <- "."
   history_url  <- as.character(attributes)
   coin_slug    <- as.character(slug)
-  if (!is.null(sleep)) Sys.sleep(sleep)
+  rate_msg     <- "Rate limit hit. Sleeping for 60 seconds."
+  if (!is.null(sleep)) {Sys.sleep(sleep)}
 
   page <- tryCatch(
-    xml2::read_html(history_url,
-                    handle = curl::new_handle("useragent" = "Mozilla/5.0")),
+    xml2::read_html(history_url, handle = curl::new_handle("useragent" = "Mozilla/5.0")),
     error = function(e) e)
 
   if (inherits(page, "error")) {
     closeAllConnections()
     message("\n")
-    message(cli::cat_bullet("Rate limit hit. Sleeping for 60 seconds.", bullet = "warning", bullet_col = "red"), appendLF = TRUE)
+    message(cli::cat_bullet(rate_msg, bullet = "warning", bullet_col = "red"), appendLF = TRUE)
     Sys.sleep(65)
     page <- xml2::read_html(history_url,
                             handle = curl::new_handle("useragent" = "Mozilla/5.0"))
   }
 
-  table   <- rvest::html_nodes(page, css = "table") %>% .[1] %>%
-    rvest::html_table(fill = TRUE) %>%
-    replace(!nzchar(.), NA)
-
-  scraper <- table[[1]] %>% tibble::as.tibble() %>%
-    dplyr::mutate(slug = coin_slug)
+  table     <- rvest::html_nodes(page, css = "table") %>% rvest::html_table(fill = TRUE)
+  df_length <- lapply(table, function(x) nrow(x)) %>% which.max()
+  result    <- table %>% .[df_length] %>% replace(!nzchar(.), NA)
+  scraper   <- result[[1]] %>% tibble::as_tibble() %>% dplyr::mutate(slug = coin_slug)
 
   return(scraper)
 }
