@@ -3,6 +3,13 @@
 To resolve advice from CRAN around elegant handling of web service error messages I have introduced new wrapper function to handle error/warning messages and updated the references in the rest of the package to match.
 Also made scraper function more robust at handling the multiple tables now returned when retrieving coin history to resolve an error regarding which list index to use.
 
+```
+CRAN repository db overrides:
+  X-CRAN-Comment: Archived on 2019-11-16 as check problems were not
+    corrected in time.
+```
+Apologies for missing the date
+
 ** Rhub results **
 ```
 > rhub::last_check()

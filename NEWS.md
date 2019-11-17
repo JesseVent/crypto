@@ -1,5 +1,8 @@
 # Latest updates, fixes and news for the Crypto package
 ![Cran](http://cranlogs.r-pkg.org/badges/grand-total/crypto) ![Cran](http://cranlogs.r-pkg.org/badges/crypto) ![Cran](http://cranlogs.r-pkg.org/badges/last-week/crypto) ![Cran](http://cranlogs.r-pkg.org/badges/last-day/crypto) ![Rdoc](http://www.rdocumentation.org/badges/version/crypto)](http://www.rdocumentation.org/packages/crypto)
+### crypto major release 1.1.2
+- Removal of crypto exchanges call as this no longer works as intended
+- Introduced more elegant error handling
 
 ### crypto major release 1.1.0
 - Significant changes to entire package due to upgrade to CMC API.
