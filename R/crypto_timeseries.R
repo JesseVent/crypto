@@ -53,8 +53,7 @@ crypto_timeseries <- function(coin = NULL) {
   }
   slug <- coins$slug %>% as.character()
   url <- paste0("https://graphs2.coinmarketcap.com/currencies/", slug)
-  df <- safely_read_json
-(url)
+  df <- safely_read_json(url)
   if (length(df) >= 5L) {
     df$price_platform <- NULL
   }

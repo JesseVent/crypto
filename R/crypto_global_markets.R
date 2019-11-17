@@ -13,20 +13,20 @@
 #'
 #' @examples
 #' market         <- 'total'
-#' crypto_global_markets <- crypto_global_market(market)
+#' crypto_global_market <- crypto_global_market(market)
 #' @export
 crypto_global_market <- function(market = NULL) {
   if (is.null(market)) {
     market <- "total"
   }
-  
+
   if (market != "total") {
     if (market != "altcoin") {
       message("Valid options are 'total' or 'altcoin'.", appendLF = TRUE)
       market <- "total"
     }
   }
-  
+
   url <- paste0("https://graphs2.coinmarketcap.com/global/marketcap-", market)
   df <- safely_read_json(url) %>% as.data.frame()
   df[, 3] <- NULL

@@ -35,7 +35,7 @@
 #' @importFrom tidyr 'replace_na'
 #' @importFrom crayon 'make_style'
 #' @importFrom grDevices 'rgb'
-#' @importFrom tibble 'tibble' 'as.tibble'
+#' @importFrom tibble 'tibble' 'as_tibble'
 #' @importFrom cli 'cat_bullet'
 #' @importFrom lubridate 'mdy'
 #'
@@ -55,68 +55,94 @@
 #'
 #' @export
 #'
-crypto_history <- function(coin = NULL, limit = NULL, start_date = NULL, end_date = NULL,
-  coin_list = NULL, sleep = NULL) {
+crypto_history <- function(coin       = NULL,
+                           limit      = NULL,
+                           start_date = NULL,
+                           end_date   = NULL,
+                           coin_list  = NULL,
+                           sleep      = NULL
+) {
   pink <- crayon::make_style(grDevices::rgb(0.93, 0.19, 0.65))
   options(scipen = 999)
-  i <- "i"
-  low <- NULL
-  high <- NULL
-  close <- NULL
+  i       <- "i"
+  low     <- NULL
+  high    <- NULL
+  close   <- NULL
   ranknow <- NULL
 
-  message(cli::cat_bullet("If this helps you become rich please consider donating",
-    bullet = "heart", bullet_col = pink))
+  message(cli::cat_bullet("If this helps you become rich please consider donating", bullet = "heart", bullet_col = pink))
   message("ERC-20: 0x375923Bf82F0b728d23A5704261a6e16341fd860", appendLF = TRUE)
   message("XRP: rK59semLsuJZEWftxBFhWuNE6uhznjz2bK", appendLF = TRUE)
   message("\n")
 
   coins <- crypto_list(coin, start_date, end_date, coin_list)
 
-  if (!is.null(limit))
-    coins <- coins[1:limit, ]
+  if (!is.null(limit)) {coins <- coins[1:limit, ]}
 
-  coin_names <- tibble::tibble(symbol = coins$symbol, name = coins$name, rank = coins$rank,
-    slug = coins$slug)
+  coin_names <- tibble::tibble(
+      symbol = coins$symbol,
+      name   = coins$name,
+      rank   = coins$rank,
+      slug   = coins$slug
+  )
+
   to_scrape <- tibble::tibble(attributes = coins$history_url, slug = coins$slug)
   loop_data <- vector("list", nrow(to_scrape))
 
-  message(cli::cat_bullet("Scraping historical crypto data", bullet = "pointer",
-    bullet_col = "green"))
-  pb <- progress_bar$new(format = ":spin [:current / :total] [:bar] :percent in :elapsedfull ETA: :eta",
-    total = nrow(to_scrape), clear = FALSE)
+  message(cli::cat_bullet("Scraping historical crypto data", bullet = "pointer", bullet_col = "green"))
+  pb <- progress_bar$new(format = ":spin [:current / :total] [:bar] :percent in :elapsedfull ETA: :eta", total = nrow(to_scrape), clear = FALSE)
 
   for (i in seq_len(nrow(to_scrape))) {
     pb$tick()
     loop_data[[i]] <- scraper(to_scrape$attributes[i], to_scrape$slug[i], sleep)
   }
 
-  results <- do.call(rbind, loop_data) %>% tibble::as.tibble()
+  results <- do.call(rbind, loop_data) %>% tibble::as_tibble()
 
-  if (length(results) == 0L)
+  if (nrow(results) == 0L) {
     stop("No data currently exists for this crypto currency.", call. = FALSE)
+  }
 
   market_data <- merge(results, coin_names, by = "slug")
-  colnames(market_data) <- c("slug", "date", "open", "high", "low", "close", "volume",
-    "market", "symbol", "name", "ranknow")
-  market_data <- market_data[c("slug", "symbol", "name", "date", "ranknow", "open",
-    "high", "low", "close", "volume", "market")]
-  market_data$date <- lubridate::mdy(market_data$date, locale = platform_locale())
+  colnames(market_data) <- c(
+      "slug",
+      "date",
+      "open",
+      "high",
+      "low",
+      "close",
+      "volume",
+      "market",
+      "symbol",
+      "name",
+      "ranknow")
+  market_data <- market_data[c(
+      "slug",
+      "symbol",
+      "name",
+      "date",
+      "ranknow",
+      "open",
+      "high",
+      "low",
+      "close",
+      "volume",
+      "market")]
 
-  market_data[, 5:11] <- apply(market_data[, 5:11], 2, function(x) gsub(",", "",
-    x))
-  market_data[, 7:11] <- apply(market_data[, 7:11], 2, function(x) gsub("-", "0",
-    x))
-  market_data$volume <- market_data$volume %>% tidyr::replace_na(0) %>% as.numeric()
-  market_data$market <- market_data$market %>% tidyr::replace_na(0) %>% as.numeric()
+  market_data$date    <- lubridate::mdy(market_data$date, locale = platform_locale())
+  market_data[, 5:11] <- apply(market_data[, 5:11], 2, function(x) gsub(",", "", x))
+  market_data[, 7:11] <- apply(market_data[, 7:11], 2, function(x) gsub("-", "0", x))
+  market_data$volume  <- market_data$volume %>% tidyr::replace_na(0) %>% as.numeric()
+  market_data$market  <- market_data$market %>% tidyr::replace_na(0) %>% as.numeric()
   market_data[, 5:11] <- apply(market_data[, 5:11], 2, function(x) as.numeric(x))
-  market_data <- na.omit(market_data)
+  market_data         <- na.omit(market_data)
 
-  market_data <- market_data %>% dplyr::mutate(close_ratio = (close - low)/(high -
-    low) %>% round(4) %>% as.numeric(), spread = (high - low) %>% round(2) %>%
-    as.numeric())
+  market_data <- market_data %>% dplyr::mutate(
+      close_ratio = (close - low) / (high -  low) %>% round(4) %>% as.numeric(),
+      spread      = (high - low) %>% round(2) %>% as.numeric()
+    )
 
   market_data$close_ratio <- market_data$close_ratio %>% tidyr::replace_na(0)
-  history_results <- market_data %>% dplyr::arrange(ranknow, date)
+  history_results         <- market_data %>% dplyr::arrange(ranknow, date)
   return(history_results)
 }
