@@ -1,4 +1,51 @@
 # Latest CRAN submission comments
+### crypto minor release 1.1.3
+Resolved issue with crypto global market history as the API endpoint had changed.
+
+> Expecting spelling note to be returned
+
+** RHUB Results **
+
+````
+> rhub::last_check()
+
+── crypto 1.1.3: OK
+
+  Build ID:   crypto_1.1.3.tar.gz-b4901dd3893844898ca37fb196f382fc
+  Platform:   Windows Server 2008 R2 SP1, R-devel, 32/64 bit
+  Submitted:  3h 45m 7s ago
+  Build time: 8m 23.8s
+
+0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+
+── crypto 1.1.3: OK
+
+  Build ID:   crypto_1.1.3.tar.gz-ed73d97bd448496db36467f22d2c82d8
+  Platform:   Ubuntu Linux 16.04 LTS, R-release, GCC
+  Submitted:  3h 45m 7s ago
+  Build time: 23m 11.3s
+
+0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+
+── crypto 1.1.3: NOTE
+
+  Build ID:   crypto_1.1.3.tar.gz-0494c0cc2b774c0981d7920af82b834a
+  Platform:   Fedora Linux, R-devel, clang, gfortran
+  Submitted:  3h 45m 7s ago
+  Build time: 28m 41.7s
+
+❯ checking CRAN incoming feasibility ...NB: need Internet access to use CRAN incoming checks
+   NOTE
+  Maintainer: ‘Jesse Vent <cryptopackage@icloud.com>’
+  
+  Possibly mis-spelled words in DESCRIPTION:
+    Cryptocurrency (3:8)
+    crypto (4:24, 4:230)
+
+0 errors ✔ | 0 warnings ✔ | 1 note ✖
+````
+
+
 ### crypto minor release 1.1.2
 To resolve advice from CRAN around elegant handling of web service error messages I have introduced new wrapper function to handle error/warning messages and updated the references in the rest of the package to match.
 Also made scraper function more robust at handling the multiple tables now returned when retrieving coin history to resolve an error regarding which list index to use.

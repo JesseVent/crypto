@@ -20,7 +20,13 @@ Retrieve daily snapshot of market_cap and the volume traded
 for either total crypto currency market or the altcoin market
 only. Selecting 'total' will include bitcoin and all altcoins.
 }
+\note{
+The API this uses often will change, please raise an issue on GitHub if errors persist.
+}
 \examples{
-market         <- 'total'
+\dontrun{
+##
+market <- 'total'
 crypto_global_market <- crypto_global_market(market)
+}
 }
