@@ -38,8 +38,6 @@
 #' # return all coins listed in 2015
 #' coin_list_2015 <- crypto_list(start_date_hist="20150101",end_date_hist="20151231",date_gap="months")
 #'
-#' }
-#'
 #' @name crypto_list
 #'
 #' @export
@@ -69,7 +67,7 @@
       out_list_recent  <- jsonlite::fromJSON(json)
       # validate name & slug via symbol from recent list
       if (!is.null(coins)){
-        coins <- coins %>% dplyr::left_join(out_list_recent %>% select(symbol,name,slug) %>% dplyr::rename(slug_main=slug, name_main=name),by="symbol") %>%
+        coins <- coins %>% rename(symbol=Symbol,name=Name) %>% dplyr::left_join(out_list_recent %>% select(symbol,name,slug) %>% dplyr::rename(slug_main=slug, name_main=name),by="symbol") %>%
           dplyr::mutate(name=ifelse(is.na(name_main),name,name_main),slug=ifelse(is.na(slug_main),slug,slug_main)) %>% dplyr::select(symbol, name, slug, hist_date)
       }
       if (is.null(end_date_hist)|is.null(coins)){

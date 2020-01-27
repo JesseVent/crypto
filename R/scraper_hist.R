@@ -46,18 +46,19 @@ scraper_hist <- function(attributes, sleep = NULL) {
                             handle = curl::new_handle("useragent" = "Mozilla/5.0"))
   }
 
-  table <- rvest::html_nodes(page, css = "table") %>% .[1] %>%
+  table <- rvest::html_nodes(page, css = "table") %>% .[3] %>%
     rvest::html_table(fill = TRUE) %>%
     replace(!nzchar(.), NA)
 
   slug <- page %>%
     rvest::html_nodes(xpath = "//td/a") %>%
-    html_attr("href") %>% as_tibble() %>% dplyr::filter(!grepl("#markets",value)) %>%
-    tidyr::separate(value,sep="/",into=c("waste1","waste2","slug","waste3")) %>% dplyr::select(slug)
+    html_attr("href") %>% as_tibble() %>% unique() %>% dplyr::filter(!grepl("#markets",value)) %>%
+    tidyr::separate(value,sep="/",into=c("waste1","waste2","slug","waste3","waste4")) %>% dplyr::select(slug)
 
 
   scraper <- table[[1]][,2:3] %>% tibble::as_tibble() %>%
-    tidyr::separate(Name,sep = "\n",into=c("symbol","name")) %>% cbind(slug) %>%
-    dplyr::select(-Symbol)
+    #tidyr::separate(Name,sep = "\n",into=c("symbol","name")) %>%
+    cbind(slug) #%>%
+    #dplyr::select(-Symbol)
   return(scraper)
 }

@@ -60,7 +60,7 @@
 #' end_date_hist="20150201",date_gap="months")
 #' coins_2015 <- crypto_history(coins = coin_list_2015,
 #' start_date = "20150101", end_date="20151231", limit=20)
-#' }
+#'
 #' @name crypto_history
 #'
 #' @export
@@ -105,14 +105,18 @@ crypto_history <- function(coins = NULL, limit = NULL, start_date = NULL, end_da
                          total = nrow(data), clear = FALSE)
   map_scrape <- function(out,slug){
     pb2$tick()
-    if (is.null(out)) {cat("\nCoin",slug,"could not be downloaded. Please check URL!\n")} else{
-    rvest::html_nodes(out, css = "table") %>% .[1] %>%
+    if (is.na(out)) {cat("\nCoin",slug,"could not be downloaded. Please check URL!\n")} else{
+    temp <- rvest::html_nodes(out, css = "table") %>% .[3] %>%
       rvest::html_table(fill = TRUE) %>%
-      replace(!nzchar(.), NA) %>% .[[1]] %>% tibble::as_tibble() %>%
-      dplyr::mutate(slug = slug) %>% mutate(Date=lubridate::mdy(Date, locale = platform_locale()))}
+      replace(!nzchar(.), NA)
+    if (!length(temp)==0) {ans <- temp %>% .[[1]] %>% tibble::as_tibble() %>%
+        dplyr::mutate(slug = slug) %>% mutate(Date=lubridate::mdy(Date, locale = platform_locale()))} else {
+          cat("\nCoin",slug,"has missing data. Please check URL!\n"); ans <- NULL
+        }
+    }
   }
   message(cli::cat_bullet("Processing historical crypto data", bullet = "pointer",bullet_col = "green"))
-  out <- map2(data$out,data$slug, .f = ~ map_scrape(.x,.y))
+  out <- map2(data$out[16:18],data$slug[16:18], .f = ~ map_scrape(.x,.y))
 
   # Old code
   results <- do.call(rbind, out) %>% tibble::as_tibble()
