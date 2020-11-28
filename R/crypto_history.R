@@ -65,6 +65,7 @@ crypto_history <- function(coin       = NULL,
   pink <- crayon::make_style(grDevices::rgb(0.93, 0.19, 0.65))
   options(scipen = 999)
   i       <- "i"
+  timestamp <- NULL
   low     <- NULL
   high    <- NULL
   close   <- NULL
@@ -103,46 +104,16 @@ crypto_history <- function(coin       = NULL,
     stop("No data currently exists for this crypto currency.", call. = FALSE)
   }
 
-  market_data <- merge(results, coin_names, by = "slug")
-  colnames(market_data) <- c(
-      "slug",
-      "date",
-      "open",
-      "high",
-      "low",
-      "close",
-      "volume",
-      "market",
-      "symbol",
-      "name",
-      "ranknow")
-  market_data <- market_data[c(
-      "slug",
-      "symbol",
-      "name",
-      "date",
-      "ranknow",
-      "open",
-      "high",
-      "low",
-      "close",
-      "volume",
-      "market")]
+    market_data <- merge(results, coin_names, by = "slug")
 
-  market_data$date    <- lubridate::mdy(market_data$date, locale = platform_locale())
-  market_data[, 5:11] <- apply(market_data[, 5:11], 2, function(x) gsub(",", "", x))
-  market_data[, 7:11] <- apply(market_data[, 7:11], 2, function(x) gsub("-", "0", x))
-  market_data$volume  <- market_data$volume %>% tidyr::replace_na(0) %>% as.numeric()
-  market_data$market  <- market_data$market %>% tidyr::replace_na(0) %>% as.numeric()
-  market_data[, 5:11] <- apply(market_data[, 5:11], 2, function(x) as.numeric(x))
-  market_data         <- na.omit(market_data)
+    market_data <- market_data %>% dplyr::mutate(
+      date        = as.Date(substr(timestamp, 1, 10)),
+      close_ratio = (close - low) / (high -  low) %>% round(4),
+      spread      = (high - low) %>% round(2)
+    ) %>% select("slug", "symbol", "name", "date", "ranknow" = "rank", "open", "high", "low", "close", "volume", "market" = "market_cap", "close_ratio", "spread") %>%
+      dplyr::arrange(ranknow, date)
 
-  market_data <- market_data %>% dplyr::mutate(
-      close_ratio = (close - low) / (high -  low) %>% round(4) %>% as.numeric(),
-      spread      = (high - low) %>% round(2) %>% as.numeric()
-    )
+   market_data$close_ratio <- market_data$close_ratio %>% tidyr::replace_na(0)
 
-  market_data$close_ratio <- market_data$close_ratio %>% tidyr::replace_na(0)
-  history_results         <- market_data %>% dplyr::arrange(ranknow, date)
-  return(history_results)
+   return(market_data)
 }

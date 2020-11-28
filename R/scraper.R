@@ -23,9 +23,11 @@
 #'
 #' @importFrom dplyr "%>%" "mutate"
 #' @importFrom tibble "as_tibble"
-#' @importFrom rvest "html_nodes" "html_table"
+#' @importFrom rvest "html_node" "html_text"
 #' @importFrom xml2 "read_html"
 #' @importFrom curl "new_handle"
+#' @importFrom jsonlite "fromJSON"
+#' @importFrom cli "cat_bullet"
 #'
 scraper <- function(attributes, slug, sleep = NULL) {
   .            <- "."
@@ -43,14 +45,16 @@ scraper <- function(attributes, slug, sleep = NULL) {
     message("\n")
     message(cli::cat_bullet(rate_msg, bullet = "warning", bullet_col = "red"), appendLF = TRUE)
     Sys.sleep(65)
-    page <- xml2::read_html(history_url,
-                            handle = curl::new_handle("useragent" = "Mozilla/5.0"))
+    page <- xml2::read_html(history_url, handle = curl::new_handle("useragent" = "Mozilla/5.0"))
   }
 
-  table     <- rvest::html_nodes(page, css = "table") %>% rvest::html_table(fill = TRUE)
-  df_length <- lapply(table, function(x) nrow(x)) %>% which.max()
-  result    <- table %>% .[df_length] %>% replace(!nzchar(.), NA)
-  scraper   <- result[[1]] %>% tibble::as_tibble() %>% dplyr::mutate(slug = coin_slug)
+  table <- page %>% rvest::html_node("#__NEXT_DATA__") %>%
+    rvest::html_text() %>%
+    jsonlite::fromJSON()
+
+  scraper <- table$props$initialState$cryptocurrency$ohlcvHistorical[[1]]$quotes$quote$USD %>%
+    tibble::as_tibble() %>%
+    dplyr::mutate(slug = coin_slug)
 
   return(scraper)
 }

@@ -36,4 +36,4 @@ SystemRequirements: libxml2-devel,
   openssl-devel,
   libsecret-devel,
   libsodium-devel
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1

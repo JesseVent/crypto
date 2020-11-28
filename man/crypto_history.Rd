@@ -4,8 +4,14 @@
 \alias{crypto_history}
 \title{Get historic crypto currency market data}
 \usage{
-crypto_history(coin = NULL, limit = NULL, start_date = NULL,
-  end_date = NULL, coin_list = NULL, sleep = NULL)
+crypto_history(
+  coin = NULL,
+  limit = NULL,
+  start_date = NULL,
+  end_date = NULL,
+  coin_list = NULL,
+  sleep = NULL
+)
 }
 \arguments{
 \item{coin}{string Name, symbol or slug of crypto currency, default is all tokens}

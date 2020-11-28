@@ -4,8 +4,7 @@
 \alias{crypto_prices}
 \title{Get current crypto currency prices}
 \usage{
-crypto_prices(coin = NULL, limit = 0, currency = NULL,
-  offset = NULL)
+crypto_prices(coin = NULL, limit = 0, currency = "USD", offset = 1)
 }
 \arguments{
 \item{coin}{Token name, default is all, Default: NULL}

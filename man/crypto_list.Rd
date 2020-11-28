@@ -4,8 +4,7 @@
 \alias{crypto_list}
 \title{Retrieves name, symbol, slug and rank for all tokens}
 \usage{
-crypto_list(coin = NULL, start_date = NULL, end_date = NULL,
-  coin_list = NULL)
+crypto_list(coin = NULL, start_date = NULL, end_date = NULL, coin_list = NULL)
 }
 \arguments{
 \item{coin}{Name, symbol or slug of crypto currency}

@@ -42,7 +42,7 @@ crypto_list <- function(coin = NULL, start_date = NULL, end_date = NULL, coin_li
   } else {
     ifelse(coin_list == "api", coins <- get_coinlist_api(), coins <- get_coinlist_static())
   }
-  
+
   if (!is.null(coin)) {
     name <- coins$name
     slug <- coins$slug
@@ -64,16 +64,16 @@ crypto_list <- function(coin = NULL, start_date = NULL, end_date = NULL, coin_li
       coins <- unique(coins)
     }
   }
-  coins <- tibble::tibble(symbol = coins$symbol, name = coins$name, slug = coins$slug, 
+  coins <- tibble::tibble(symbol = coins$symbol, name = coins$name, slug = coins$slug,
     rank = coins$rank)
   if (is.null(start_date)) {
     start_date <- "20130428"
   }
   if (is.null(end_date)) {
-    end_date <- gsub("-", "", lubridate::today())
+    end_date <- gsub("-", "", lubridate::today("UTC"))
   }
   exchangeurl <- paste0("https://coinmarketcap.com/currencies/", coins$slug, "/#markets")
-  historyurl <- paste0("https://coinmarketcap.com/currencies/", coins$slug, "/historical-data/?start=", 
+  historyurl <- paste0("https://coinmarketcap.com/currencies/", coins$slug, "/historical-data/?start=",
     start_date, "&end=", end_date)
   exchange_url <- c(exchangeurl)
   history_url <- c(historyurl)

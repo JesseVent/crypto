@@ -11,3 +11,5 @@ cmc_apikey
 sandbox_cmc_apikey
 R/temp.R
 CRAN-RELEASE
+.httr-oauth
+.division.json.icloud
