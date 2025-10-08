@@ -4,17 +4,12 @@
 \alias{crypto_history}
 \title{Get historic crypto currency market data}
 \usage{
-crypto_history(
-  coin = NULL,
-  limit = NULL,
-  start_date = NULL,
-  end_date = NULL,
-  coin_list = NULL,
-  sleep = NULL
-)
+crypto_history(coins = NULL, limit = NULL, start_date = NULL,
+  end_date = NULL, coin_list = NULL, sleep = NULL)
 }
 \arguments{
-\item{coin}{string Name, symbol or slug of crypto currency, default is all tokens}
+\item{coins}{string if NULL retrieve all currently existing coins (crypto_list()),
+or provide list of crypto currencies in the crypto_list() format (e.g. current and dead coins since 2015)}
 
 \item{limit}{integer Return the top n records, default is all tokens}
 
@@ -27,12 +22,11 @@ crypto_history(
 \item{sleep}{integer Seconds to sleep for between API requests}
 }
 \value{
-Crypto currency historic OHLC market data in a dataframe:
+Crypto currency historic OHLC market data in a dataframe and additional information via attribute "info":
   \item{slug}{Coin url slug}
   \item{symbol}{Coin symbol}
   \item{name}{Coin name}
   \item{date}{Market date}
-  \item{ranknow}{Current Rank}
   \item{open}{Market open}
   \item{high}{Market high}
   \item{low}{Market low}
@@ -41,6 +35,9 @@ Crypto currency historic OHLC market data in a dataframe:
   \item{market}{USD Market cap}
   \item{close_ratio}{Close rate, min-maxed with the high and low values that day}
   \item{spread}{Volatility premium, high minus low for that day}
+  \item{start_date}{in info: Begin of historic data}
+  \item{end_date}{in info: End of historic data}
+  \item{message}{in info: Either "Success" when data was available or error message from scraper}
 
 This is the main function of the crypto package. If you want to retrieve
 ALL coins then do not pass a argument to crypto_history(), or pass the coin name.
@@ -51,14 +48,4 @@ CoinMarketCap <https://coinmarketcap.com> and display
 the results in a date frame. This can be used to conduct
 analysis on the crypto financial markets or to attempt
 to predict future market movements or trends.
-}
-\examples{
-\dontrun{
-
-# Retrieving market history for ALL crypto currencies
-all_coins <- crypto_history(limit = 1)
-
-# Retrieving this years market history for ALL crypto currencies
-all_coins <- crypto_history(start_date = '20180101')
-}
 }
