@@ -17,6 +17,6 @@ CoinMarketCap Professional API Call
 }
 \examples{
 \dontrun{
-cmc_api("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest")
+cmc_api('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest')
 }
 }

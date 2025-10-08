@@ -14,3 +14,4 @@ cran-comments.md
 .gitconfig
 cmc_apikey
 sandbox_cmc_apikey
+^\.httr-oauth$

@@ -17,7 +17,6 @@
 #'   \item{slug}{Coin URL slug (unique)}
 #'
 #' @importFrom tibble tibble
-#' @importFrom jsonlite fromJSON
 #'
 #' @examples
 #' \dontrun{
@@ -30,7 +29,7 @@ crypto_timeseries <- function(coin = NULL) {
     coin <- "bitcoin"
   }
   json <- "https://s2.coinmarketcap.com/generated/search/quick_search.json"
-  coins <- jsonlite::read_json(json, simplifyVector = TRUE)
+  coins <- safely_read_json(json)
   if (!is.null(coin)) {
     name <- coins$name
     slug <- coins$slug
@@ -54,14 +53,14 @@ crypto_timeseries <- function(coin = NULL) {
   }
   slug <- coins$slug %>% as.character()
   url <- paste0("https://graphs2.coinmarketcap.com/currencies/", slug)
-  df <- jsonlite::fromJSON(url, flatten = TRUE)
+  df <- safely_read_json(url)
   if (length(df) >= 5L) {
     df$price_platform <- NULL
   }
   df <- as.data.frame(df)
   df[, c(3, 5, 7)] <- NULL
   names(df) <- c("timestamp", "market_cap", "price_btc", "price_usd", "volume")
-  df$timestamp <- as.POSIXct(as.numeric(df$timestamp)/1000, origin = "1970-01-01", 
+  df$timestamp <- as.POSIXct(as.numeric(df$timestamp)/1000, origin = "1970-01-01",
     tz = "UTC")
   df$slug <- slug
   market_data <- df %>% as.data.frame()

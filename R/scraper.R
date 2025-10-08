@@ -22,20 +22,22 @@
 #'   \item{market}{USD Market cap}
 #'
 #' @importFrom dplyr "%>%" "mutate"
-#' @importFrom tibble "as.tibble"
-#' @importFrom rvest "html_nodes" "html_table"
+#' @importFrom tibble "as_tibble"
+#' @importFrom rvest "html_node" "html_text"
 #' @importFrom xml2 "read_html"
 #' @importFrom curl "new_handle"
+#' @importFrom jsonlite "fromJSON"
+#' @importFrom cli "cat_bullet"
 #'
 scraper <- function(attributes, slug, sleep = NULL) {
   .            <- "."
   history_url  <- as.character(attributes)
   coin_slug    <- as.character(slug)
-  if (!is.null(sleep)) Sys.sleep(sleep)
+  rate_msg     <- "Rate limit hit. Sleeping for 60 seconds."
+  if (!is.null(sleep)) {Sys.sleep(sleep)}
 
   page <- tryCatch(
-    xml2::read_html(history_url,
-                    handle = curl::new_handle("useragent" = "Mozilla/5.0")),
+    xml2::read_html(history_url, handle = curl::new_handle("useragent" = "Mozilla/5.0")),
     error = function(e) e)
 
   if (inherits(page, "error")) {

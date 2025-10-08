@@ -26,7 +26,7 @@ Each value in \code{frequency <- c('second', 'minute',
 }
 \examples{
   \dontrun{
- You can lookup additional frequencies at \\code{?round_date}
+ You can lookup additional frequencies at \code{?round_date}
  from the lubridate package.
     crypto_xts(df, '.5s')
     crypto_xts(df, 'sec')

@@ -69,14 +69,14 @@ crypto_history <- function(coins = NULL, limit = NULL, start_date = NULL, end_da
   coin_list = NULL, sleep = NULL) {
   pink <- crayon::make_style(grDevices::rgb(0.93, 0.19, 0.65))
   options(scipen = 999)
-  i <- "i"
-  low <- NULL
-  high <- NULL
-  close <- NULL
+  i       <- "i"
+  timestamp <- NULL
+  low     <- NULL
+  high    <- NULL
+  close   <- NULL
   ranknow <- NULL
 
-  message(cli::cat_bullet("If this helps you become rich please consider donating",
-    bullet = "heart", bullet_col = pink))
+  message(cli::cat_bullet("If this helps you become rich please consider donating", bullet = "heart", bullet_col = pink))
   message("ERC-20: 0x375923Bf82F0b728d23A5704261a6e16341fd860", appendLF = TRUE)
   message("XRP: rK59semLsuJZEWftxBFhWuNE6uhznjz2bK", appendLF = TRUE)
   message("\n")

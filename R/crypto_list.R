@@ -29,7 +29,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' coin <- "kin"
+#' coin <- 'kin'
 #' coins <- crypto_list(coin)
 #'
 #' # return all coins
@@ -119,3 +119,16 @@
     coins$history_url  <- as.character(history_url)
     return(coins)
   }
+  exchangeurl <- paste0("https://coinmarketcap.com/currencies/", coins$slug, "/#markets")
+  historyurl <- paste0("https://coinmarketcap.com/currencies/", coins$slug, "/historical-data/?start=",
+    start_date, "&end=", end_date)
+  exchange_url <- c(exchangeurl)
+  history_url <- c(historyurl)
+  coins$symbol <- as.character(toupper(coins$symbol))
+  coins$name <- as.character(coins$name)
+  coins$slug <- as.character(coins$slug)
+  coins$exchange_url <- as.character(exchange_url)
+  coins$history_url <- as.character(history_url)
+  coins$rank <- as.numeric(coins$rank)
+  return(coins)
+}
