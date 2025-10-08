@@ -41,7 +41,7 @@ scraper <- function(attributes, slug, sleep = NULL) {
     error = function(e) e)
 
   if (inherits(page, "error")) {
-    if (grep("404",page$message)){cat("No coin data found for",coin_slug,"!\n")} else {
+    if (grepl("404",page$message)){cat("No coin data found for",coin_slug," ",foferror,"/",page$messsage,"!\n")} else {
       closeAllConnections()
       message("\n")
       message(cli::cat_bullet("Rate limit hit. Sleeping for 60 seconds.", bullet = "warning", bullet_col = "red"), appendLF = TRUE)
